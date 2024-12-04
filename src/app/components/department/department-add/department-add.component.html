@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card card-secondary">
+        <div class="card-header">
+          <h3 class="card-title">{{ departmentId ? 'Edit' : 'Add' }} Department</h3>
+        </div>
+        <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="name">Department Name</label>
+              <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter Department Name">
+              <div *ngIf="submitted && departmentForm.controls['name'].errors?.['required']" class="text-danger">
+                Department Name is required.
+              </div>
+            </div>
+
+            <div formArrayName="designations">
+              <label>Designation Title</label>
+              <div *ngFor="let designation of designations.controls; let i = index" [formGroupName]="i">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="title" placeholder="Enter Designation Title">
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-danger" (click)="removeDesignation(i)">
+                        <i class="fas fa-trash"></i> Remove
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="submitted && designation.get('title').errors?.['required']" class="text-danger">
+                    Designation Title is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" (click)="addDesignation()">Add Designation</button>
+
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">{{ departmentId ? 'Update' : 'Submit' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

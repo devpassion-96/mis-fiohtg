@@ -1,0 +1,52 @@
+<div class="container-fluid mt-5">
+  <div class="card">
+    <div class="card-header">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Filter by Staff ID, Type, or Status" [(ngModel)]="filter">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" (click)="applyFilter()">Filter</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-header">
+      <h3 class="card-title">Leave Requests</h3>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Staff Namesss</th>
+            <th>Type</th>
+            <th>Dates</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of leaves">
+            <td>{{ leave.employeeName }}</td>
+            <td>{{ leave.type }}</td>
+            <td>{{ leave.startDate | date }} - {{ leave.endDate | date }}</td>
+            <td [ngClass]="{
+              'status-pending': leave.status === 'Pending',
+              'status-approved': leave.status === 'Approved',
+              'status-rejected': leave.status === 'Rejected'
+            }">{{ leave.status }}</td>
+            <td>
+              <button class="btn btn-info btn-xs mr-2" (click)="viewLeave(leave._id)">
+                <i class="fas fa-eye"></i>
+              </button>
+              <!-- <button class="btn btn-primary btn-xs mr-2" (click)="editLeave(leave._id)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-xs" (click)="deleteLeave(leave._id)">
+                <i class="fas fa-trash"></i>
+              </button> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

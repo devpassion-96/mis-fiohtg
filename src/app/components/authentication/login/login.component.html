@@ -1,0 +1,32 @@
+<div class="login-full-page">
+  <div class="login-box">
+    <div class="logo-container">
+      <img src="assets/images/fiohtg_logo.png" alt="Logo" class="login-logo">
+    </div>
+    <h2 class="text-center">Login</h2>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div class="card login-card">
+      <div class="card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+
+        <form (submit)="onLogin()">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Username" [(ngModel)]="username" name="username">
+            <span class="input-group-icon fas fa-user-circle"></span>
+          </div>
+
+          <div class="input-group">
+            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" name="password">
+            <span class="input-group-icon fas fa-lock"></span>
+          </div>
+
+          <button type="submit" class="btn-login">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

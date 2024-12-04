@@ -1,0 +1,13 @@
+<div>
+    <h3>Request Vehicle</h3>
+    <form (ngSubmit)="createRequest()">
+      <label>Officer ID:</label>
+      <input type="text" [(ngModel)]="request.officerId" name="officerId" required />
+  
+      <label>Vehicle Type:</label>
+      <input type="text" [(ngModel)]="request.vehicleTypeRequested" name="vehicleTypeRequested" required />
+  
+      <button type="submit">Request</button>
+    </form>
+  </div>
+  

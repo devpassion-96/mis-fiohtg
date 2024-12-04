@@ -1,0 +1,21 @@
+<div>
+    <h3>Pending Requests</h3>
+    <table>
+      <tr>
+        <th>Officer ID</th>
+        <th>Vehicle Type</th>
+        <th>Approval Status</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let request of requests">
+        <td>{{ request.officerId }}</td>
+        <td>{{ request.vehicleTypeRequested }}</td>
+        <td>{{ request.approvalStatus }}</td>
+        <td>
+          <button (click)="approveRequest(request._id)">Approve</button>
+          <button (click)="allocateVehicle(request._id)">Allocate</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  

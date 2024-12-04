@@ -1,0 +1,112 @@
+<div class="container">
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="card">
+      <div class="card-header">
+        Edit Performance Indicator
+      </div>
+      <div class="card-body">
+
+
+        <!-- Level -->
+
+
+        <!-- Verifiable Indicators -->
+        <div formArrayName="verifiableIndicators">
+          <div *ngFor="let vi of verifiableIndicators.controls; let i=index" [formGroupName]="i">
+            <div class="card mb-3">
+              <div class="card-header">Verifiable Indicator {{ i + 1 }}</div>
+              <div class="card-body">
+
+                <div class="form-group">
+                  <label>Level</label>
+                  <select class="form-control" formControlName="level">
+                    <option value="Impact">Impact</option>
+                    <option value="Outcome">Outcome</option>
+                    <option value="Output">Output</option>
+                  </select>
+                </div>
+
+                <!-- Intervention Logic -->
+                <div class="form-group">
+                  <label>Intervention Logic</label>
+                  <input type="text" class="form-control" formControlName="interventionLogic">
+                </div>
+
+                <div class="form-group">
+                  <label>Indicator</label>
+                  <input type="text" class="form-control" formControlName="indicator">
+                </div>
+                <div class="form-group">
+                  <label>Baseline</label>
+                  <input type="text" class="form-control" formControlName="baseline">
+                </div>
+                <div class="form-group">
+                  <label>Means of Verification</label>
+                  <input type="text" class="form-control" formControlName="meansOfVerification">
+                </div>
+
+                <!-- Target Data -->
+                <div formArrayName="targetData">
+                  <div *ngFor="let td of targetData(i).controls; let j=index" [formGroupName]="j">
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <div class="form-group">
+                          <label>Period</label>
+                          <select class="form-control" placeholder="Enter Period " formControlName="period">
+                            <option value="Quarterly 1">Quarterly 1</option>
+                            <option value="Quarterly 2">Quarterly 2</option>
+                            <option value="Quarterly 3">Quarterly 3</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Target Female</label>
+                          <input type="number" class="form-control" formControlName="targetFemale">
+                        </div>
+                        <div class="form-group">
+                          <label>Target Male</label>
+                          <input type="number" class="form-control" formControlName="targetMale">
+                        </div>
+                        <div class="form-group">
+                          <label>Achieved Female</label>
+                          <input type="number" class="form-control" formControlName="achievedFemale">
+                        </div>
+                        <div class="form-group">
+                          <label>Achieved Male</label>
+                          <input type="number" class="form-control" formControlName="achievedMale">
+                        </div>
+                        <div class="form-group">
+                          <label>Variance Female</label>
+                          <input type="text" class="form-control" formControlName="varianceFemale" readonly>
+                        </div>
+                        <div class="form-group">
+                          <label>Variance Male</label>
+                          <input type="text" class="form-control" formControlName="varianceMale" readonly>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" placeholder="Status " formControlName="status">
+                              <option value="Attained">Attained</option>
+                              <option value="Not Attained">Not Attained</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <button type="button" class="btn btn-primary btn-sm" (click)="addTargetData(i)">Add Target Data</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success" (click)="addVerifiableIndicator()">Add Verifiable Indicator</button>
+        </div>
+
+        <!-- Cumulative Values Display Outside of Verifiable Indicators Loop -->
+        <!-- Similar to how you display them in the Add Component but use static display elements like <p> or non-input <div> since they're not editable -->
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>

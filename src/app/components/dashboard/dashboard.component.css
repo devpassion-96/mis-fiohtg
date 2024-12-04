@@ -1,0 +1,25 @@
+.project-insight-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.project-insight-card h3 {
+  margin-top: 0;
+}
+
+/* Add more styling as per your design requirements */
+
+.status-not-started {
+  background-color: grey;
+}
+
+.status-in-progress {
+  background-color: blue;
+}
+
+.status-completed {
+  background-color: green;
+}
+

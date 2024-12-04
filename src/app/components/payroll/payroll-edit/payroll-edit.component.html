@@ -1,0 +1,65 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Edit Payroll Record</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Payroll Details</h3>
+        </div>
+        <!-- /.card-header -->
+
+        <!-- form start -->
+        <form [formGroup]="payrollForm" (ngSubmit)="onSubmit()">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="staffId">Staff ID</label>
+              <input type="text" class="form-control" id="staffId" formControlName="staffId" placeholder="Enter Staff ID">
+            </div>
+            <div class="form-group">
+              <label for="basicSalary">Basic Salary</label>
+              <input type="number" class="form-control" id="basicSalary" formControlName="basicSalary" placeholder="Enter Basic Salary">
+            </div>
+            <div class="form-group">
+              <label for="bonuses">Bonuses</label>
+              <input type="number" class="form-control" id="bonuses" formControlName="bonuses" placeholder="Enter Bonuses">
+            </div>
+            <div class="form-group">
+              <label for="deductions">Deductions</label>
+              <input type="number" class="form-control" id="deductions" formControlName="deductions" placeholder="Enter Deductions">
+            </div>
+            <div class="form-group">
+              <label for="netSalary">Net Salary</label>
+              <input type="number" class="form-control" id="netSalary" formControlName="netSalary" placeholder="Net Salary" readonly>
+            </div>
+            <div class="form-group">
+              <label for="month">Month</label>
+              <input type="text" class="form-control" id="month" formControlName="month" placeholder="Enter Month">
+            </div>
+            <div class="form-group">
+              <label for="year">Year</label>
+              <input type="number" class="form-control" id="year" formControlName="year" placeholder="Enter Year">
+            </div>
+          </div>
+          <!-- /.card-body -->
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update Payroll Record</button>
+          </div>
+        </form>
+      </div>
+      <!-- /.card -->
+    </div>
+  </section>
+  <!-- /.content -->
+</div>

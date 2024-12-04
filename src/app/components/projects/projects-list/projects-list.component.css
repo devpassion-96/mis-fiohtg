@@ -1,0 +1,49 @@
+.info-box {
+  position: relative;
+  transition: all .3s ease;
+}
+
+.info-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Action Icons */
+.action-icons {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.action-icon {
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: color .3s ease;
+}
+
+.view-icon:hover {
+  color: #86c7f3;  /* Light Blue */
+}
+
+.edit-icon:hover {
+  color: #f0db4f;  /* Yellow */
+}
+
+.delete-icon:hover {
+  color: #f76c6c;  /* Red */
+}
+
+h1 {
+  font-weight: 600; /* Making font slightly bolder */
+}
+.content-wrapper, .content {
+  width: 100%;
+}
+
+/* For smaller screens, you might want to adjust font size or spacing */
+@media (max-width: 768px) {
+  h1 {
+      font-size: 24px;
+  }
+}

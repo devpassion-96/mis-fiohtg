@@ -1,0 +1,36 @@
+<div class="card mt-5">
+  <div class="card-header">
+    <h3 class="card-title">Budget List</h3>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Project ID</th>
+            <th>Department ID</th>
+            <th>Amount</th>
+            <th>Balance</th>
+            <!-- <th>Actions</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let budget of budgets">
+            <td>{{ budget.projectName }}</td>
+            <td>{{ budget.departmentName }}</td>
+            <td>D {{ budget.amount }}</td>
+            <td>D {{ budget.balance }}</td>
+            <!-- <td> -->
+              <!-- <button class="btn btn-primary btn-sm" (click)="editBudget(budget.id)">
+                <i class="fas fa-edit mr-2"></i>
+              </button> -->
+              <!-- <button class="btn btn-danger btn-sm" (click)="deleteBudget(budget.id)">
+                <i class="fas fa-trash"></i>
+              </button> -->
+            <!-- </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

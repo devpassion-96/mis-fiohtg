@@ -1,0 +1,59 @@
+<div *ngIf="!isLoading" class="card mt-5">
+  <div class="card-header bg-secondary">
+    <h5 class="card-title text-white">Review Request</h5>
+  </div>
+  <div class="card-body">
+    <!-- Display Request Details -->
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <p><strong>Request ID:</strong> {{ request._id }}</p>
+        <p><strong>Project Name:</strong> {{ getProjectNameById(request.projectId) }}</p>
+        <p><strong>Requested By:</strong> {{ getEmployeeNameById(request.staffId) }}</p>
+        <p><strong>Amount Requested:</strong> D {{ request.amountRequested }}</p>
+        <p><strong>Status:</strong> {{ request.status }}</p>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <p><strong>Created At:</strong> {{ request.createdAt | date:'mediumDate' }}</p>
+        <p><strong>Description:</strong> {{ request.description }}</p>
+        <p><strong>Outputs:</strong> {{ request.outputs }}</p>
+        <p *ngIf="request.reviewedAt"><strong>Reviewed At:</strong> {{ request.reviewedAt | date:'mediumDate' }}</p>
+        <p *ngIf="request.approvedOrRejectedAt"><strong>Approved/Rejected At:</strong> {{ request.approvedOrRejectedAt | date:'mediumDate' }}</p>
+      </div>
+    </div>
+
+    <!-- List Existing Comments -->
+    <div *ngIf="request.comments && request.comments.length > 0" class="mb-3">
+      <h6>Comments:</h6>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let comment of request.comments">
+          "{{ comment.text }}"
+          <small class="text-muted">Reviewed By: {{getEmployeeNameById(comment.reviewedBy)}}, at {{ comment.reviewedAt | date:'medium' }}</small>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Add Comment Form -->
+    <div class="card card-outline card-info">
+      <div class="card-header">
+        <h6 class="card-title">Add Comment</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+          <div class="form-group">
+            <textarea id="comment" formControlName="comment" class="form-control" rows="3" placeholder="Enter your comment"></textarea>
+            <div *ngIf="submitted && commentForm.controls['comment'].errors?.['required']" class="text-danger mt-1">
+              Please enter a comment.
+            </div>
+          </div>
+          <button type="submit" class="btn btn-info">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="text-center mt-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

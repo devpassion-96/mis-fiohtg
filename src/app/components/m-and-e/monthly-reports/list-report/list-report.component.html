@@ -1,0 +1,33 @@
+<div class="container mt-5 mb-5">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Monthly Reports</h3>
+        <a routerLink="/add-monthly-report" class="btn btn-primary float-right">Create New Report</a>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Office Activities</th>
+              <th>Gov/NGO Meetings</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reports">
+              <td>{{ report.month }}</td>
+              <td>{{ report.officeActivities }}</td>
+              <td>{{ report.govNgoMeetings }}</td>
+              <td>
+                <a [routerLink]="['/monthly-report-detail', report._id]" class="btn btn-info btn-sm mr-2">View</a>
+                <a [routerLink]="['/edit-monthly-report', report._id]" class="btn btn-warning btn-sm mr-2">Edit</a>
+                <button (click)="deleteReport(report._id)" class="btn btn-danger btn-sm">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

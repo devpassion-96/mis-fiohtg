@@ -1,0 +1,43 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Training Schedule</h2>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Trainer</th>
+                <th>Location</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let training of trainings">
+                <td>{{ training.title }}</td>
+                <td>{{ training.startDate | date }}</td>
+                <td>{{ training.endDate | date }}</td>
+                <td>{{ training.trainer }}</td>
+                <td>{{ training.location }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm mr-2" (click)="editTraining(training.id)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteTraining(training.id)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Add button for creating new training -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

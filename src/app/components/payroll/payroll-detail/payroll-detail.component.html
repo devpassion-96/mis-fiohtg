@@ -1,0 +1,17 @@
+<div *ngIf="payroll" class="card">
+  <div class="card-header">
+    Payroll Details for {{ payroll.staffId }}
+  </div>
+  <div class="card-body">
+    <p>Basic Salary: {{ payroll.basicSalary }}</p>
+    <p>Bonuses: {{ payroll.bonuses }}</p>
+    <p>Deductions: {{ payroll.deductions }}</p>
+    <p>Net Salary: {{ payroll.netSalary }}</p>
+    <p>Month: {{ payroll.month }}</p>
+    <p>Year: {{ payroll.year }}</p>
+    <!-- Other details -->
+  </div>
+</div>
+<div *ngIf="!payroll" class="alert alert-warning">
+  No payroll details available.
+</div>

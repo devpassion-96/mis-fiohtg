@@ -1,0 +1,76 @@
+<div class="card mt-5 mb-5">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">Funding Requests (All)</h3>
+    <div class="ml-auto d-flex align-items-center">
+        <button (click)="exportExcel()" class="btn btn-success btn-sm mr-2">
+            <i class="fas fa-file-excel"></i> Export to Excel
+        </button>
+        <select #filterSelect class="form-control" (change)="onFilterChange(filterSelect.value)">
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Reviewed">Reviewed</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Staff</th>
+          <th>Project</th>
+          <th>Amount Requested</th>
+          <th>Files</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of filteredRequests">
+          <td>{{ request._id }}</td>
+          <td>{{ request.employeeName }}</td>
+          <td>{{ request.projectName }}</td>
+          <td>D {{ request.amountRequested }}</td>
+          <td>
+                
+            <span 
+              *ngFor="let file of request.files" 
+              (click)="viewFile(file)" 
+              class="file-link badge badge-primary mr-1 mb-1"
+              role="button"
+            >
+              {{ file.split('/').pop() }}
+            </span>
+          </td>
+          <td>{{ request.status }}</td>
+          <td>
+            <button class="btn btn-info btn-sm mr-2" (click)="printRequestDetails(request._id)" [disabled]="request.status !== 'Approved'">
+              <i class="fas fa-print">Print</i>
+            </button>
+          </td>
+
+
+          <!-- new addition -->
+          <td>
+            <!-- <ul>
+              <li *ngFor="let file of request.files">
+                <a [href]="file" target="_blank">{{ file }}</a>
+              </li>
+            </ul> -->
+          </td>
+          <!-- <td>
+            <a [routerLink]="['/print-request', request._id]" class="btn btn-warning btn-sm">Edit</a>
+          </td> -->
+
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer">
+    <h5>Total Amount from Approved Requests: D {{ totalAmountCollected }}</h5>
+  </div>
+</div>

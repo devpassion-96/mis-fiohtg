@@ -1,0 +1,22 @@
+<!-- <div class="card mt-5" *ngIf="vehicle">
+  <div class="card-header">
+    <h3 class="card-title">Vehicle Details</h3>
+  </div>
+  <div class="card-body">
+    <p><strong>Make:</strong> {{ vehicle.make }}</p>
+    <p><strong>Model:</strong> {{ vehicle.model }}</p>
+    <p><strong>Year:</strong> {{ vehicle.year }}</p>
+    <p><strong>License Plate:</strong> {{ vehicle.licensePlate }}</p>
+    <p><strong>Status:</strong> {{ vehicle.status }}</p>
+    <p *ngIf="vehicle.currentDriverId"><strong>Current Driver ID:</strong> {{ vehicle.currentDriverId }}</p>
+    <p><strong>Breakdown Status:</strong> {{ vehicle.breakdownStatus ? 'Yes' : 'No' }}</p>
+  </div>
+</div> -->
+<div *ngIf="vehicle">
+  <h2>Vehicle Details</h2>
+  <p><strong>Vehicle Number:</strong> {{ vehicle.vehicleNumber }}</p>
+  <p><strong>Status:</strong> {{ vehicle.status }}</p>
+</div>
+<div *ngIf="!vehicle">
+  <p>Loading vehicle details...</p>
+</div>

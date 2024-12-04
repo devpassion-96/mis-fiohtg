@@ -1,0 +1,51 @@
+  <div class="content container">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-12">
+            <h1 class="m-0 text-dark">Projects</h1>
+          </div>
+          <div class="col-4 col-sm-3">
+            <h5 class="mt-2">Filter Projects</h5>
+            <div class="d-flex flex-column align-items-sm-end align-items-start">
+
+              <select [(ngModel)]="selectedStatus" (change)="filterProjects()" class="form-control" id="projectStatusFilter">
+                <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-12" *ngFor="let project of filteredProjects | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+        <div class="info-box" [ngClass]="{'bg-gradient-info': project.status === 'Not Started', 'bg-gradient-warning': project.status === 'In Progress', 'bg-gradient-success': project.status === 'Completed'}">
+          <span class="info-box-icon">
+            <i class="fas" [ngClass]="{'fa-tasks': project.status === 'Not Started', 'fa-cogs': project.status === 'In Progress', 'fa-check-circle': project.status === 'Completed'}"></i>
+          </span>
+          <div class="info-box-content">
+            <span class="info-box-text">{{ project.name }}</span>
+            <span class="info-box-number">{{ project.endDate | date }}</span>
+            <span class="info-box-text">{{ project.status }}</span>
+
+            <!-- Optional Progress Bar -->
+            <div class="progress">
+              <div class="progress-bar" style="width: 70%"></div>
+            </div>
+
+            <!-- Action Icons -->
+            <div class="action-icons">
+              <i (click)="viewProject(project._id)" class="fas fa-eye action-icon view-icon" title="View Project"></i>
+              <i (click)="editProject(project._id)" class="fas fa-edit action-icon edit-icon" title="Edit Project"></i>
+              <i (click)="deleteProject(project._id)" class="fas fa-trash action-icon delete-icon" title="Delete Project"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+
+

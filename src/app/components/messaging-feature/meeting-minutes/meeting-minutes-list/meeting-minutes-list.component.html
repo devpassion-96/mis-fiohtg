@@ -1,0 +1,32 @@
+<div class="card mt-5">
+  <div class="card-header ">
+    <h3 class="card-title">Meeting Minutes List</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Meeting Date</th>
+          <th>Created By</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meetingMinute of meetingMinutesList">
+          <td>{{ meetingMinute.title }}</td>
+          <td>{{ meetingMinute.meetingDate | date:'medium' }}</td>
+          <td>{{ getEmployeeNameByStaffId(meetingMinute.createdBy) }}</td>
+          <td>
+            <button class="btn btn-info btn-sm mr-2" (click)="viewMeetingMinuteDetails(meetingMinute._id)">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-primary btn-sm" (click)="editMeetingMinute(meetingMinute._id)">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

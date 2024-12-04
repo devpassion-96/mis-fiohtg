@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Employee Development Tracking</h3>
+  </div>
+  <div class="card-body">
+    <div *ngFor="let employee of employees">
+      <h5>{{ employee.firstName }} {{ employee.lastName }} ({{ employee.staffId }})</h5>
+      <ul>
+        <li *ngFor="let training of getEmployeeTrainings(employee._id)">
+          {{ training.title }} - {{ training.startDate | date }} to {{ training.endDate | date }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

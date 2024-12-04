@@ -1,0 +1,103 @@
+<div *ngIf="employee" class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="page-title">Employee Details - {{ employee.firstName }} {{ employee.lastName }}</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+          <li class="breadcrumb-item active">Employee Profile</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Header -->
+
+  <!-- Profile Overview -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <img src="assets/images/fiohtg_logo.png" alt="Logo" class="rounded-circle" style="width: 100px; height: 100px;">
+       </div>
+        <div class="col-md-8">
+         <p><strong>Staff ID:</strong> {{ employee.staffId }}</p>
+            <p><strong>Name:</strong> {{ employee.firstName }} {{ employee.lastName }}</p>
+            <p><strong>Gender:</strong> {{ employee.gender }}</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Profile Overview -->
+
+  <!-- Angular-Based Tab Navigation -->
+  <div class="card tab-box">
+    <div class="row user-tabs">
+      <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'basic'" (click)="activeTab = 'basic'">Basic Information</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'professional'" (click)="activeTab = 'professional'">Professional Information</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'dependents'" (click)="activeTab = 'dependents'">Dependents</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+   <!-- Tab Content -->
+
+   <div class="card">
+    <div class="card-body">
+      <!-- Basic Information Tab Content -->
+      <div *ngIf="activeTab === 'basic'" class="tab-pane">
+
+          <div>
+            <h4>Basic Information</h4>
+            <p><strong>Staff ID:</strong> {{ employee.staffId }}</p>
+            <p><strong>Name:</strong> {{ employee.firstName }} {{ employee.lastName }}</p>
+            <p><strong>Gender:</strong> {{ employee.gender }}</p>
+            <p><strong>Date of Birth:</strong> {{ employee.dateOfBirth | date }}</p>
+            <p><strong>City:</strong> {{ employee.city }}</p>
+            <p><strong>Mobile Number:</strong> {{ employee.mobileNumber }}</p>
+            <p><strong>Email:</strong> {{ employee.email }}</p>
+          </div>
+      </div>
+
+      <!-- Professional Information Tab Content -->
+      <div *ngIf="activeTab === 'professional'" class="tab-pane">
+        <h4>Professional Information</h4>
+        <p><strong>Designation:</strong> {{ employee.designation }}</p>
+        <p><strong>Department:</strong> {{ employee.department }}</p>
+        <p><strong>Grade:</strong> {{ employee.grade }}</p>
+        <p><strong>Point:</strong> {{ employee.point }}</p>
+        <p><strong>National ID:</strong> {{ employee.nationalIdentificationNumber }}</p>
+        <p><strong>TIN Number:</strong> {{ employee.tinNumber }}</p>
+        <p><strong>SSHFC Number:</strong> {{ employee.sshfcNumber }}</p>
+        <p><strong>Staff Type:</strong> {{ employee.staffType }}</p>
+        <p><strong>Staff Status:</strong> {{ employee.staffStatus }}</p>
+        <p><strong>Basic Salary:</strong> {{ employee.basicSalary }}</p>
+        <p><strong>Probation End Date:</strong> {{ employee.probationEndDate | date }}</p>
+        <p><strong>Remarks:</strong> {{ employee.remarks }}</p>
+      </div>
+
+      <!-- Dependents Tab Content -->
+      <div *ngIf="activeTab === 'dependents'" class="tab-pane">
+        <h4>Dependents</h4>
+        <ul *ngIf="employee.dependents.length > 0">
+          <li *ngFor="let dependent of employee.dependents">
+            {{ dependent.dependentFirstName }} {{ dependent.dependentLastName }}
+            ({{ dependent.dependentRelationship }} - {{ dependent.dependentGender }},
+            DOB: {{ dependent.dependentDOB | date }})
+          </li>
+        </ul>
+        <p *ngIf="employee.dependents.length === 0">No dependents registered.</p>
+      </div>
+    </div>
+   </div>
+</div>

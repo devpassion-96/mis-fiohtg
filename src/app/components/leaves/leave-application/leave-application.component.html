@@ -1,0 +1,66 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="card">
+        <div class="card-header card-secondary">
+          <h3 class="card-title">{{ currentLeaveId ? 'Update Leave Request' : 'Leave Application Form' }}</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+
+            <div class="form-group mr-2">
+              <label for="handingOverTo">Handing Over To</label>
+              <select id="handingOverTo" class="form-control" formControlName="handingOverTo">
+                <option value="">Select Employee</option>
+                <option *ngFor="let handingOverTo of employees" [ngValue]="handingOverTo.staffId">{{ handingOverTo.firstName }} {{handingOverTo.lastName}}</option>
+              </select>
+              <div *ngIf="submitted && leaveForm.controls['handingOverTo'].errors?.['required']" class="text-danger">
+                Field is required.
+              </div>
+            </div>
+
+            <!-- Leave Type Field -->
+            <div class="form-group">
+              <label for="type">Leave Type</label>
+              <select class="form-control" id="type" formControlName="type">
+                <option value="">Select Leave Type</option>
+                <option *ngFor="let type of leaveTypes" [ngValue]="type">{{ type }}</option>
+              </select>
+              <div *ngIf="submitted && leaveForm.controls['type'].errors?.['required']" class="text-danger">
+                Selecting a leave type is required.
+              </div>
+            </div>
+
+            <!-- Start and End Date Fields -->
+            <div class="form-group">
+              <label for="startDate">Start Date</label>
+              <input type="date" class="form-control" id="startDate" formControlName="startDate">
+              <div *ngIf="submitted && leaveForm.controls['startDate'].errors?.['required']" class="text-danger">
+                Start Date is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="endDate">End Date</label>
+              <input type="date" class="form-control" id="endDate" formControlName="endDate">
+              <div *ngIf="submitted && leaveForm.controls['endDate'].errors?.['required']" class="text-danger">
+                End Date is required.
+              </div>
+              <div *ngIf="leaveForm.errors?.['dateInvalid']" class="text-danger">
+                Start date should be before end date.
+              </div>
+            </div>
+
+            <!-- Remarks Field -->
+            <div class="form-group">
+              <label for="remarks">Handing over notes:</label>
+              <textarea class="form-control" id="remarks" formControlName="remarks"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">{{ currentLeaveId ? 'Update Leave' : 'Apply for Leave' }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

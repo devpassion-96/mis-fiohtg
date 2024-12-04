@@ -1,0 +1,104 @@
+<section class="content mt-5">
+  <div class="container-fluid">
+    <!-- Info boxes -->
+    <div class="row">
+      <div class="col-12">
+        <!-- Invoice Section -->
+        <div class="invoice p-3 mb-3">
+          <!-- Header -->
+          <div class="row">
+            <div class="col-12">
+              <h4>
+                <img src="assets/images/fiohtg_logo.png" alt="Fiohtg Logo" style="height: 50px;">
+                Fiohtg, The Gambia
+                <small class="float-right">Date: {{ request.createdAt | date:'MM/dd/yyyy' }}</small>
+              </h4>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="row invoice-info">
+            <!-- From Address -->
+            <div class="col-sm-4 invoice-col">
+              Address
+              <address>
+                <strong>Fiohtg, The Gambia</strong><br>
+                Address Line 1<br>
+                Address Line 2<br>
+                Phone: +220 3992020<br>
+                Email: info@fiohtg.com
+              </address>
+            </div>
+
+
+            <!-- Invoice Info -->
+            <div class="col-sm-4 invoice-col">
+              <b>Project:</b> {{ project?.name }}<br>
+              <!-- <b>Staff Name</b> {{ employee?.firstName }} {{ employee?.lastName }}<br> -->
+              <div *ngIf="employee">
+                <b>Staff Name: </b> {{ employee.firstName }} {{ employee.lastName }}
+              </div>
+              <b>Approved Date:</b> {{ request.approvedOrRejectedAt | date:'MM/dd/yyyy' }}<br>
+              <b>Status:</b>  {{ request.status }} <br>
+              <b>Decided By:</b>  {{ getEmployeeNameById(request.reviewedBy) }}<br>
+              <b>Director's Comment:</b>  {{ lastCommentText }} <br>
+            </div>
+          </div>
+
+          <!-- Products Table -->
+          <div class="row">
+            <div class="col-12 table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Description</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ request.description }}</td>
+
+                  </tr>
+                  <tr>
+                    <td> Outputs: {{ request.outputs }}</td>
+
+                  </tr>
+                  <!-- Repeat for each product -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Payment Info -->
+          <div class="row">
+
+            <div class="col-6">
+              <p class="lead">Approved Date {{ request.approvedOrRejectedAt | date:'MM/dd/yyyy' }}</p>
+              <div class="table-responsive">
+                <table class="table">
+                  <tr>
+                    <th style="width:50%">Amount Approved:</th>
+                    <td>D {{ request.amountRequested }}</td>
+                  </tr>
+
+
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Print Button -->
+          <div class="row no-print">
+            <div class="col-12">
+              <button onclick="window.print();" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+

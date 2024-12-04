@@ -1,0 +1,267 @@
+<div class="container mt-5 mb-5">
+  <!-- Form for Adding Request -->
+<div *ngIf="!isEditing" class="card card-primary">
+  <div class="card-header">
+    <h3 class="card-title">Add New Request</h3>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <label for="officerName">Officer's Name</label>
+      <input
+        [(ngModel)]="newRequest.requestingOfficer"
+        id="officerName"
+        class="form-control"
+        placeholder="Officer's Name"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="unit">Unit</label>
+      <input
+        [(ngModel)]="newRequest.unit"
+        id="unit"
+        class="form-control"
+        placeholder="Unit"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="purpose">Purpose</label>
+      <input
+        [(ngModel)]="newRequest.purpose"
+        id="purpose"
+        class="form-control"
+        placeholder="Purpose of Trip"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="projectGoalNumber">Project/Goal Number</label>
+      <input
+        [(ngModel)]="newRequest.projectGoalNumber"
+        id="projectGoalNumber"
+        class="form-control"
+        placeholder="Project/Goal Number"
+        type="text"
+      />
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="travelingDay">Traveling Day</label>
+        <input
+          [(ngModel)]="newRequest.travelingDay"
+          id="travelingDay"
+          class="form-control"
+          type="date"
+        />
+      </div>
+      <div class="form-group col-md-6">
+        <label for="returnDay">Return Day</label>
+        <input
+          [(ngModel)]="newRequest.returnDay"
+          id="returnDay"
+          class="form-control"
+          type="date"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="cumulativeDays">Cumulative Days</label>
+      <input
+        [(ngModel)]="newRequest.cumulativeDays"
+        id="cumulativeDays"
+        class="form-control"
+        placeholder="Days"
+        type="number"
+      />
+    </div>
+    <div class="form-group">
+      <label for="regions">Regions</label>
+      <input
+        [(ngModel)]="newRequest.regions"
+        id="regions"
+        class="form-control"
+        placeholder="Regions"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="district">District</label>
+      <input
+        [(ngModel)]="newRequest.district"
+        id="district"
+        class="form-control"
+        placeholder="District"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="villages">Villages</label>
+      <input
+        [(ngModel)]="newRequest.villages"
+        id="villages"
+        class="form-control"
+        placeholder="Villages"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="remarks">Remarks</label>
+      <textarea
+        [(ngModel)]="newRequest.remarks"
+        id="remarks"
+        class="form-control"
+        placeholder="Remarks"
+        rows="2"
+      ></textarea>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-success" (click)="addRequest()">Add Request</button>
+  </div>
+</div>
+
+<!-- Form for Editing Request -->
+<div *ngIf="isEditing" class="card card-warning">
+<div class="card-header">
+<h3 class="card-title">Edit Request</h3>
+</div>
+<div class="card-body">
+<!-- Officer's Name -->
+<div class="form-group">
+  <label for="officerName">Officer's Name</label>
+  <input
+    [(ngModel)]="requestToEdit.requestingOfficer"
+    id="officerName"
+    class="form-control"
+    placeholder="Officer's Name"
+    type="text"
+  />
+</div>
+
+<!-- Unit -->
+<div class="form-group">
+  <label for="unit">Unit</label>
+  <input
+    [(ngModel)]="requestToEdit.unit"
+    id="unit"
+    class="form-control"
+    placeholder="Unit"
+    type="text"
+  />
+</div>
+
+<!-- Purpose of Trip -->
+<div class="form-group">
+  <label for="purpose">Purpose of Trip</label>
+  <input
+    [(ngModel)]="requestToEdit.purpose"
+    id="purpose"
+    class="form-control"
+    placeholder="Purpose of Trip"
+    type="text"
+  />
+</div>
+
+<!-- Project/Goal Number -->
+<div class="form-group">
+  <label for="projectGoalNumber">Project/Goal Number</label>
+  <input
+    [(ngModel)]="requestToEdit.projectGoalNumber"
+    id="projectGoalNumber"
+    class="form-control"
+    placeholder="Project/Goal Number"
+    type="text"
+  />
+</div>
+
+<!-- Traveling Day and Return Day -->
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="travelingDay">Traveling Day</label>
+    <input
+      [(ngModel)]="requestToEdit.travelingDay"
+      id="travelingDay"
+      class="form-control"
+      type="date"
+    />
+  </div>
+  <div class="form-group col-md-6">
+    <label for="returnDay">Return Day</label>
+    <input
+      [(ngModel)]="requestToEdit.returnDay"
+      id="returnDay"
+      class="form-control"
+      type="date"
+    />
+  </div>
+</div>
+
+<!-- Cumulative Days -->
+<div class="form-group">
+  <label for="cumulativeDays">Cumulative Days</label>
+  <input
+    [(ngModel)]="requestToEdit.cumulativeDays"
+    id="cumulativeDays"
+    class="form-control"
+    placeholder="Days"
+    type="number"
+  />
+</div>
+
+<!-- Regions -->
+<div class="form-group">
+  <label for="regions">Regions</label>
+  <input
+    [(ngModel)]="requestToEdit.regions"
+    id="regions"
+    class="form-control"
+    placeholder="Regions"
+    type="text"
+  />
+</div>
+
+<!-- District -->
+<div class="form-group">
+  <label for="district">District</label>
+  <input
+    [(ngModel)]="requestToEdit.district"
+    id="district"
+    class="form-control"
+    placeholder="District"
+    type="text"
+  />
+</div>
+
+<!-- Villages -->
+<div class="form-group">
+  <label for="villages">Villages</label>
+  <input
+    [(ngModel)]="requestToEdit.villages"
+    id="villages"
+    class="form-control"
+    placeholder="Villages"
+    type="text"
+  />
+</div>
+
+<!-- Remarks -->
+<div class="form-group">
+  <label for="remarks">Remarks</label>
+  <textarea
+    [(ngModel)]="requestToEdit.remarks"
+    id="remarks"
+    class="form-control"
+    placeholder="Remarks"
+    rows="3"
+  ></textarea>
+</div>
+</div>
+<div class="card-footer">
+<button class="btn btn-primary" (click)="updateRequest()">Update Request</button>
+<button class="btn btn-secondary" (click)="isEditing = false">Cancel</button>
+</div>
+</div>
+
+
+</div>

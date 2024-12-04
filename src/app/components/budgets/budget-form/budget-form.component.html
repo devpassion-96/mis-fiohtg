@@ -1,0 +1,55 @@
+<form [formGroup]="budgetForm" (ngSubmit)="submitBudget()" class="form-horizontal">
+  <div class="card card-secondary mt-5 justify-content-center col-9">
+    <div class="card-header">
+      <h3 class="card-title">Budget Allocation</h3>
+    </div>
+
+    <div class="card-body">
+      <!-- Project Dropdown -->
+      <div class="form-group row">
+        <label for="projectSelect" class="col-sm-2 col-form-label">Project:</label>
+        <div class="col-sm-10">
+          <select id="projectSelect" formControlName="projectId" class="form-control">
+            <option value="" disabled>Select Project</option>
+            <option *ngFor="let project of projects" [value]="project._id">{{ project.name }}</option>
+          </select>
+          <div *ngIf="submitted && budgetForm.controls['projectId'].errors?.['required']" class="text-danger">
+            Selecting a project is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Department Dropdown -->
+      <div class="form-group row">
+        <label for="departmentSelect" class="col-sm-2 col-form-label">Department:</label>
+        <div class="col-sm-10">
+          <select id="departmentSelect" formControlName="departmentId" class="form-control">
+            <option value="" disabled>Select Department</option>
+            <option *ngFor="let department of departments" [value]="department._id">{{ department.name }}</option>
+          </select>
+          <div *ngIf="submitted && budgetForm.controls['departmentId'].errors?.['required']" class="text-danger">
+            Selecting a department is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount Input -->
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Amount:</label>
+        <div class="col-sm-10">
+          <input type="number" formControlName="amount" placeholder="Amount" class="form-control">
+          <div *ngIf="submitted && budgetForm.controls['amount'].errors?.['required']" class="text-danger">
+            Amount is required.
+          </div>
+          <div *ngIf="submitted && budgetForm.controls['amount'].errors?.['min']" class="text-danger">
+            Amount should be a positive number.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update' : 'Create' }} Budget</button>
+    </div>
+  </div>
+</form>

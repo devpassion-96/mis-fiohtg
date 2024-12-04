@@ -1,0 +1,9 @@
+@media print {
+    /* Specific print adjustments, if needed */
+    .container, .card, .card-header, .card-body {
+        width: 100%;
+        padding: 0.5rem;
+    }
+    .btn { display: none; }
+  }
+  

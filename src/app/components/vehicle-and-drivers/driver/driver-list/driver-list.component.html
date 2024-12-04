@@ -1,0 +1,76 @@
+<div class="driver-list card">
+  <div class="card-header">
+    <h2 class="card-title">Drivers</h2>
+  </div>
+
+  <!-- Form for Adding or Editing Driver -->
+  <div class="card-body">
+    <div *ngIf="!isEditing" class="form-inline mb-3">
+      <input
+        [(ngModel)]="newDriver.name"
+        placeholder="Driver Name"
+        class="form-control mr-2"
+      />
+      <select [(ngModel)]="newDriver.status" class="form-control mr-2">
+        <option value="Available">Available</option>
+        <option value="On Trek">On Trek</option>
+      </select>
+      <button class="btn btn-success" (click)="addDriver()">Add Driver</button>
+    </div>
+
+    <div *ngIf="isEditing" class="form-inline mb-3">
+      <input
+        [(ngModel)]="driverToEdit.name"
+        placeholder="Driver Name"
+        class="form-control mr-2"
+      />
+      <select [(ngModel)]="driverToEdit.status" class="form-control mr-2">
+        <option value="Available">Available</option>
+        <option value="On Trek">On Trek</option>
+      </select>
+      <button class="btn btn-primary mr-2" (click)="updateDriver()">Update Driver</button>
+      <button class="btn btn-secondary" (click)="isEditing = false">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Driver List -->
+  <div class="card-body table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Driver Name</th>
+          <th>Status</th>
+          <th>Return Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of drivers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ driver.name }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-success': driver.status === 'Available',
+                'badge-warning': driver.status === 'On Trek'
+              }"
+            >
+              {{ driver.status }}
+            </span>
+          </td>
+          <td>{{ driver.updatedAt }}</td>
+          <td>
+            <button class="btn btn-info btn-sm mr-1" (click)="editDriver(driver)">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteDriver(driver._id!)">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

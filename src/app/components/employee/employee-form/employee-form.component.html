@@ -1,0 +1,312 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card card-secondary">
+        <div class="card-header ">
+          <h3 class="card-title">Employee Form</h3>
+        </div>
+        <div class="card-body">
+      <form  *ngIf="employeeForm" [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+
+        <!-- Personal Information -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" class="form-control" formControlName="firstName">
+              <div *ngIf="submitted && employeeForm.controls['firstName'].errors?.['required']" class="text-danger">
+                First Name is required.
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" class="form-control" formControlName="lastName">
+              <div *ngIf="submitted && employeeForm.controls['lastName'].errors?.['required']" class="text-danger">
+                Last Name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select id="gender" class="form-control" formControlName="gender">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div *ngIf="submitted && employeeForm.controls['gender'].errors?.['required']" class="text-danger">
+                Gender is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="dateOfBirth">Date of Birth</label>
+              <input type="date" id="dateOfBirth" class="form-control" formControlName="dateOfBirth">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" class="form-control" formControlName="city">
+              <div *ngIf="submitted && employeeForm.controls['city'].errors?.['required']" class="text-danger">
+                City is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="mobileNumber">Mobile Number</label>
+              <input type="tel" id="mobileNumber" class="form-control" formControlName="mobileNumber">
+              <div *ngIf="submitted && employeeForm.controls['mobileNumber'].errors?.['required']" class="text-danger">
+                Mobile Number is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" formControlName="email">
+              <div *ngIf="submitted">
+                <div *ngIf="submitted && employeeForm.controls['email'].errors?.['required']" class="text-danger">
+                  Email is required.
+                </div>
+                <div *ngIf="submitted && employeeForm.controls['email'].errors?.['email']" class="text-danger">
+                  Please enter a valid email.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employment Information -->
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="appointmentDate">Appointment Date</label>
+              <input type="date" id="appointmentDate" class="form-control" formControlName="appointmentDate">
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="department">Department</label>
+
+            <select id="department" class="form-control" formControlName="department">
+              <option value="">Select Department</option>
+              <option *ngFor="let department of departments" [ngValue]="department._id">{{ department.name }}</option>
+            </select>
+            <div *ngIf="submitted && employeeForm.controls['department'].errors?.['required']" class="text-danger">
+              Department is required.
+            </div>
+
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="designation">Designation</label>
+            <select id="designation" class="form-control" formControlName="designation">
+              <option value="">Select Designation</option>
+              <option *ngFor="let designation of designations" [ngValue]="designation.title">{{ designation.title }}</option>
+            </select>
+            <div *ngIf="submitted && employeeForm.controls['designation'].errors?.['required']" class="text-danger">
+              Designation is required.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="grade">Grade</label>
+              <input type="number" id="grade" class="form-control" formControlName="grade">
+              <div *ngIf="submitted">
+                <div *ngIf="submitted && employeeForm.controls['grade'].errors?.['required']" class="text-danger">
+                  Grade is required.
+                </div>
+                <div *ngIf="submitted && employeeForm.controls['grade'].errors?.['min']" class="text-danger">
+                  Grade must be greater than 0.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="point">Point</label>
+              <input type="number" id="point" class="form-control" formControlName="point">
+              <div *ngIf="submitted">
+                <div *ngIf="submitted && employeeForm.controls['point'].errors?.['required']" class="text-danger">
+                  Point is required.
+                </div>
+                <div *ngIf="submitted && employeeForm.controls['point'].errors?.['min']" class="text-danger">
+                  Point must be greater than 0.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="basicSalary">Basic Salary</label>
+              <input type="number" id="basicSalary" class="form-control" formControlName="basicSalary">
+              <div *ngIf="submitted">
+                <div *ngIf="submitted && employeeForm.controls['basicSalary'].errors?.['required']" class="text-danger">
+                  Basic Salary is required.
+                </div>
+                <div *ngIf="submitted && employeeForm.controls['basicSalary'].errors?.['min']" class="text-danger">
+                  Basic Salary must be non-negative.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nationalIdentificationNumber">Id Card Number</label>
+              <input type="number" id="nationalIdentificationNumber" class="form-control" formControlName="nationalIdentificationNumber">
+              <div *ngIf="submitted">
+                <div *ngIf="submitted && employeeForm.controls['nationalIdentificationNumber'].errors?.['required']" class="text-danger">
+                  ID is required.
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="staffType">Staff Type</label>
+              <select id="staffType" class="form-control" formControlName="staffType">
+                <option value="">Select Type</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Contract">Contract</option>
+              </select>
+              <div *ngIf="submitted && employeeForm.controls['staffType'].errors?.['required']" class="text-danger">
+                Staff Type is required.
+              </div>
+            </div>
+          </div>
+
+          <!-- tin number -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="tinNumber">TIN Number</label>
+              <input type="number" id="tinNumber" class="form-control" formControlName="tinNumber">
+
+            </div>
+          </div>
+
+          <!-- sshfc number -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="sshfcNumber">Social Security Number</label>
+              <input type="number" id="sshfcNumber" class="form-control" formControlName="sshfcNumber">
+
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="staffStatus">Staff Status</label>
+              <select id="staffStatus" class="form-control" formControlName="staffStatus">
+                <option value="">Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div *ngIf="submitted && employeeForm.controls['staffStatus'].errors?.['required']" class="text-danger">
+                Staff Status is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="probationEndDate">Probation End Date</label>
+              <input type="date" id="probationEndDate" class="form-control" formControlName="probationEndDate">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="remarks">Remarks</label>
+              <textarea id="remarks" class="form-control" formControlName="remarks"></textarea>
+            </div>
+          </div>
+          <!-- <div class="col-md-12">
+            <div class="form-group">
+              <label for="image">Image URL</label>
+              <input type="text" id="image" class="form-control" formControlName="image">
+            </div>
+          </div> -->
+        </div>
+
+        <!-- Dependents -->
+        <div class="row">
+          <div class="col-12">
+            <div formArrayName="dependents">
+              <label> {{ isEditMode ? 'Update Dependent(s)' : 'Add Dependent(s) ' }}</label>
+              <button type="button" class="btn btn-secondary ml-2 btn-sm" (click)="addDependent()">Add Dependent</button>
+              <div *ngFor="let dependent of dependents.controls; let i = index" [formGroupName]="i" class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="dependentFirstName">Dependent First Name</label>
+                    <input type="text" id="dependentFirstName" class="form-control" formControlName="dependentFirstName">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="dependentLastName">Dependent Last Name</label>
+                    <input type="text" id="dependentLastName" class="form-control" formControlName="dependentLastName">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="dependentDOB">Date of Birth</label>
+                    <input type="date" id="dependentDOB" class="form-control" formControlName="dependentDOB">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="dependentGender">Gender</label>
+                    <select id="dependentGender" class="form-control" formControlName="dependentGender">
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="dependentRelationship">Relationship</label>
+                    <input type="text" id="dependentRelationship" class="form-control" formControlName="dependentRelationship">
+                    <div class="input-group-append">
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-danger mt-4" (click)="removeDependent(i)">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                </div>
+                <hr>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary"> {{ isEditMode ? 'Update Employee' : 'Create Employee' }}</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

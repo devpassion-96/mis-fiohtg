@@ -1,0 +1,474 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="#" class="brand-link">
+    <span class="brand-text font-weight-light">FIOHTG System</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div *ngIf="user$ | async as user;" class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="info">
+        <a class="d-block">{{ user.username }}</a>
+      </div>
+
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+       
+          
+        
+        <!-- Dashboard Item -->
+        <li class="nav-item" >
+          <a [routerLink]="['/dashboard']" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+
+
+
+        <!-- Employees Dropdown -->
+        <!-- <li *ngIf="userRole === 'admin'" class="nav-item  "> -->
+      <li class="nav-item ">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Employees
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/employee-list']" class="nav-link">
+                <i class="far fa-list-alt nav-icon"></i>
+                <p>
+                  All Employees 
+                  <!-- <span class="badge badge-primary ml-2" >10</span> -->
+                  <!-- <span class="badge badge-primary" *ngIf="employeeCount > 0">{{ employeeCount }}</span> -->
+                </p>
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/employee-form']" class="nav-link">
+                <i class="fas fa-user-plus nav-icon"></i>
+                <p>Add Employee</p>
+              </a>
+            </li>
+
+            <!-- Add Department List -->
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/department-list']" class="nav-link">
+                <i class="far fa-building nav-icon"></i>
+                <p>Department List</p>
+              </a>
+            </li>
+            <!-- Add Department Form -->
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/department-add']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Add Department</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- ... existing sidebar content ... -->
+
+        <!-- Project Management Dropdown -->
+        <li class="nav-item" *ngIf="userRole === 'admin'">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-project-diagram"></i> <!-- Icon for Project Management -->
+            <p>
+              Project Management
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/projects']" class="nav-link">
+                <i class="fas fa-th-list nav-icon"></i>
+                <p>Projects</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/project-form']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Add Project</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/budget-list']" class="nav-link">
+                <i class="fas fa-th-list nav-icon"></i>
+                <p>Budget List</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/budget-form']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Create Budget</p>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <!-- Request Management Dropdown -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-file-alt"></i> <!-- Icon for Request Management -->
+            <p>
+              Fund Requests
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/request-form']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Make Request</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/request-list']" class="nav-link">
+                <i class="fas fa-list nav-icon"></i>
+                <p>Request List</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/pending-requests']" class="nav-link">
+                <i class="fas fa-hourglass-start nav-icon"></i>
+                <p>Manager Review List</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/m-and-e-review-list']" class="nav-link">
+                <i class="fas fa-hourglass-start nav-icon"></i>
+                <p>M&E Review List</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/finance-list']" class="nav-link">
+                <i class="fas fa-hourglass-start nav-icon"></i>
+                <p>Finance Review List</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/reviewed-requests']" class="nav-link">
+                <i class="fas fa-check-square nav-icon"></i>
+                <p>Reviewed Requests</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a [routerLink]="['/retire-fund']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Retire Fund</p>
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/retire-fund-list']" class="nav-link">
+                <i class="fas fa-list-alt nav-icon"></i>
+                <p>Retirements</p>
+              </a>
+            </li>
+
+           
+          </ul>
+        </li>
+
+        <!-- vehicle and driver feature -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-car"></i>
+            <p>
+              Vehicles & Driver
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/vehicle-list']" class="nav-link">
+                <i class="nav-icon fas fa-car"></i>
+                <p>Vehicle List</p>
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/driver-list']" class="nav-link">
+                <i class="nav-icon fas fa-user-tie"></i>
+                <p>Driver List</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-request-form']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Make Vehicle Request</p>
+              </a>
+            </li>
+            
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-request-list']" class="nav-link">
+                <i class="nav-icon fas fa-file-alt"></i>
+                <p>Vehicle Request List</p>
+              </a>
+            </li>
+            
+            <!-- <li class="nav-item">
+              <a [routerLink]="['/vehicle-form']" class="nav-link">
+                <i class="fas fa-plus nav-icon"></i>
+                <p>Add Vehicle</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-list']" class="nav-link">
+                <i class="fas fa-car-side nav-icon"></i>
+                <p>Vehicles</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/driver-form']" class="nav-link">
+                <i class="fas fa-user-plus nav-icon"></i>
+                <p>Add Driver</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/driver-list']" class="nav-link">
+                <i class="fas fa-id-badge nav-icon"></i>
+                <p>Drivers</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-request-form']" class="nav-link">
+                <i class="fas fa-edit nav-icon"></i>
+                <p>Make Vehicle Request</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-request-list']" class="nav-link">
+                <i class="fas fa-list nav-icon"></i>
+                <p>Requests</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-allocation-form']" class="nav-link">
+                <i class="fas fa-hand-pointer nav-icon"></i>
+                <p>Allocate Vehicles</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/vehicle-allocation-list']" class="nav-link">
+                <i class="fas fa-clipboard-list nav-icon"></i>
+                <p>Process Allocations</p>
+              </a>
+            </li> -->
+          </ul>
+        </li>
+
+        <!-- Leaves Dropdown -->
+        <li class="nav-item  ">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <p>
+              Leaves
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/leave-form']" class="nav-link">
+                <i class="fas fa-calendar-plus nav-icon"></i>
+                <p>Make Request</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/leave-list']" class="nav-link">
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>All Leave Requests</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/finance-leave-review']" class="nav-link">
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>Finance Leave Review</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/hr-leave-review']" class="nav-link">
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>HR Leave Review</p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="userRole === 'admin'">
+              <a [routerLink]="['/leave-approval']" class="nav-link">
+                <i class="fas fa-calendar-check nav-icon"></i>
+                <p>Leave Approval</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Daily Permission Dropdown -->
+        <li class="nav-item  ">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-envelope-open-text"></i>
+            <p>
+              Permissions
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/daily-permission-form']" class="nav-link">
+                <i class="fas fa-file-signature nav-icon"></i>
+                <p>Take Permission</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/supervisor-approval']" class="nav-link">
+                <i class="fas fa-hourglass-start nav-icon"></i>
+                <p>Pending Requests</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/daily-permission-list']" class="nav-link">
+                <i class="fas fa-check-circle nav-icon"></i>
+                <p>All Requests</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- activity report -->
+<li class="nav-item" *ngIf="userRole === 'admin'">
+  <a href="#" class="nav-link">
+    <i class="nav-icon fas fa-chart-line"></i> <!-- Updated icon for M & E -->
+    <p>
+      M & E
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a [routerLink]="['/activity-report-form']" class="nav-link">
+        <i class="fas fa-edit nav-icon"></i> <!-- Updated icon for adding reports -->
+        <p>Add Activity Report</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a [routerLink]="['/view-reports']" class="nav-link">
+        <i class="fas fa-eye nav-icon"></i> <!-- Updated icon for viewing reports -->
+        <p>View Reports</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a [routerLink]="['/performance-add']" class="nav-link">
+        <i class="fas fa-plus-circle nav-icon"></i> <!-- Updated icon for adding indicators -->
+        <p>Add Indicator Tracker</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a [routerLink]="['/performance-list']" class="nav-link">
+        <i class="fas fa-list-alt nav-icon"></i> <!-- Updated icon for viewing indicator list -->
+        <p>View Indicator List</p>
+      </a>
+    </li>
+
+    <!-- monthly reports -->
+
+
+    <li class="nav-item">
+      <a [routerLink]="['/add-monthly-report']" class="nav-link">
+        <i class="fas fa-plus-circle nav-icon"></i> <!-- Updated icon for adding indicators -->
+        <p>Add Monthly Report</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a [routerLink]="['/monthly-reports']" class="nav-link">
+        <i class="fas fa-list-alt nav-icon"></i> <!-- Updated icon for viewing indicator list -->
+        <p>View Monthly Report</p>
+      </a>
+    </li>
+
+    <!-- Commented sections left as is; suggested icons could be similar to above depending on the specific functionality -->
+  </ul>
+</li>
+
+
+            <!-- Messaging Dropdown -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-envelope"></i>
+            <p>
+              Messaging
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <!-- Meeting Minutes List -->
+            <li class="nav-item">
+              <a [routerLink]="['/meeting-minutes']" class="nav-link">
+                <i class="fas fa-clipboard-list nav-icon"></i>
+                <p>Meeting Minutes List</p>
+              </a>
+            </li>
+            <!-- Create Meeting Minutes -->
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/meeting-minutes-create']" class="nav-link">
+                <i class="fas fa-plus-square nav-icon"></i>
+                <p>Write Minutes</p>
+              </a>
+            </li>
+            <!-- Memo List -->
+            <li class="nav-item">
+              <a [routerLink]="['/memos']" class="nav-link">
+                <i class="fas fa-sticky-note nav-icon"></i>
+                <p>Memos</p>
+              </a>
+            </li>
+            <!-- Memo Form -->
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/memo-form']" class="nav-link">
+                <i class="fas fa-file-alt nav-icon"></i>
+                <p>Write Memo</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+
+
+        <!-- <li class="nav-item">
+          <a [routerLink]="['/profile']" class="nav-link">
+            <i class="fas fa-list nav-icon"></i>
+            <p>Profile</p>
+          </a>
+        </li> -->
+
+
+        <li class="nav-item" *ngIf="userRole === 'admin'">
+          <a [routerLink]="['/register']" class="nav-link">
+            <i class="fas fa-user-plus nav-icon"></i>
+            <p>Register User</p>
+          </a>
+        </li>
+
+
+        <button (click)="onLogout()" class="btn btn-danger">Logout</button>
+
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

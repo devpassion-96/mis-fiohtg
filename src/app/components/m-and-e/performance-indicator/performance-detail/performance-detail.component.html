@@ -1,0 +1,113 @@
+<div class="container mt-3" *ngIf="indicator" id="print-section">
+
+  
+
+  <div class="card">
+    <div class="card-header">
+
+      <div class="row">
+        <div class="col-10">
+          <h3 class="card-title">Performance Indicator Details</h3>
+        </div>
+
+        <div class="col-2">
+          <button printSectionId="print-section" ngxPrint [useExistingCss]="true" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+        </div>
+      </div>
+     
+    </div>
+    <div class="card-body">
+      <!-- Cumulative Values -->
+      <div class="mb-4">
+        <h4>Cumulative Values</h4>
+        <div class="row">
+
+          <div class="col-sm-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-bullseye"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Total Target</span>
+                <span class="info-box-number">{{ cumulativeTarget }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Total Achieved</span>
+                <span class="info-box-number">{{ cumulativeAchieved }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-minus-circle"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Total Variance</span>
+                <span class="info-box-number">{{ cumulativeVariance }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon" [ngClass]="{'bg-success': status === 'Attained', 'bg-danger': status === 'Not Attained'}"><i class="fas" [ngClass]="{'fa-check': status === 'Attained', 'fa-times': status === 'Not Attained'}"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Status</span>
+                <span class="info-box-number">{{ status }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verifiable Indicators Details -->
+      <div *ngFor="let vi of indicator.verifiableIndicators; let i = index">
+        <h5 class="text-bold">{{ vi.level }} - {{ vi.interventionLogic }}</h5>
+        <div>
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chart-line"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Indicator {{ i + 1 }}</span>
+              <span class="info-box-number">{{ vi.indicator }}</span>
+            </div>
+          </div>
+          <dl class="row">
+            <dt class="col-sm-4">Baseline:</dt>
+            <dd class="col-sm-8">{{ vi.baseline }}</dd>
+            <dt class="col-sm-4">Means of Verification:</dt>
+            <dd class="col-sm-8">{{ vi.meansOfVerification }}</dd>
+          </dl>
+          <div *ngFor="let td of vi.targetData">
+            <ul class="list-group mb-3">
+              <li class="list-group-item">
+                <strong>Period:</strong> {{ td.period }}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Target Female: {{ td.targetFemale }}
+                <span class="badge bg-primary rounded-pill">{{ td.achievedFemale }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Target Male: {{ td.targetMale }}
+                <span class="badge bg-primary rounded-pill">{{ td.achievedMale }}</span>
+              </li>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <strong>Variance Female:</strong> {{ td.varianceFemale }}
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>Variance Male:</strong> {{ td.varianceMale }}
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

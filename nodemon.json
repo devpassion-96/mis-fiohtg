@@ -1,0 +1,6 @@
+{
+  "env": {
+    "MONGO_ATLAS_PW": "hMceefa60KqI9nNc",
+    "JWT_KEY": "secret_key_for_fiohtg_application"
+  }
+}

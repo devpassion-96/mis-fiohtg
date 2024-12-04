@@ -1,0 +1,171 @@
+<div class="card card-primary col-9 mt-5">
+
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card-header">
+        <h3 class="card-title">{{ isUpdateMode ? 'Update' : 'Create' }} Project</h3>
+      </div>
+
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+        <div class="card-body">
+          <div class="form-group row">
+            <label for="projectName" class="col-sm-2 col-form-label">Project Name</label>
+            <div class="col-sm-10">
+              <input type="text" formControlName="name" class="form-control" id="projectName" placeholder="Project Name">
+              <div *ngIf="submitted && projectForm.controls['name'].errors?.['required']" class="text-danger">
+                Project Name is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+              <textarea formControlName="description" class="form-control" id="description" placeholder="Description" rows="6"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Start Date</label>
+            <div class="col-sm-10">
+              <input type="date" formControlName="startDate" class="form-control" >
+              <div *ngIf="submitted && projectForm.controls['startDate'].errors?.['required']" class="text-danger">
+                Start Date is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">End Date</label>
+            <div class="col-sm-10">
+              <input type="date" formControlName="endDate" class="form-control">
+              <div *ngIf="submitted && projectForm.controls['endDate'].errors?.['required']" class="text-danger">
+                End Date is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="status" class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-10">
+              <select formControlName="status" class="form-control" id="status">
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <div *ngIf="submitted && projectForm.controls['status'].errors?.['required']" class="text-danger">
+                Status is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="managerId" class="col-sm-2 col-form-label">Manager</label>
+            <!-- <div class="col-sm-10">
+              <input type="text" formControlName="managerId" class="form-control" id="managerId" placeholder="Manager ID">
+            </div> -->
+
+            <div class="col-sm-10">
+              <select formControlName="managerId" class="form-control">
+                <option value="" disabled>Select Staff</option>
+                <option *ngFor="let employee of employees" [value]="employee.staffId">{{ employee.firstName }} {{ employee.lastName }}</option>
+              </select>
+              <div *ngIf="submitted && projectForm.controls['managerId'].errors?.['required']" class="text-danger">
+                Manager is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" formArrayName="teamMembers">
+            <label class="col-sm-2 col-form-label">Team Members</label>
+            <div class="col-sm-10">
+              <div *ngFor="let member of teamMembers.controls; let i = index" class="input-group mb-3">
+                <select [formControlName]="i" class="form-control" id="staffId">
+                  <option value="">Select Staff</option>
+                  <option *ngFor="let employee of employees" [value]="employee.staffId">{{ employee.firstName }} {{ employee.lastName }}</option>
+                </select>
+                <div class="input-group-append">
+                  <button (click)="removeTeamMember(i)" class="btn btn-danger">Remove</button>
+                </div>
+                <div *ngIf="submitted && member.errors?.['required']" class="text-danger">
+                  Team Member is required.
+                </div>
+              </div>
+              <button type="button" (click)="addTeamMember()" class="btn btn-primary">Add Team Member</button>
+            </div>
+          </div>
+
+          <div formArrayName="activities" class="mt-4">
+            <h5 class="mb-2">Project Activities</h5>
+            <div *ngFor="let activity of activities.controls; let i = index" [formGroupName]="i" class="card mb-2">
+              <div class="card-body">
+                <!-- Description Field -->
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Description</label>
+                  <div class="col-sm-10">
+                    <input formControlName="description" class="form-control" placeholder="Description">
+                    <div *ngIf="submitted && activity.get('description').errors?.['required']" class="text-danger">
+                      Activity Description is required.
+                    </div>
+                  </div>
+                </div>
+                <!-- Start Date Field -->
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Start Date</label>
+                  <div class="col-sm-10">
+                    <input type="date" formControlName="startDate" class="form-control">
+                    <div *ngIf="submitted && activity.get('startDate').errors?.['required']" class="text-danger">
+                      Start Date is required.
+                    </div>
+                  </div>
+                </div>
+                <!-- End Date Field -->
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">End Date</label>
+                  <div class="col-sm-10">
+                    <input type="date" formControlName="endDate" class="form-control">
+                    <div *ngIf="submitted && activity.get('endDate').errors?.['required']" class="text-danger">
+                      End Date is required.
+                    </div>
+                  </div>
+                </div>
+                <!-- Responsible Person Field -->
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Responsible Person</label>
+                  <div class="col-sm-10">
+                    <select formControlName="responsiblePerson" class="form-control">
+                      <option value="" disabled>Select Staff</option>
+                      <option *ngFor="let employee of employees" [value]="employee.staffId">{{ employee.firstName }} {{ employee.lastName }}</option>
+                    </select>
+                    <div *ngIf="submitted && activity.get('responsiblePerson').errors?.['required']" class="text-danger">
+                      Responsible Person is required.
+                    </div>
+                  </div>
+                </div>
+                <!-- Remove Activity Button -->
+                <div class="text-right">
+                  <button (click)="removeActivity(i)" class="btn btn-danger">Remove Activity</button>
+                </div>
+              </div>
+            </div>
+            <!-- Add Activity Button -->
+            <div class="text-left">
+              <button type="button" (click)="addActivity()" class="btn btn-primary">Add Activity</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- activities -->
+
+
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">{{ isUpdateMode ? 'Update' : 'Create' }} Project</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</div>

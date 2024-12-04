@@ -1,0 +1,162 @@
+<div class="card card-secondary mt-5 container">
+  <div class="card-header">
+    <h3 class="card-title">Activity Report Form</h3>
+  </div>
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+    <!-- Step 1: Basic Information -->
+<div class="card-body" *ngIf="currentStep === 1">
+
+  <!-- Date of Filing -->
+  <div class="form-group">
+    <label for="dateOfFiling">Date of Filing</label>
+    <input type="date" class="form-control" id="dateOfFiling" formControlName="dateOfFiling">
+  </div>
+
+  <!-- Programme/Activity Title -->
+  <div class="form-group">
+    <label for="activityTitle">Programme/Activity Title</label>
+    <input type="text" class="form-control" id="activityTitle" formControlName="activityTitle">
+  </div>
+
+  <!-- Date of the Activity -->
+  <div class="form-group">
+    <label for="activityDate">Date of the Activity</label>
+    <input type="date" class="form-control" id="activityDate" formControlName="activityDate">
+  </div>
+   <!-- Venue -->
+   <div class="form-group">
+    <label for="venue">Venue</label>
+    <input type="text" class="form-control" id="venue" formControlName="venue">
+  </div>
+
+</div>
+
+
+<!-- Step 2: Location and Participants -->
+<div class="card-body" *ngIf="currentStep === 2">
+
+  <!-- Organiser(s) -->
+  <div class="form-group">
+    <label for="organisers">Organiser(s)</label>
+    <input type="text" class="form-control" id="organisers" formControlName="organisers">
+  </div>
+
+  <!-- Target Participant Number (Males) -->
+  <div class="form-group">
+    <label for="targetParticipantsMales">Target Participants - Males</label>
+    <input type="number" class="form-control" id="targetParticipantsMales" formControlName="targetParticipantsMales">
+  </div>
+
+  <!-- Target Participant Number (Females) -->
+  <div class="form-group">
+    <label for="targetParticipantsFemales">Target Participants - Females</label>
+    <input type="number" class="form-control" id="targetParticipantsFemales" formControlName="targetParticipantsFemales">
+  </div>
+
+  <!-- Actual Participants (Males) -->
+  <div class="form-group">
+    <label for="actualParticipantsMales">Actual Participants - Males</label>
+    <input type="number" class="form-control" id="actualParticipantsMales" formControlName="actualParticipantsMales">
+  </div>
+
+  <!-- Actual Participants (Females) -->
+  <div class="form-group">
+    <label for="actualParticipantsFemales">Actual Participants - Females</label>
+    <input type="number" class="form-control" id="actualParticipantsFemales" formControlName="actualParticipantsFemales">
+  </div>
+</div>
+
+<!-- Step 3: Detailed Information and Submission -->
+<div class="card-body" *ngIf="currentStep === 3">
+
+  <!-- Facilitators -->
+  <div class="form-group">
+    <label for="facilitators">Facilitators</label>
+    <input type="text" class="form-control" id="facilitators" formControlName="facilitators">
+  </div>
+
+  <!-- Specific Goal/Objective -->
+  <div class="form-group">
+    <label for="specificGoal">Specific Goal/Objective</label>
+    <input type="text"  class="form-control" id="specificGoal" formControlName="specificGoal">
+  </div>
+
+  <!-- Contribution to Goal/Objective -->
+  <div class="form-group">
+    <label for="contribution">Contribution to Goal/Objective</label>
+    <textarea class="form-control" id="contribution" formControlName="contribution"></textarea>
+  </div>
+
+  <!-- Nature of the Activity -->
+  <div class="form-group">
+    <label for="activityNature">Nature of the Activity</label>
+    <textarea class="form-control" id="activityNature" formControlName="activityNature"></textarea>
+  </div>
+
+  <!-- Inputs (Resources Used) -->
+  <div class="form-group">
+    <label for="inputsUsed">Inputs (Resources Used)</label>
+    <textarea class="form-control" id="inputsUsed" formControlName="inputsUsed"></textarea>
+  </div>
+
+  <!-- Indicators -->
+  <div class="form-group">
+    <label for="indicators">Indicators</label>
+    <textarea class="form-control" id="indicators" formControlName="indicators"></textarea>
+  </div>
+
+  </div>
+
+  <!-- Step 4 -->
+<div class="card-body" *ngIf="currentStep === 4">
+  <!-- Outputs -->
+  <div class="form-group">
+    <label for="outputs">Outputs</label>
+    <textarea class="form-control" id="outputs" formControlName="outputs"></textarea>
+  </div>
+
+  <!-- Outcome/Benefits -->
+  <div class="form-group">
+    <label for="outcomes">Outcome/Benefits</label>
+    <textarea class="form-control" id="outcomes" formControlName="outcomes"></textarea>
+  </div>
+
+  <!-- Findings/Observations/Analyses -->
+  <div class="form-group">
+    <label for="findings">Findings/Observations/Analyses</label>
+    <textarea class="form-control" id="findings" formControlName="findings"></textarea>
+  </div>
+
+  <!-- Recommendations/Solutions/Resolutions -->
+  <div class="form-group">
+    <label for="recommendations">Recommendations/Solutions/Resolutions</label>
+    <textarea class="form-control" id="recommendations" formControlName="recommendations"></textarea>
+  </div>
+
+  <!-- Any Other Information -->
+  <div class="form-group">
+    <label for="additionalInfo">Any Other Information</label>
+    <textarea class="form-control" id="additionalInfo" formControlName="additionalInfo"></textarea>
+  </div>
+
+  <!-- Pictorial (Photos) -->
+  <div class="form-group">
+    <label for="photos">Pictorial (Photos)</label>
+    <input type="file" class="form-control" id="photos" formControlName="photos" accept="image/jpeg">
+  </div>
+
+</div>
+
+<div class="card-footer">
+  <button type="button" class="form-navigation-button btn-previous" (click)="goToPreviousStep()" *ngIf="currentStep > 1">Previous</button>
+  <button type="button" class="form-navigation-button btn-next" (click)="goToNextStep()" *ngIf="currentStep < totalSteps">Next</button>
+  <button type="submit" class="form-navigation-button btn-submit" *ngIf="currentStep === totalSteps">Submit</button>
+  </div>
+
+        </form>
+      </div>
+
+
+
+
+

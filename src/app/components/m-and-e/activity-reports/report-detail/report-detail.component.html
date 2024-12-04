@@ -1,0 +1,193 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-12">
+        <h1 class="m-0 text-dark">Report Details</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="card card-primary card-outline">
+      <div class="card-header">
+        <h3 class="card-title">Activity Report: {{ report.activityTitle }}</h3>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Report Filed By</span>
+                <span class="info-box-number">{{ report.reportFiledBy }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="far fa-calendar-alt"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Date of Filing</span>
+                <span class="info-box-number">{{ report.dateOfFiling | date }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-heading"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Activity Title</span>
+                <span class="info-box-number">{{ report.activityTitle }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="far fa-calendar-check"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Date of the Activity</span>
+                <span class="info-box-number">{{ report.activityDate | date }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-map-marker-alt"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Venue</span>
+                <span class="info-box-number">{{ report.venue }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-users"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Organiser(s)</span>
+                <span class="info-box-number">{{ report.organisers }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-male"></i><i class="fas fa-female"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Target Participants</span>
+                <span class="info-box-number">Males: {{ report.targetParticipantsMales }}, Females: {{ report.targetParticipantsFemales }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-user-check"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Actual Participants</span>
+                <span class="info-box-number">Males: {{ report.actualParticipantsMales }}, Females: {{ report.actualParticipantsFemales }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-chalkboard-teacher"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Facilitators</span>
+                <span class="info-box-number">{{ report.facilitators }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-bullseye"></i>              </span>
+              <div class="info-box-content">
+                <span class="info-box-text">Specific Goal/Objective</span>
+                <span class="info-box-number">{{ report.specificGoal }}</span>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-6">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-tree"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Nature of the Activity</span>
+                <span class="info-box-number">{{ report.activityNature }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-cogs"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Inputs (Resources Used)</span>
+                <span class="info-box-number">{{ report.inputsUsed }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-chart-bar"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Indicators</span>
+                <span class="info-box-number">{{ report.indicators }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-tasks"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Contribution to Goal/Objective</span>
+                <span class="info-box-number">{{ report.contribution }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-project-diagram"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Outputs</span>
+                <span class="info-box-number">{{ report.outputs }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-balance-scale-right"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Outcome/Benefits</span>
+                <span class="info-box-number">{{ report.outcomes }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-search"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Findings/Observations/Analyses</span>
+                <span class="info-box-number">{{ report.findings }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-lightbulb"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Recommendations/Solutions/Resolutions</span>
+                <span class="info-box-number">{{ report.recommendations }}</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-info-circle"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Any Other Information</span>
+                <span class="info-box-number">{{ report.additionalInfo }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assuming you're storing URLs or paths to images for pictorial evidence -->
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="far fa-images"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Pictorial (Photos)</span>
+                <div>
+                  <img *ngIf="report.photos" [src]="report.photos" alt="Report Photos" class="img-thumbnail" style="max-height: 200px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+
+

@@ -1,0 +1,79 @@
+<div class="container">
+  <h2>Add New Goal</h2>
+  <form [formGroup]="addGoalForm" (ngSubmit)="onSubmit()">
+
+    <label for="level">Goal Level:</label>
+    <select id="level" formControlName="level">
+      <option value="Impact">Impact</option>
+      <option value="Outcome">Outcome</option>
+      <option value="Output">Output</option>
+    </select>
+
+    <div formArrayName="objectives" *ngFor="let objective of objectives.controls; let i=index">
+      <div [formGroupName]="i">
+        <h3>Objective {{i + 1}}</h3>
+        <label for="description-{{i}}">Description:</label>
+        <input id="description-{{i}}" type="text" formControlName="description">
+
+        <div formArrayName="indicators" *ngFor="let indicator of getIndicators(i).controls; let j=index">
+          <div [formGroupName]="j">
+            <h4>Indicator {{j + 1}}</h4>
+            <label for="indicator-description-{{i}}-{{j}}">Description:</label>
+            <input id="indicator-description-{{i}}-{{j}}" type="text" formControlName="description">
+
+            <label for="baselineValue-{{i}}-{{j}}">Baseline Value:</label>
+            <input id="baselineValue-{{i}}-{{j}}" type="text" formControlName="baselineValue">
+
+            <label for="meansOfVerification-{{i}}-{{j}}">Means of Verification:</label>
+            <input id="meansOfVerification-{{i}}-{{j}}" type="text" formControlName="meansOfVerification">
+
+            <div formArrayName="targetPeriods" *ngFor="let targetPeriod of getTargetPeriods(i, j).controls; let k=index">
+              <div [formGroupName]="k">
+                <h5>Target Period {{k + 1}}</h5>
+                <label for="periodType-{{i}}-{{j}}-{{k}}">Period Type:</label>
+                <input id="periodType-{{i}}-{{j}}-{{k}}" type="text" formControlName="periodType">
+
+                <label for="periodValue-{{i}}-{{j}}-{{k}}">Period Value:</label>
+                <input id="periodValue-{{i}}-{{j}}-{{k}}" type="text" formControlName="periodValue">
+
+                <div formGroupName="targets">
+                  <label for="femaleTarget-{{i}}-{{j}}-{{k}}">Female Target:</label>
+                  <input id="femaleTarget-{{i}}-{{j}}-{{k}}" type="number" formControlName="female">
+
+                  <label for="maleTarget-{{i}}-{{j}}-{{k}}">Male Target:</label>
+                  <input id="maleTarget-{{i}}-{{j}}-{{k}}" type="number" formControlName="male">
+
+                  <label for="totalTarget-{{i}}-{{j}}-{{k}}">Total Target:</label>
+                  <input id="totalTarget-{{i}}-{{j}}-{{k}}" type="number" formControlName="total">
+                </div>
+
+                <div formGroupName="achieved">
+                  <label for="femaleAchieved-{{i}}-{{j}}-{{k}}">Female Achieved:</label>
+                  <input id="femaleAchieved-{{i}}-{{j}}-{{k}}" type="number" formControlName="female">
+
+                  <label for="maleAchieved-{{i}}-{{j}}-{{k}}">Male Achieved:</label>
+                  <input id="maleAchieved-{{i}}-{{j}}-{{k}}" type="number" formControlName="male">
+
+                  <label for="totalAchieved-{{i}}-{{j}}-{{k}}">Total Achieved:</label>
+                  <input id="totalAchieved-{{i}}-{{j}}-{{k}}" type="number" formControlName="total">
+                </div>
+
+                <label>Status:</label>
+                <select formControlName="status">
+                  <option value="Attained">Attained</option>
+                  <option value="Not Attained">Not Attained</option>
+                </select>
+
+              </div>
+            </div>
+            <button (click)="addTargetPeriod(i, j)">Add Another Target Period</button>
+          </div>
+        </div>
+        <button (click)="addIndicator(i)">Add Another Indicator</button>
+      </div>
+    </div>
+    <button (click)="addObjective()">Add Another Objective</button>
+
+    <button type="submit" [disabled]="!addGoalForm.valid">Add Goal</button>
+  </form>
+</div>

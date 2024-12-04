@@ -1,0 +1,70 @@
+<div class="card mt-5">
+  <div class="card-header">
+    <h3 class="card-title">All Permission Requests</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Staff Name</th>
+          <th>Date</th>
+          <th>Time From</th>
+          <th>Time To</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of pendingRequests">
+          <td>{{ getEmployeeNameByStaffId(request.staffId) }}</td>
+          <td>{{ request.date | date }}</td>
+          <td>{{ request.timeFrom | date:'shortTime' }}</td>
+          <td>{{ request.timeTo | date:'shortTime' }}</td>
+          <td>{{ request.reason }}</td>
+          <td>{{ request.status }}</td>
+          <td>
+            <button class="btn btn-info btn-xs mr-2" (click)="loadPermissionDetails(request._id)"><i class="fas fa-eye"></i> View</button>
+
+            <!-- <button class="btn btn-success btn-xs" (click)="approveRequest(request.id)">
+              Approve
+            </button>
+            <button class="btn btn-danger btn-xs" (click)="rejectRequest(request.id)">
+              Reject
+            </button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Modal for viewing request details -->
+<div *ngIf="selectedRequest" class="modal fade" id="requestModal" #requestModal tabindex="-1" role="dialog" aria-labelledby="requestModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="requestModalLabel">Request Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Staff Name:</strong> {{ getEmployeeNameByStaffId(selectedRequest?.staffId) }}</p>
+        <p><strong>Date:</strong> {{ selectedRequest?.date | date }}</p>
+        <p><strong>Reason:</strong> {{ selectedRequest?.reason }}</p>
+        <p><strong>Time From:</strong> {{ selectedRequest?.timeFrom | date:'shortTime'}}</p>
+        <p><strong>Time To:</strong> {{ selectedRequest?.timeTo | date:'shortTime'}}</p>
+        <p><strong>Current Status:</strong> {{ selectedRequest?.status }}</p>
+
+
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-success" (click)="approveRequest(selectedRequest?.id, selectedRequest?.supervisorComments)">Approve</button>
+        <button type="button" class="btn btn-danger" (click)="rejectRequest(selectedRequest?.id, selectedRequest?.supervisorComments)">Reject</button> -->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

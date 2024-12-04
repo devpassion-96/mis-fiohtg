@@ -1,0 +1,158 @@
+<div class="container mt-5 mb-5">
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">{{ reportForm.get('id') ? 'Edit Report' : 'Create Report' }}</h3>
+    </div>
+    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+
+        <!-- Month Dropdown -->
+        <div class="form-group">
+          <label>Month</label>
+          <select formControlName="month" class="form-control" required>
+            <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+          </select>
+        </div>
+
+        <!-- Office Activities -->
+        <div class="form-group">
+          <label>Office Activities</label>
+          <textarea formControlName="officeActivities" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- Government/NGO Meetings -->
+        <div class="form-group">
+          <label>Meetings with Gov/NGOs</label>
+          <textarea formControlName="govNgoMeetings" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- Workshop Reports -->
+        <h5>Workshop Reports</h5>
+        <div formArrayName="workshopReports">
+          <div *ngFor="let workshop of workshopReports.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-2">
+            <div class="form-group">
+              <label>Activity Title</label>
+              <input formControlName="activityTitle" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Community</label>
+              <input formControlName="community" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Facilitator</label>
+              <input formControlName="facilitator" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input formControlName="date" class="form-control" type="date" />
+            </div>
+
+            <!-- Beneficiaries -->
+            <div formGroupName="beneficiaries" class="form-group">
+              <label>Beneficiaries</label>
+              <div class="row">
+                <div class="col">
+                  <input formControlName="male" class="form-control" type="number" placeholder="Male" />
+                </div>
+                <div class="col">
+                  <input formControlName="female" class="form-control" type="number" placeholder="Female" />
+                </div>
+                <div class="col">
+                  <input formControlName="pwds" class="form-control" type="number" placeholder="PWDs" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Budget</label>
+              <input formControlName="budget" class="form-control" type="number" />
+            </div>
+            <div class="form-group">
+              <label>Follow Up</label>
+              <input formControlName="followUp" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Project/Donor</label>
+              <input formControlName="projectOrDonor" class="form-control" type="text" />
+            </div>
+
+            <!-- Remove Workshop Button -->
+            <button type="button" class="btn btn-danger btn-sm mt-2" (click)="removeWorkshopReport(i)">Remove Workshop</button>
+          </div>
+
+          <!-- Add Workshop Button -->
+          <button type="button" class="btn btn-primary btn-sm mt-3" (click)="addWorkshopReport()">Add Workshop Report</button>
+        </div>
+
+        <!-- Office Activity Plans -->
+        <div class="form-group mt-4">
+          <label>Office Activity Plans</label>
+          <textarea formControlName="officeActivityPlans" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- Other Activity Plans -->
+        <h5>Other Activity Plans</h5>
+        <div formArrayName="otherActivityPlans">
+          <div *ngFor="let otherPlan of otherActivityPlans.controls; let j = index" [formGroupName]="j" class="border rounded p-3 mb-2">
+            <div class="form-group">
+              <label>Activity Title</label>
+              <input formControlName="oap_activityTitle" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Community</label>
+              <input formControlName="oap_community" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Facilitator</label>
+              <input formControlName="oap_facilitator" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input formControlName="oap_date" class="form-control" type="date" />
+            </div>
+
+            <!-- Beneficiaries -->
+            <div formGroupName="oap_beneficiaries" class="form-group">
+              <label>Beneficiaries</label>
+              <div class="row">
+                <div class="col">
+                  <input formControlName="oap_male" class="form-control" type="number" placeholder="Male" />
+                </div>
+                <div class="col">
+                  <input formControlName="oap_female" class="form-control" type="number" placeholder="Female" />
+                </div>
+                <div class="col">
+                  <input formControlName="oap_pwds" class="form-control" type="number" placeholder="PWDs" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Budget</label>
+              <input formControlName="oap_budget" class="form-control" type="number" />
+            </div>
+            <div class="form-group">
+              <label>Follow Up</label>
+              <input formControlName="oap_followUp" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+              <label>Project/Donor</label>
+              <input formControlName="oap_projectOrDonor" class="form-control" type="text" />
+            </div>
+
+            <!-- Remove Other Activity Plan Button -->
+            <button type="button" class="btn btn-danger btn-sm mt-2" (click)="removeOtherActivityPlan(j)">Remove Activity Plan</button>
+          </div>
+
+          <!-- Add Other Activity Plan Button -->
+          <button type="button" class="btn btn-primary btn-sm mt-3" (click)="addOtherActivityPlan()">Add Activity Plan</button>
+        </div>
+
+      </div>
+
+      <div class="card-footer">
+        <button type="submit" class="btn btn-success">Submit Report</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="card mt-5">
+  <div class="card-header">
+    <h3 class="card-title">Pending Leave Requests (Director Level)</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Staff Name</th>
+          <th>Type</th>
+          <th>Dates</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leave of pendingLeaves">
+          <td>{{ leave.employeeName }}</td>
+          <td>{{ leave.type }}</td>
+          <td>{{ leave.startDate | date }} - {{ leave.endDate | date }}</td>
+          <td>
+            <button class="btn btn-info btn-xs mr-2" (click)="loadLeaveDetails(leave._id)"><i class="fas fa-eye"></i> View Details</button>
+         </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- modal -->
+
+<div class="modal fade" id="leaveDetailsModal" #leaveDetailsModal tabindex="-1" role="dialog" aria-labelledby="leaveDetailsModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="leaveDetailsModalLabel">Leave Details</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body bg-light" *ngIf="selectedLeave">
+        <div class="row">
+          <div class="col-md-6 border-right">
+            <h6 class="text-muted">Staff Name</h6>
+            <p>{{ selectedLeave?.employeeName }}</p>
+
+            <h6 class="text-muted">Type</h6>
+            <p>{{ selectedLeave?.type }}</p>
+
+            <h6 class="text-muted">Start Date</h6>
+            <p>{{ selectedLeave?.startDate | date:'mediumDate' }}</p>
+
+            <h6 class="text-muted">End Date</h6>
+            <p>{{ selectedLeave?.endDate | date:'mediumDate' }}</p>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted">Reason</h6>
+            <p>{{ selectedLeave?.remarks }}</p>
+
+            <h6 class="text-muted">Previous Reviews</h6>
+            <ul class="list-unstyled">
+              <li *ngFor="let comment of selectedLeave.comments">
+                <p class="mb-0">{{ comment.text }}</p>
+                <small class="text-muted">Reviewed by {{ getEmployeeNameByStaffId(comment.reviewedBy) }} on {{ comment.reviewedAt | date:'mediumDate' }}</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group mt-4">
+          <label for="approverComments" class="font-weight-bold">Approver Comments</label>
+          <textarea class="form-control" id="approverComments" rows="3" [(ngModel)]="selectedLeave.approverComments" placeholder="Enter your comments here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer bg-white">
+        <button type="button" class="btn btn-outline-success" (click)="approveLeave(selectedLeave)"><i class="fas fa-check"></i> Approve</button>
+        <button type="button" class="btn btn-outline-danger" (click)="rejectLeave(selectedLeave)"><i class="fas fa-times"></i> Reject</button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="closeModal()"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

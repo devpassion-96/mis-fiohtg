@@ -1,0 +1,79 @@
+<div class="vehicle-list card">
+  <div class="card-header">
+    <h2 class="card-title">Vehicles</h2>
+  </div>
+
+  <!-- Form for Adding or Editing Vehicle -->
+  <div class="card-body">
+    <div *ngIf="!isEditing" class="form-inline mb-3">
+      <input
+        [(ngModel)]="newVehicle.vehicleNumber"
+        placeholder="Vehicle Number"
+        class="form-control mr-2"
+      />
+      <select [(ngModel)]="newVehicle.status" class="form-control mr-2">
+        <option value="Available">Available</option>
+        <option value="On Trek">On Trek</option>
+        <option value="Under Maintenance">Under Maintenance</option>
+      </select>
+      <button class="btn btn-success" (click)="addVehicle()">Add Vehicle</button>
+    </div>
+
+    <div *ngIf="isEditing" class="form-inline mb-3">
+      <input
+        [(ngModel)]="vehicleToEdit.vehicleNumber"
+        placeholder="Vehicle Number"
+        class="form-control mr-2"
+      />
+      <select [(ngModel)]="vehicleToEdit.status" class="form-control mr-2">
+        <option value="Available">Available</option>
+        <option value="On Trek">On Trek</option>
+        <option value="Under Maintenance">Under Maintenance</option>
+      </select>
+      <button class="btn btn-primary mr-2" (click)="updateVehicle()">Update Vehicle</button>
+      <button class="btn btn-secondary" (click)="isEditing = false">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Vehicle List -->
+  <div class="card-body table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Vehicle Number</th>
+          <th>Status</th>
+          <th>Return Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of vehicles; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ vehicle.vehicleNumber }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-success': vehicle.status === 'Available',
+                'badge-warning': vehicle.status === 'On Trek',
+                'badge-danger': vehicle.status === 'Under Maintenance'
+              }"
+            >
+              {{ vehicle.status }}
+            </span>
+          </td>
+          <td>{{ vehicle.updatedAt}}</td>
+          <td>
+            <button class="btn btn-info btn-sm mr-1" (click)="editVehicle(vehicle)">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteVehicle(vehicle._id!)">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

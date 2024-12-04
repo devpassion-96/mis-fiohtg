@@ -1,0 +1,86 @@
+<div *ngIf="project" class="container-fluid mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Project Detail Card -->
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title">{{ project.name }}</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-8">
+              <div class="info-box mb-3 bg-light">
+                <div class="info-box-content">
+                  <span class="info-box-text text-muted">General Information</span>
+                  <span class="info-box-number">Description: {{ project.description }}</span>
+                  <div>Start Date: {{ project.startDate | date }}</div>
+                  <div>End Date: {{ project.endDate | date }}</div>
+                  <div>Status: {{ project.status }}</div>
+                  <div>Project Leader: {{ managerName }}</div>
+                </div>
+              </div>
+
+              <!-- Team Members Section -->
+              <div class="info-box mb-3 bg-light">
+                <div class="info-box-content">
+                  <span class="info-box-text text-muted">Team Members</span>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let memberName of teamMemberNames">{{ memberName }}</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Activities -->
+              <div class="info-box mb-3 bg-light">
+                <div class="info-box-content">
+                  <span class="info-box-text text-muted">Activities</span>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let activity of project.activities">
+                      <p>Description: {{ activity.description }}</p>
+                      <p>Start Date: {{ activity.startDate | date }}</p>
+                      <p>End Date: {{ activity.endDate | date }}</p>
+                      <p>Responsible: {{ activity.responsiblePersonName }}</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-4">
+              <h5>Comments</h5>
+              <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item" *ngFor="let comment of paginatedComments">
+                  <p>{{ comment.content }}</p>
+                  <small class="text-muted">Commented on {{ comment.timestamp | date:'medium' }}, <strong>By:</strong> {{ getEmployeeNameByStaffId(comment.staffId) }}</small>
+                </li>
+              </ul>
+              <nav aria-label="Page navigation">
+                <ul class="pagination">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="goToPreviousPage()">Previous</a>
+                  </li>
+                  <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                    <a class="page-link" (click)="goToNextPage()">Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="commentContent" placeholder="Add a comment...">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Comment</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

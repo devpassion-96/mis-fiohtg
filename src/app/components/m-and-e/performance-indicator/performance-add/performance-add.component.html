@@ -1,0 +1,196 @@
+<div class="container mt-3 mb-5">
+  <div class="card">
+    <div class="card-header bg-info">
+      <!-- Conditionally set the form title based on Add or Edit mode -->
+      <h3 class="card-title">{{ isEditMode ? 'Edit Performance Indicator' : 'Add New Performance Indicator' }}</h3>
+    </div>
+
+    <!-- Form Submission -->
+    <form [formGroup]="performanceForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+      <div class="card-body">
+
+        <!-- Project Name - Disable in Edit Mode -->
+        <div class="form-group row">
+          <label for="projectName" class="col-sm-2 col-form-label">Project Name</label>
+          <div class="col-sm-10">
+            <select
+              id="projectName"
+              formControlName="projectName"
+              class="form-control"
+              [disabled]="isEditMode">
+              <option value="" disabled>Select Project</option>
+              <option *ngFor="let project of projects" [value]="project._id">{{ project.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Verifiable Indicators Section -->
+        <div formArrayName="verifiableIndicators" *ngFor="let verifiableIndicator of verifiableIndicators.controls; let i = index">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h3 class="card-title">Verifiable Indicator {{ i + 1 }}</h3>
+              <button
+                type="button"
+                class="close"
+                aria-label="Close"
+                (click)="removeVerifiableIndicator(i)"
+                *ngIf="!isEditMode">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <!-- Indicator Fields -->
+            <div class="card-body" [formGroupName]="i">
+              <div class="row">
+                <!-- Level -->
+                <div class="col">
+                  <div class="form-group">
+                    <label>Level</label>
+                    <select class="form-control" formControlName="level">
+                      <option value="Impact">Impact</option>
+                      <option value="Outcome">Outcome</option>
+                      <option value="Output">Output</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Intervention Logic -->
+                <div class="col">
+                  <div class="form-group">
+                    <label>Intervention Logic</label>
+                    <input type="text" class="form-control" formControlName="interventionLogic" placeholder="Enter Intervention Logic">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Indicator Field -->
+              <div class="form-group">
+                <label>Indicator</label>
+                <input type="text" class="form-control" formControlName="indicator" placeholder="Indicator">
+              </div>
+
+              <!-- Baseline Field -->
+              <div class="form-group">
+                <label>Baseline</label>
+                <input type="text" class="form-control" formControlName="baseline" placeholder="Baseline">
+              </div>
+
+              <!-- Means of Verification Field -->
+              <div class="form-group">
+                <label>Means of Verification</label>
+                <input type="text" class="form-control" formControlName="meansOfVerification" placeholder="Means of Verification">
+              </div>
+
+              <!-- Target Data -->
+              <div formArrayName="targetData" *ngFor="let target of targetData(i).controls; let j = index">
+                <div [formGroupName]="j" class="mb-2">
+                  <div class="form-group">
+                    <label>Period</label>
+                    <select class="form-control" formControlName="period">
+                      <option value="Quarterly 1">Quarter 1</option>
+                      <option value="Quarterly 2">Quarter 2</option>
+                      <option value="Quarterly 3">Quarter 3</option>
+                      <option value="Quarterly 4">Quarter 4</option>
+                      <option value="Annual">Yearly</option>
+                    </select>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Target Female</label>
+                        <input type="number" class="form-control" formControlName="targetFemale">
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Target Male</label>
+                        <input type="number" class="form-control" formControlName="targetMale">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Achieved Female</label>
+                        <input type="number" class="form-control" formControlName="achievedFemale">
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Achieved Male</label>
+                        <input type="number" class="form-control" formControlName="achievedMale">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Variance Female</label>
+                        <input type="text" class="form-control" formControlName="varianceFemale" readonly>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Variance Male</label>
+                        <input type="text" class="form-control" formControlName="varianceMale" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cumulative Values -->
+        <div class="mt-4">
+          <h4>Cumulative Values</h4>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Cumulative Achieved:</label>
+                <input type="text" class="form-control" [value]="cumulativeAchieved" readonly>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Cumulative Target:</label>
+                <input type="text" class="form-control" [value]="cumulativeTarget" readonly>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Cumulative Variance:</label>
+                <input type="text" class="form-control" [value]="cumulativeVariance" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Verifiable Indicator Button -->
+        <div class="form-group">
+          <button type="button" class="btn btn-secondary" (click)="addVerifiableIndicator()">
+            <i class="fas fa-plus"></i> Add Another Verifiable Indicator
+          </button>
+        </div>
+
+        <!-- Duplicate Form Button -->
+        <div class="form-group mt-4" *ngIf="isEditMode">
+          <button type="button" class="btn btn-warning" (click)="duplicateForm()">
+            <i class="fas fa-copy"></i> Duplicate Entire Form
+          </button>
+        </div>
+      </div>
+      
+      <!-- Submit Button with Conditional Text -->
+      <div class="card-footer">
+        <button type="submit" class="btn btn-info" [disabled]="performanceForm.invalid">
+          {{ isEditMode ? 'Update Performance Indicator' : 'Submit Performance Indicator' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

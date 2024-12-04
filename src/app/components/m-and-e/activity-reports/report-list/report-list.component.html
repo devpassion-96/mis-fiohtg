@@ -1,0 +1,34 @@
+<div class="card mt-5">
+  <div class="card-header">
+    <h3 class="card-title">Activity Reports</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Report Filed By</th>
+          <th>Date of Filing</th>
+          <th>Activity Title</th>
+          <!-- Add other relevant headers -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.reportFiledBy }}</td>
+          <td>{{ report.dateOfFiling | date }}</td>
+          <td>{{ report.activityTitle }}</td>
+          <!-- Add other relevant data cells -->
+          <td>
+            <button class="btn btn-info btn-sm mr-2" [routerLink]="['/report-detail', report._id]">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteReport(report._id)">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

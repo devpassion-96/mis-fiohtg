@@ -1,0 +1,74 @@
+<div class="container mt-5 mb-5" *ngIf="report" id="print-section">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h3 class="card-title">Report Details for {{ report.month }}</h3>
+      <a [routerLink]="['/edit-monthly-report', report._id]" class="btn btn-warning">Edit Report</a>
+
+      <div class="col-2">
+        <button printSectionId="print-section" ngxPrint [useExistingCss]="true" class="btn btn-default">
+          <i class="fas fa-print"></i> Print
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- Office Activities Conducted -->
+      <div class="mb-4">
+        <h5>Office Activities Conducted</h5>
+        <p>{{ report.officeActivities }}</p>
+      </div>
+
+      <!-- Meetings with Government and NGOs -->
+      <div class="mb-4">
+        <h5>Meetings with Gov and NGOs</h5>
+        <p>{{ report.govNgoMeetings }}</p>
+      </div>
+
+      <!-- Workshop Reports -->
+      <div class="mb-4" *ngIf="report.workshopReports?.length > 0">
+        <h5>Workshop/Field Reports</h5>
+        <ul class="list-group mb-3">
+          <li *ngFor="let workshop of report.workshopReports" class="list-group-item">
+            <strong>Activity Title:</strong> {{ workshop.activityTitle }}<br />
+            <strong>Community:</strong> {{ workshop.community }}<br />
+            <strong>Facilitator:</strong> {{ workshop.facilitator }}<br />
+            <strong>Date:</strong> {{ workshop.date | date }}<br />
+            <strong>Beneficiaries:</strong> 
+            Male - {{ workshop.beneficiaries.male }}, 
+            Female - {{ workshop.beneficiaries.female }}, 
+            PWDs - {{ workshop.beneficiaries.pwds }}<br />
+            <strong>Budget:</strong> D{{ workshop.budget }}<br />
+            <strong>Follow Up:</strong> {{ workshop.followUp }}<br />
+            <strong>Project/Donor:</strong> {{ workshop.projectOrDonor }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Office Activity Plans -->
+      <div class="mb-4">
+        <h5>Office Activity Plans</h5>
+        <p>{{ report.officeActivityPlans }}</p>
+      </div>
+
+      <!-- Other Activity Plans -->
+      <div class="mb-4" *ngIf="report.otherActivityPlans?.length > 0">
+        <h5>Other Activity Plans</h5>
+        <ul class="list-group mb-3">
+          <li *ngFor="let plan of report.otherActivityPlans" class="list-group-item">
+            <strong>Activity Title:</strong> {{ plan.oap_activityTitle }}<br />
+            <strong>Community:</strong> {{ plan.oap_community }}<br />
+            <strong>Facilitator:</strong> {{ plan.oap_facilitator }}<br />
+            <strong>Date:</strong> {{ plan.oap_date | date }}<br />
+            <strong>Beneficiaries:</strong> 
+            Male - {{ plan.oap_beneficiaries.oap_male }}, 
+            Female - {{ plan.oap_beneficiaries.oap_female }}, 
+            PWDs - {{ plan.oap_beneficiaries.oap_pwds }}<br />
+            <strong>Budget:</strong> D{{ plan.oap_budget }}<br />
+            <strong>Follow Up:</strong> {{ plan.oap_followUp }}<br />
+            <strong>Project/Donor:</strong> {{ plan.oap_projectOrDonor }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

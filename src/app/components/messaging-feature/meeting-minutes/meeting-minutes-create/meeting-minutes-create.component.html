@@ -1,0 +1,191 @@
+<div class="container mt-4 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div class="meeting-minutes-form">
+        <div class="card">
+          <div class="card-header bg-secondary">
+            <h3 class="card-title text-white">Meeting Minutes Form</h3>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="meetingMinutesForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" class="form-control" formControlName="title">
+                <div *ngIf="submitted && meetingMinutesForm.controls['title'].errors?.['required']" class="text-danger">
+                  Title is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="meetingDate">Meeting Date</label>
+                <input type="date" id="meetingDate" class="form-control" formControlName="meetingDate">
+                <div *ngIf="submitted && meetingMinutesForm.controls['meetingDate'].errors?.['required']" class="text-danger">
+                  Meeting Date is required.
+                </div>
+              </div>
+
+              <!-- Points Discussed FormArray -->
+              <div class="form-group">
+                <label>Points Discussed</label>
+                <div formArrayName="pointsDiscussed">
+                  <div *ngFor="let point of pointsDiscussedFormArray.controls; let i = index">
+                    <div class="input-group mb-3">
+                      <input [formControlName]="i" class="form-control">
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-danger" (click)="removeListItem(pointsDiscussedFormArray, i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addListItem(pointsDiscussedFormArray)">Add Point</button>
+                <div *ngIf="submitted && pointsDiscussedFormArray.errors?.['required']" class="text-danger">
+                  At least one point discussed is required.
+                </div>
+              </div>
+
+              <!-- Decisions Made FormArray -->
+              <div class="form-group">
+                <label>Decisions Made</label>
+                <div formArrayName="decisionsMade">
+                  <div *ngFor="let decision of decisionsMadeFormArray.controls; let i = index">
+                    <div class="input-group mb-3">
+                      <input [formControlName]="i" class="form-control">
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-danger" (click)="removeListItem(decisionsMadeFormArray, i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addListItem(decisionsMadeFormArray)">Add Decision</button>
+                <div *ngIf="submitted && decisionsMadeFormArray.length === 0" class="text-danger">
+                  At least one decision made is required.
+                </div>
+              </div>
+
+              <!-- Action Items FormArray -->
+              <div class="form-group">
+                <label>Action Items</label>
+                <div formArrayName="actionItems">
+                  <div *ngFor="let actionItem of actionItemsFormArray.controls; let i = index">
+                    <div class="input-group mb-3">
+                      <input [formControlName]="i" class="form-control">
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-danger" (click)="removeListItem(actionItemsFormArray, i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addListItem(actionItemsFormArray)">Add Action Item</button>
+                <div *ngIf="submitted && actionItemsFormArray.length === 0" class="text-danger">
+                  At least one action item is required.
+                </div>
+              </div>
+
+              <!-- Participants FormArray -->
+              <div class="form-group">
+                <label>Participants</label>
+                <div formArrayName="participants">
+                  <div *ngFor="let participant of participantsFormArray.controls; let i = index">
+                    <div class="input-group mb-3">
+                      <select [formControlName]="i" class="form-control">
+                        <option *ngFor="let employee of employees" [value]="employee.staffId">
+                          {{employee.firstName}} {{employee.lastName}}
+                        </option>
+                      </select>
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-danger" (click)="removeParticipant(i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addParticipant()">Add Participant</button>
+                <div *ngIf="submitted && participantsFormArray.length === 0" class="text-danger">
+                  At least one participant is required.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Absent With Apology</label>
+                <div formArrayName="absentWithApology">
+                  <div *ngFor="let absentWithApology of absentWithApologyFormArray.controls; let i = index">
+                    <div class="input-group mb-3">
+                      <select [formControlName]="i" class="form-control">
+                        <option *ngFor="let employee of employees" [value]="employee.staffId">
+                          {{employee.firstName}} {{employee.lastName}}
+                        </option>
+                      </select>
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-danger" (click)="removeAbsentWithApology(i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addAbsentWithApology()">Add Absent Person</button>
+                <!-- <div *ngIf="submitted && participantsFormArray.length === 0" class="text-danger">
+                  At least one participant is required.
+                </div> -->
+              </div>
+
+
+            <!-- Agenda FormArray -->
+            <div class="form-group">
+              <label>Agenda Items</label>
+              <div formArrayName="agenda">
+                <div *ngFor="let agendaItem of agendaFormArray.controls; let i = index">
+                  <div class="input-group mb-3">
+                    <input [formControlName]="i" class="form-control" placeholder="Agenda Item">
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-danger" (click)="removeAgendaItem(i)">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary" (click)="addAgendaItem()">Add Agenda Item</button>
+              <div *ngIf="submitted && agendaFormArray.length === 0" class="text-danger">
+                At least one agenda item is required.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="secretary">Secretary</label>
+              <select id="secretary" class="form-control" formControlName="secretary">
+                <option *ngFor="let employee of employees" [value]="employee.staffId">
+                  {{employee.firstName}} {{employee.lastName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && meetingMinutesForm.controls['secretary'].errors?.['required']" class="text-danger">
+                Selecting a secretary is required.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="chairperson">Chairperson</label>
+              <select id="chairperson" class="form-control" formControlName="chairperson">
+                <option *ngFor="let employee of employees" [value]="employee.staffId">
+                  {{employee.firstName}} {{employee.lastName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && meetingMinutesForm.controls['chairperson'].errors?.['required']" class="text-danger">
+                Selecting a chairperson is required.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="secretarySignature">Secretary Signature</label>
+              <input type="file" id="secretarySignature" (change)="onFileSelected($event, 'secretary')">
+            </div>
+
+            <div class="form-group">
+              <label for="chairpersonSignature">Chairperson Signature</label>
+              <input type="file" id="chairpersonSignature" (change)="onFileSelected($event, 'chairperson')">
+            </div>
+
+
+
+              <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update' : 'Submit' }}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

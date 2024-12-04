@@ -1,0 +1,15 @@
+.btn-action {
+  margin-right: 8px;
+}
+
+.status-pending {
+  color: orange;
+}
+
+.status-approved {
+  color: green;
+}
+
+.status-rejected {
+  color: red;
+}

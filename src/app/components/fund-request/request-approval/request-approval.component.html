@@ -1,0 +1,67 @@
+<div *ngIf="!isLoading" class="card mt-5 shadow-lg">
+  <div class="card-header bg-dark">
+    <h4 class="card-title text-white">Fund Request Decision</h4>
+  </div>
+  <div class="card-body p-4">
+    <!-- Budget Details -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="p-3 bg-light rounded">
+          <h5 class="text-info">Budget Details</h5>
+          <p><i class="pr-2 fas fa-project-diagram text-muted"></i> <strong>Project Name:</strong> {{ getProjectNameById(request.projectId) }}</p>
+          <p><i class="pr-2 fas fa-wallet text-muted"></i> <strong>Current Project Balance:</strong> D{{ budget?.balance | number }}</p>
+          <p><i class="pr-2 fas fa-hand-holding-usd text-muted"></i> <strong>Requested Amount:</strong> D{{ request.amountRequested | number }}</p>
+          <p><i class="pr-2 fas fa-calculator text-muted"></i> <strong>Budget Balance After Approval:</strong> D{{ budget?.balance - request.amountRequested | number }}</p>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="p-3 bg-light rounded">
+          <h5 class="text-info">Request Details</h5>
+          <p><strong>Description:</strong> {{ request.description }}</p>
+          <h6 class="text-info mt-3">Manager's Comments</h6>
+          <ul class="list-unstyled">
+            <li *ngFor="let comment of request.comments">
+              <i class="far fa-comment-dots text-muted"></i> "{{ comment.text }}"
+              <br>
+              <small class="text-muted">Reviewed By: {{ getEmployeeNameById(comment.reviewedBy)}}, at {{ comment.reviewedAt | date:'medium' }}</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+   <!-- Add Comment Form -->
+   <div class="card card-outline card-info">
+    <div class="card-header">
+      <h6 class="card-title">Add Comment</h6>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="commentForm" (ngSubmit)="approveWithComment()">
+        <div class="form-group">
+          <textarea id="comment" formControlName="comment" class="form-control" rows="3" placeholder="Enter your comment"></textarea>
+          <div *ngIf="submitted && commentForm.controls['comment'].errors?.['required']" class="text-danger mt-1">
+            Please enter a comment.
+          </div>
+        </div>
+        <!-- <button type="submit" class="btn btn-info">Submit Review</button> -->
+      </form>
+    </div>
+  </div>
+
+    <!-- Action Buttons with Enhanced Styling -->
+    <div class="d-flex justify-content-center mt-4">
+      <button class="btn btn-outline-success mr-2" (click)="approveWithComment()" [disabled]="budget?.balance < request.amountRequested">
+        <i class="fas fa-check"></i> Approve
+      </button>
+      <button class="btn btn-outline-danger" (click)="rejectRequest()">
+        <i class="fas fa-times"></i> Reject
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="text-center mt-5">
+  <div class="spinner-border text-info" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

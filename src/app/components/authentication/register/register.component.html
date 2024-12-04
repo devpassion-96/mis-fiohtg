@@ -1,0 +1,82 @@
+<div class="container d-flex justify-content-center pt-4" style="height: 100vh;">
+  <div class="register-box col-md-6">
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <h1><b>Register User</b></h1>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+          <!-- Staff ID -->
+          <div class="form-group">
+            <label for="staffId">Staff Name</label>
+            <select formControlName="staffId" id="staffId" class="form-control">
+              <option value="" disabled selected>Select Staff</option>
+              <option *ngFor="let employee of employees" [ngValue]="employee.staffId">
+                {{ employee.firstName }} {{ employee.lastName }}
+              </option>
+            </select>
+            <div *ngIf="submitted && registerForm.controls['staffId'].errors?.['required']" class="text-danger">
+              Staff must be selected.
+            </div>
+          </div>
+
+          <!-- Username -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control" formControlName="username" placeholder="Username" readonly>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="form-control" formControlName="password" placeholder="Password">
+            <div *ngIf="submitted && registerForm.controls['password'].errors?.['required']" class="text-danger">
+              Password is required.
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" class="form-control" formControlName="address" placeholder="Address" readonly>
+          </div>
+
+          <!-- Telephone -->
+          <div class="form-group">
+            <label for="telephone">Telephone</label>
+            <input type="tel" id="telephone" class="form-control" formControlName="telephone" placeholder="Telephone" readonly>
+          </div>
+
+            <!-- Department -->
+            <div class="form-group">
+              <label for="department">Department ID</label>
+              <input type="text" id="department" class="form-control" formControlName="department" placeholder="Department" readonly>
+            </div>
+
+          <!-- Role -->
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select formControlName="role" id="role" class="form-control">
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="employee" selected>Employee</option>
+            </select>
+            <div *ngIf="submitted && registerForm.controls['role'].errors?.['required']" class="text-danger">
+              Role is required.
+            </div>
+          </div>
+
+          <!-- Register Button -->
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- /.form-box -->
+    </div><!-- /.card -->
+  </div>
+  <!-- /.register-box -->
+</div>

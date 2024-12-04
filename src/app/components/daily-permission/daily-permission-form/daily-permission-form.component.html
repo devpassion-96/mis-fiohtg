@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-9">
+      <div class="card card-secondary">
+        <div class="card-header">
+          <h3 class="card-title">Daily Permission Request Form</h3>
+        </div>
+
+        <form [formGroup]="permissionForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+          <div class="card-body">
+
+
+
+            <!-- Reason Field -->
+            <div class="form-group row">
+              <label for="reason" class="col-sm-2 col-form-label">Reason</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="reason" formControlName="reason" placeholder="Reason for leaving"></textarea>
+                <div *ngIf="submitted && permissionForm.controls['reason'].errors?.['required']" class="text-danger">
+                  Reason for leaving is required.
+                </div>
+              </div>
+
+
+            </div>
+
+            <!-- Time From Field -->
+            <div class="form-group row">
+              <label for="timeFrom" class="col-sm-2 col-form-label">Time From</label>
+              <div class="col-sm-10">
+                <input type="time" class="form-control" id="timeFrom" formControlName="timeFrom">
+                <div *ngIf="submitted && permissionForm.controls['timeFrom'].errors?.['required']" class="text-danger">
+                  Time From is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Time To Field -->
+            <div class="form-group row">
+              <label for="timeTo" class="col-sm-2 col-form-label">Time To</label>
+              <div class="col-sm-10">
+                <input type="time" class="form-control" id="timeTo" formControlName="timeTo">
+                <div *ngIf="submitted && permissionForm.controls['timeTo'].errors?.['required']" class="text-danger">
+                  Time To is required.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Submit Button -->
+          <div class="card-footer text-center">
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

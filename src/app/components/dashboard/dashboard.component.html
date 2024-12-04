@@ -1,0 +1,311 @@
+
+<section class="content mt-5">
+
+  <div class="col-sm-4" *ngIf="userRole === 'employee'">
+    <div class="position-relative p-3 bg-gray" style="height: 180px">
+      <div class="ribbon-wrapper">
+        <div class="ribbon bg-primary">
+          FIOHTG
+        </div>
+      </div>
+      Dashboard <br>
+      <small>Kindly navigate to the task you want to accomplish on the left sidebar</small>
+    </div>
+  </div>
+
+
+  <div class="container-fluid" *ngIf="userRole === 'admin'">
+
+    <div class="row" >
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+          <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Total Employees</span>
+            <span class="info-box-number">{{ totalEmployees }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+          <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user-plus"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Recent Hires</span>
+            <span class="info-box-number">{{ recentHires }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix hidden-md-up"></div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+          <span class="info-box-icon bg-success elevation-1"><i class="fas fa-chart-pie"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Total Budget</span>
+            <span class="info-box-number">D {{ totalBudget.toLocaleString() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+          <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-money-check"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Amount Used</span>
+            <span class="info-box-number">D {{ totalBudgetUsed.toLocaleString() }}</span>
+            <!-- <span class="info-box-number">D 0</span> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+  <!-- <div *ngFor="let project of projectBar" class="project-item">
+    <h3>{{ project.name }}</h3>
+    <div class="progress">
+      <div class="progress-bar" [ngClass]="project.statusClass"
+      role="progressbar" aria-valuemin="0" aria-valuemax="100">
+   {{ project.progress | number: '1.0-0' }}%
+ </div>
+
+    </div>
+    <p>Status: <span [ngClass]="project.statusClass">{{ project.status }}</span></p>
+  </div> -->
+
+
+  <!-- <div class="container">
+    <h2>Project Management Insights</h2>
+    <div *ngFor="let insight of projectInsights" class="project-insight-card">
+      <h3>{{ insight.project.name }}</h3>
+      <p>Status: {{ insight.project.status }}</p>
+      <p>Budget Total: {{ insight.budget.amount | currency }}</p>
+      <p>Budget Used: {{ insight.budgetUsed | currency }}</p>
+      <p>Budget Remaining: {{ insight.budgetRemaining | currency }}</p>
+      <p>Deadline: {{ insight.project.endDate | date }}</p>
+    </div>
+  </div>
+
+
+  <div class="project-insights">
+    <h2>Ongoing Projects (In Progress)</h2>
+    <ul>
+      <li *ngFor="let project of projects">
+        {{ project.name }}
+      </li>
+    </ul>
+
+    <h2>Upcoming Deadlines</h2>
+    <ul>
+      <li *ngFor="let project of projects">
+        {{ project.name }} (Due: {{ project.endDate | date:'shortDate' }})
+      </li>
+    </ul>
+
+    <h2>Budget Summaries</h2>
+    <ul>
+      <li *ngFor="let item of budgetSummaries">
+        Project: {{ item.project.name }}, Budget Utilization: {{ item.budgetUtilization.toFixed(2) }}%
+      </li>
+    </ul>
+
+    <h2>Total Budget Information</h2>
+    <p>Total Budget: D {{ totalBudget }}</p>
+    <p>Total Budget Used: D {{ totalBudgetUsed}}</p>
+  </div> -->
+
+
+  <div class="row">
+
+  <div class="col-md-8">
+
+  <div class="card">
+  <div class="card-header">
+  <h3 class="card-title">Department Distribution</h3>
+  <div class="card-tools">
+  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+  <i class="fas fa-minus"></i>
+  </button>
+
+  </div>
+  </div>
+
+  <div class="card-body p-0">
+  <div class="d-md-flex">
+  <div class="p-1 flex-fill" style="overflow: hidden">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <canvas id="departmentChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- Other columns or cards -->
+    </div>
+  </div>
+
+  </div>
+  </div>
+
+  </div>
+
+
+  <div class="card">
+  <div class="card-header border-transparent">
+  <h3 class="card-title">Latest Leave Requests</h3>
+  <div class="card-tools">
+  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+  <i class="fas fa-minus"></i>
+  </button>
+
+  </div>
+  </div>
+
+  <div class="card-body p-0">
+  <div class="table-responsive">
+  <table class="table m-0">
+  <thead>
+  <tr>
+    <th>Staff Name</th>
+    <th>Type</th>
+    <th>Status</th>
+    <th>Dates</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let leave of pendingLeaves">
+  <td>{{ leave.employeeName }}</td>
+  <td>{{ leave.type }}</td>
+  <td><span class="badge badge-success">{{ leave.status }}</span></td>
+  <td>{{ leave.startDate | date }} - {{ leave.endDate | date }}</td>
+          <td>
+            <button class="btn btn-info btn-xs mr-2" (click)="loadLeaveDetails(leave._id)"><i class="fas fa-eye"></i> View</button>
+         </td>
+  </tbody>
+  </table>
+  </div>
+
+  </div>
+
+  <div class="card-footer clearfix">
+
+  <a [routerLink]="['/leave-approval']" class="btn btn-sm btn-info float-right">View All Leaves</a>
+  </div>
+
+  </div>
+
+  <!-- Modal for Leave Details -->
+<div class="modal fade" id="leaveDetailsModal" #leaveDetailsModal tabindex="-1" role="dialog" aria-labelledby="leaveDetailsModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="leaveDetailsModalLabel">Leave Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="selectedLeave">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Staff ID:</strong> {{ selectedLeave?.employeeName }}</p>
+            <p><strong>Type:</strong> {{ selectedLeave?.type }}</p>
+            <p><strong>Start Date:</strong> {{ selectedLeave?.startDate | date }}</p>
+            <p><strong>End Date:</strong> {{ selectedLeave?.endDate | date }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Reason:</strong> {{ selectedLeave?.remarks }}</p>
+            <div class="form-group">
+              <label for="approverComments"><strong>Approver Comments</strong></label>
+              <textarea class="form-control" id="approverComments" [(ngModel)]="selectedLeave.approverComments"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="approveLeave(selectedLeave)"><i class="fas fa-check"></i> Approve</button>
+        <button type="button" class="btn btn-danger" (click)="rejectLeave(selectedLeave)"><i class="fas fa-times"></i> Reject</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+<div class="col-md-4">
+  <div class="info-box mb-3 bg-warning">
+    <span class="info-box-icon"><i class="fas fa-clipboard"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">All Leave Applications</span>
+      <span class="info-box-number">{{ allLeavesCount }}</span>
+    </div>
+  </div>
+
+  <div class="info-box mb-3 bg-info">
+    <span class="info-box-icon"><i class="fas fa-hourglass-start"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">Pending Leaves</span>
+      <span class="info-box-number">{{ pendingLeaveCount }}</span>
+    </div>
+  </div>
+
+  <div class="info-box mb-3 bg-success">
+    <span class="info-box-icon"><i class="fas fa-check"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">Approved Requests</span>
+      <span class="info-box-number">{{ approvedLeaveCount }}</span>
+    </div>
+  </div>
+
+  <div class="info-box mb-3 bg-danger">
+    <span class="info-box-icon"><i class="fas fa-times"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">Rejected Requests</span>
+      <span class="info-box-number">{{ rejectedLeaveCount }}</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Recently Added Projects</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      <ul *ngFor="let budget of budgets" class="products-list product-list-in-card pl-2 pr-2">
+        <li class="item">
+          <div class="product-img">
+            <img src="assets/images/fiohtg_logo.png" alt="Fiohtg Image" class="img-size-50">
+          </div>
+          <div class="product-info">
+            <a href="javascript:void(0)" class="product-title">{{ budget.projectName }}
+              <span class="badge badge-warning float-right">D {{ budget.amount.toLocaleString() }}</span>
+            </a>
+            <span class="product-description">{{ budget.departmentName }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card-footer text-center">
+      <a [routerLink]="['/projects']" class="uppercase">View All Projects</a>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+
+  </div>
+  </section>

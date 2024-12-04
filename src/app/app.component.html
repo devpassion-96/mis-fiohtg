@@ -1,0 +1,17 @@
+<div class="wrapper" *ngIf="authService.isLoggedIn()">
+  <app-header class="sticky-header"></app-header>
+  <div class="main-container">
+    <app-sidebar class="sticky-sidebar"></app-sidebar>
+    <div class="content-wrapper">
+      <section class="content">
+        <router-outlet></router-outlet>
+      </section>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>
+
+<!-- This router-outlet will be used for login and other full-page routes like registration, etc. -->
+<div *ngIf="!authService.isLoggedIn()">
+  <router-outlet></router-outlet>
+</div>

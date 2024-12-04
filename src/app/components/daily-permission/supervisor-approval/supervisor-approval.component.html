@@ -1,0 +1,81 @@
+<div class="card mt-5">
+  <div class="card-header">
+    <h3 class="card-title">Pending Permission Requests</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Staff Name</th>
+          <th>Date</th>
+          <th>Time From</th>
+          <th>Time To</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of pendingRequests">
+          <td>{{ getEmployeeNameByStaffId(request.staffId) }}</td>
+          <td>{{ request.date | date }}</td>
+          <td>{{ request.timeFrom | date:'shortTime' }}</td>
+          <td>{{ request.timeTo | date:'shortTime' }}</td>
+          <td>{{ request.reason }}</td>
+          <td>{{ request.status }}</td>
+          <td>
+            <button class="btn btn-info btn-xs mr-2" (click)="loadPermissionDetails(request._id)"><i class="fas fa-eye"></i> View</button>
+
+            <!-- <button class="btn btn-success btn-xs" (click)="approveRequest(request.id)">
+              Approve
+            </button>
+            <button class="btn btn-danger btn-xs" (click)="rejectRequest(request.id)">
+              Reject
+            </button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Modal for viewing request details -->
+<div *ngIf="selectedRequest" class="modal fade" id="requestModal" #requestModal tabindex="-1" role="dialog" aria-labelledby="requestModalLabel">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content rounded-lg shadow-lg">
+      <div class="modal-header bg-gradient-primary">
+        <h5 class="modal-title text-white" id="requestModalLabel"><i class="fas fa-info-circle mr-2"></i>Request Details</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="d-flex flex-column">
+          <p class="mb-1"><strong>Staff Name: </strong> <span class="text-secondary">{{ getEmployeeNameByStaffId(selectedRequest?.staffId) }}</span></p>
+          <p class="mb-1"><strong>Date: </strong> <span class="text-secondary">{{ selectedRequest?.date | date }}</span></p>
+          <p class="mb-1"><strong>Reason: </strong> <span class="text-secondary">{{ selectedRequest?.reason }}</span></p>
+          <p class="mb-1"><strong>Time From: </strong> <span class="text-secondary">{{ selectedRequest?.timeFrom | date:'shortTime' }}</span></p>
+          <p class="mb-1"><strong>Time To: </strong> <span class="text-secondary">{{ selectedRequest?.timeTo | date:'shortTime' }}</span></p>
+          <p class="mb-1"><strong>Current Status: </strong> <span class="text-secondary">{{ selectedRequest?.status }}</span></p>
+        </div>
+        <div class="form-group mt-3">
+          <label for="supervisorComments" class="font-weight-bold">Supervisor Comments</label>
+          <textarea class="form-control rounded" id="supervisorComments" rows="3" [(ngModel)]="selectedRequest.supervisorComments" placeholder="Add comments here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" (click)="approveRequest(selectedRequest?._id, selectedRequest?.supervisorComments)">
+          <i class="fas fa-check mr-1"></i> Approve
+        </button>
+        <button type="button" class="btn btn-outline-danger" (click)="rejectRequest(selectedRequest?._id, selectedRequest?.supervisorComments)">
+          <i class="fas fa-times mr-1"></i> Reject
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="closeModal()">
+          <i class="fas fa-arrow-left mr-1"></i> Back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

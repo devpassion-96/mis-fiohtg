@@ -1,0 +1,28 @@
+<div class="memo-detail mt-5">
+  <div class="card">
+    <div class="card-header bg-light">
+      <h3 class="card-title">Memo Details</h3>
+      <div class="card-tools">
+        <button onclick="window.print();" class="btn btn-tool">
+          <i class="fas fa-print"></i> Print
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-5" style="background-color: #f8f8f8; font-family: 'Times New Roman', Times, serif;">
+      <h4 class="text-center mb-4">{{ memo.title }}</h4>
+
+      <p><strong>Date:</strong> {{ memo.createdAt | date:'mediumDate' }}</p>
+      <p><strong>From:</strong> {{ getEmployeeNameByStaffId(memo.createdBy) }}</p>
+      <p><strong>To:</strong> All Staff</p> <!-- Assuming "To" is not available as a variable -->
+      <p><strong>Subject:</strong> {{ memo.title }}</p> <!-- Assuming "Subject" is a placeholder for static text -->
+
+      <p style="white-space: pre-wrap;">{{ memo.content }}</p>
+
+      <div class="mt-5">
+        <p>Best Regards,</p>
+        <p>{{ getEmployeeNameByStaffId(memo.createdBy) }}</p>
+      </div>
+
+    </div>
+  </div>
+</div>

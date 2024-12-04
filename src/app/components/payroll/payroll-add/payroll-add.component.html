@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Add Payroll Record</h2>
+  <form [formGroup]="payrollForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="staffId">Staff ID</label>
+      <input type="text" id="staffId" class="form-control" formControlName="staffId">
+    </div>
+    <div class="form-group">
+      <label for="basicSalary">Basic Salary</label>
+      <input type="number" id="basicSalary" class="form-control" formControlName="basicSalary">
+    </div>
+    <div class="form-group">
+      <label for="bonuses">Bonuses</label>
+      <input type="number" id="bonuses" class="form-control" formControlName="bonuses">
+    </div>
+    <div class="form-group">
+      <label for="deductions">Deductions</label>
+      <input type="number" id="deductions" class="form-control" formControlName="deductions">
+    </div>
+    <div class="form-group">
+      <label for="netSalary">Net Salary</label>
+      <input type="number" id="netSalary" class="form-control" formControlName="netSalary" readonly>
+    </div>
+    <div class="form-group">
+      <label for="month">Month</label>
+      <input type="text" id="month" class="form-control" formControlName="month">
+    </div>
+    <div class="form-group">
+      <label for="year">Year</label>
+      <input type="number" id="year" class="form-control" formControlName="year">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Payroll Record</button>
+  </form>
+</div>

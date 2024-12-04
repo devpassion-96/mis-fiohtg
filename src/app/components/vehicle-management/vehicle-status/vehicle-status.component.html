@@ -1,0 +1,18 @@
+<div>
+    <h3>Vehicle Status</h3>
+    <table>
+      <tr>
+        <th>Plate Number</th>
+        <th>Status</th>
+        <th>Location</th>
+        <th>Last Service Date</th>
+      </tr>
+      <tr *ngFor="let vehicle of vehicles">
+        <td>{{ vehicle.plateNumber }}</td>
+        <td>{{ vehicle.status }}</td>
+        <td>{{ vehicle.location || 'N/A' }}</td>
+        <td>{{ vehicle.lastServiceDate | date: 'short' }}</td>
+      </tr>
+    </table>
+  </div>
+  

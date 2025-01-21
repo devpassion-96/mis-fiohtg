@@ -82,6 +82,9 @@ import { AllocationListComponent } from './components/vehicle-management/allocat
 import { DriverStatusComponent } from './components/vehicle-management/driver-status/driver-status.component';
 import { VehicleStatusComponent } from './components/vehicle-management/vehicle-status/vehicle-status.component';
 import { ManagerLeaveListComponent } from './components/leaves/manager-leave-list/manager-leave-list.component';
+import { BudgetCashflowComponent } from './components/budgets/budget-cashflow/budget-cashflow.component';
+import { BudgetTransferComponent } from './components/budgets/budget-transfer/budget-transfer.component';
+import { TransactionHistoryComponent } from './components/budgets/transaction-history/transaction-history.component';
 
 const routes: Routes = [
 
@@ -142,6 +145,10 @@ const routes: Routes = [
   { path: 'budget-list', component: BudgetListComponent },
   { path: 'budget-form', component: BudgetFormComponent },
   { path: 'budget-form/:id', component: BudgetFormComponent },
+
+  { path: 'budget-transfer', component: BudgetTransferComponent },
+  { path: 'budget-cashflow', component: BudgetCashflowComponent },
+  { path: 'transaction-history', component: TransactionHistoryComponent },
 
   { path: 'request-form', component: RequestFormComponent },
   { path: 'request-list', component: RequestListComponent },

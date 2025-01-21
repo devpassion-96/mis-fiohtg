@@ -28,6 +28,9 @@
           </a>
         </li>
 
+      
+        
+
         <!-- Employees Dropdown -->
         <!-- <li *ngIf="userRole === 'admin'" class="nav-item  "> -->
       <li class="nav-item ">
@@ -188,6 +191,27 @@
               <a [routerLink]="['/retire-fund-list']" class="nav-link">
                 <i class="fas fa-list-alt nav-icon"></i>
                 <p>Retirements</p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/budget-transfer']" class="nav-link">
+                <i class="nav-icon fas fa-exchange-alt"></i>
+                <p>Transfer Budget</p>
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/budget-cashflow']" class="nav-link">
+                <i class="nav-icon fas fa-dollar-sign"></i>
+                <p>Cash Flow</p>
+              </a>
+            </li>
+            
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/transaction-history']" class="nav-link">
+                <i class="nav-icon fas fa-history"></i>
+                <p>Transaction History</p>
               </a>
             </li>
 

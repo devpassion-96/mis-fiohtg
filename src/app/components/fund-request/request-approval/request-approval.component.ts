@@ -147,41 +147,6 @@ export class RequestApprovalComponent implements OnInit {
     });
   }
 
-  // addComment() {
-  //   this.submitted = true;
-  //   if (this.commentForm.valid) {
-  //     const commentText = this.commentForm.get('comment').value;
-  //   const newComment = {
-  //     text: commentText,
-  //     reviewedBy:this.user.staffId,
-  //     reviewedAt: new Date(), // Add the current date and time
-  //   };
-  //   this.request.comments.push(newComment);
-  //     // Update the status based on the current status
-  //     console.log('Current Status:', this.request.status);
-  //     // switch (this.request.status) {
-  //     //   case 'Pending':
-  //     //     this.request.status = 'ManagerReview';
-  //     //     break;
-  //     //   case 'ManagerReview':
-  //     //     this.request.status = 'M&EReview';
-  //     //     break;
-  //     //   case 'M&EReview':
-  //     //     this.request.status = 'Reviewed'; // Ready for Director Decision
-  //     //     break;
-  //     // }
-  //     this.request.reviewedAt = new Date();
-
-  //     this.requestService.updateRequestRecord(this.request._id, this.request).subscribe({
-  //       next: () => {
-  //         // this.toastr.success('Request reviewed successfully');
-  //         // this.router.navigate(['/request-list']);
-  //       },
-  //       error: () => this.toastr.error('Error updating request')
-  //     });
-  //   }
-  // }
-
   addComment() {
     this.submitted = true;
   
@@ -212,22 +177,6 @@ export class RequestApprovalComponent implements OnInit {
     }
   }
   
-
-  // approveRequest() {
-
-  //   // Set transaction details
-  // this.transactionDetails = {
-  //   requestId: this.request._id,
-  //   projectName: this.budget.projectId,
-  //   amountApproved: this.request.amountRequested,
-  //   approvedBy: this.user.staffId,
-  //   date: new Date()
-  // };
-
-  //   this.updateBudget(this.request.projectId, this.request.amountRequested, () => {
-  //     this.updateRequestStatus('Approved');
-  //   });
-  // }
 
   approveRequest() {
     // Ensure the comment form is valid before proceeding
@@ -285,78 +234,6 @@ export class RequestApprovalComponent implements OnInit {
     });
   }
 
-  // private updateBudget(projectId: string, amount: number, onSuccess: () => void) {
-  //   this.budgetService.getBudgetByProjectId(projectId).subscribe({
-  //     next: (budgetArray) => {
-  //       const budget = budgetArray[0];
-  //       if (!budget) {
-  //         this.toastr.error('Budget not found for this project');
-  //         return;
-  //       }
-
-  //       // Check if the current budget balance is sufficient
-  //       const newBalance = budget.balance - amount;
-  //       if (newBalance >= 0) {
-  //         const updatedBudget: Budget = {
-  //           ...budget,
-  //           balance: newBalance
-  //         };
-
-  //         this.budgetService.updateBudgetRecord(budget._id, updatedBudget).subscribe({
-  //           next: () => {
-  //             // this.toastr.success('Budget updated successfully');
-  //             onSuccess(); // Proceed to approve the request
-  //           },
-  //           error: () => this.toastr.error('Error updating budget')
-  //         });
-  //       } else {
-  //         this.toastr.error('Insufficient budget for this project');
-  //       }
-  //     },
-  //     error: () => this.toastr.error('Error fetching budget details')
-  //   });
-  // }
-
-  // private updateBudget(projectId: string, amount: number, onSuccess: () => void): void {
-  //   // Fetch the budget for the project
-  //   this.budgetService.getBudgetByProjectId(projectId).subscribe({
-  //     next: (budgetArray) => {
-  //       const budget = budgetArray[0]; // Assume only one budget per project
-  
-  //       if (!budget) {
-  //         this.toastr.error('Budget not found for this project');
-  //         return;
-  //       }
-  
-  //       // Calculate the new balance
-  //       if (budget.balance >= amount) {
-  //         const updatedBudget: Budget = {
-  //           ...budget,
-  //           balance: budget.balance - amount, // Deduct the amount
-  //         };
-  
-  //         // Call the update API
-  //         this.budgetService.updateBudgetRecord(budget._id, updatedBudget).subscribe({
-  //           next: () => {
-  //             this.toastr.success('Budget updated successfully');
-  //             onSuccess(); // Execute success callback
-  //           },
-  //           error: (err) => {
-  //             console.error('Error updating budget:', err);
-  //             this.toastr.error('Error updating budget');
-  //           },
-  //         });
-  //       } else {
-  //         this.toastr.error('Insufficient budget for this project');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Error fetching budget details:', err);
-  //       this.toastr.error('Error fetching budget details');
-  //     },
-  //   });
-  // }
-
   private updateBudget(projectId: string, amount: number, onSuccess: () => void): void {
     // Fetch the budget for the project
     this.budgetService.getBudgetByProjectId(projectId).subscribe({
@@ -409,37 +286,6 @@ export class RequestApprovalComponent implements OnInit {
       },
     });
   }
-  
-  
-
-  // approveWithComment() {
-  //   this.submitted = true;
-  
-  //   if (this.commentForm.valid) {
-  //     const commentText = this.commentForm.get('comment').value;
-  //     const newComment = {
-  //       text: commentText,
-  //       reviewedBy: this.user.staffId,
-  //       reviewedAt: new Date(),
-  //     };
-  
-  //     // Add comment to the request
-  //     this.request.comments.push(newComment);
-  
-  //     // Update the status to Approved
-  //     this.request.status = 'Approved'; // Or the next status you want after approval
-  //     this.request.reviewedAt = new Date();
-  
-  //     // Call the service to update the request record
-  //     this.requestService.updateRequestRecord(this.request._id, this.request).subscribe({
-  //       next: () => {
-  //         this.toastr.success('Request approved with comment successfully');
-  //         this.router.navigate(['/request-list']);
-  //       },
-  //       error: () => this.toastr.error('Error updating request'),
-  //     });
-  //   }
-  // }
 
   approveWithComment() {
     this.submitted = true;

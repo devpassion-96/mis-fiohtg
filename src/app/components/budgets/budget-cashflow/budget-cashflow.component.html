@@ -1,0 +1,29 @@
+<section class="content">
+    <div class="container mt-5">
+        <div class="container-fluid">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Add Incoming Cash Flow</h3>
+              </div>
+              <form [formGroup]="cashFlowForm" (ngSubmit)="submitCashFlow()">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="project">Project</label>
+                    <select id="project" formControlName="projectId" class="form-control">
+                      <option *ngFor="let budget of budgets" [value]="budget.projectId">{{ getProjectNameById(budget.projectId) }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" formControlName="amount" class="form-control" placeholder="Enter amount">
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-success" [disabled]="cashFlowForm.invalid">Add Funds</button>
+                </div>
+              </form>
+            </div>
+          </div>
+    </div>
+  </section>
+  

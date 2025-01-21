@@ -19,7 +19,6 @@ export class BudgetService {
   }
 
   getBudgetByProjectId(projectId: string): Observable<Budget[]> {
-    // return this.http.get<Budget[]>(`${this.apiUrl}?projectId=${projectId}`);
 
     const params = new HttpParams().set('projectId', projectId); // Clean and safe query parameter handling
     return this.http.get<Budget[]>(this.apiUrl, { params });
@@ -36,5 +35,22 @@ export class BudgetService {
 
   deleteBudgetRecord(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Transfer funds between budgets
+  transferFunds(sourceBudgetId: string, targetBudgetId: string, amount: number): Observable<any> {
+    const transferPayload = { sourceBudgetId, targetBudgetId, amount };
+    return this.http.post(`${this.apiUrl}/transfer`, transferPayload);
+  }
+
+  // Add incoming cash flow to a budget
+  addIncomingCashFlow(projectId: string, amount: number): Observable<any> {
+    const cashFlowPayload = { projectId, amount };
+    return this.http.post(`${this.apiUrl}/add-funds`, cashFlowPayload);
+  }
+
+  // Get transaction history for transfers and cash flow
+  getTransactionHistory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/history`);
   }
 }

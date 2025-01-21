@@ -129,12 +129,6 @@ export class BudgetFormComponent implements OnInit {
         balance: formValues.amount
       };
 
-      // const budgetDataUpdate: Budget = {
-      //   ...formValues,
-      //   projectId: +formValues.projectId,  // Convert to number
-      //   departmentId: +formValues.departmentId,
-      // };
-
       if (this.isEditMode && this.currentBudgetId) {
         this.budgetService.updateBudgetRecord(this.currentBudgetId, budgetData).subscribe({
           next: () => this.handleSuccess('Budget updated successfully!'),

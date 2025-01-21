@@ -1,8 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin, map } from 'rxjs';
 import { DailyPermission } from 'src/app/models/daily-permission.model';
 import { Employee } from 'src/app/models/employee.model';
+import { UserProfileService } from 'src/app/services/auth/user-profile.service';
 import { DailyPermissionService } from 'src/app/services/hrm/daily-permission.service';
+import { DepartmentService } from 'src/app/services/hrm/department.service';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
 
 @Component({
@@ -17,27 +20,104 @@ export class SupervisorApprovalComponent implements OnInit {
 
   pendingRequests: DailyPermission[] = [];
   employees: Employee[] = [];
+  user: any; // Logged-in user details
 
   constructor(private permissionRequestService: DailyPermissionService,
-    private employeeService: EmployeeService,
-    private toastr: ToastrService) {}
+    private employeeService: EmployeeService,private userProfileService: UserProfileService,
+    private toastr: ToastrService,private departmentService: DepartmentService) {}
 
   ngOnInit(): void {
-    this.loadPendingRequests();
+    // this.loadPendingRequests();
     this.loadAllEmployees();
+
+    this.loadUserDetails();
   }
 
-  loadPendingRequests() {
-    this.permissionRequestService.getAllPermissions().subscribe(
-      requests => {
-        this.pendingRequests = requests.filter(request => request.status === 'Pending');
+  loadUserDetails() {
+    this.userProfileService.user.subscribe(
+      (userData) => {
+        if (userData) {
+          this.user = userData; // Get the logged-in user's details
+          this.loadPermissionRequests(); // Load requests based on the user's role
+        }
       },
-      error => {
-        console.error('Error loading permission requests:', error);
-        // Handle the error appropriately
+      (error) => {
+        console.error('Error fetching user profile:', error);
       }
     );
   }
+
+  loadPermissionRequests() {
+    forkJoin({
+      permissions: this.permissionRequestService.getAllPermissions(),
+      employees: this.employeeService.getAllEmployees(),
+      departments: this.departmentService.getDepartments() // Add departments for filtering
+    })
+      .pipe(
+        map(({ permissions, employees, departments }) => {
+          return permissions.map(permission => {
+            const employee = employees.find(emp => emp.staffId === permission.staffId);
+
+            let employeeDepartmentName = 'Unknown Department';
+            let employeeDepartmentId = null;
+
+            if (employee) {
+              const employeeDepartment = departments.find(dept => {
+                return dept._id.toString() === employee.department.toString();
+              });
+
+              if (employeeDepartment) {
+                employeeDepartmentName = employeeDepartment.name;
+                employeeDepartmentId = employeeDepartment._id;
+              }
+            }
+
+            return {
+              ...permission,
+              employeeName: `${employee?.firstName || 'Unknown'} ${employee?.lastName || ''}`,
+              department: employeeDepartmentName,
+              departmentId: employeeDepartmentId || 'Unknown Department'
+            };
+          });
+        })
+      )
+      .subscribe({
+        next: (mappedPermissions) => {
+          if (this.user) {
+            if (this.user.role === 'admin') {
+              // Admins see all pending requests
+              this.pendingRequests = mappedPermissions.filter(request => request.status === 'Pending');
+            } else if (this.user.role === 'manager') {
+              // Managers see pending requests for their department
+              this.pendingRequests = mappedPermissions.filter(request => {
+                const isSameDepartment = request.departmentId === this.user.department;
+                const isPending = request.status === 'Pending';
+                return isSameDepartment && isPending;
+              });
+            }
+          } else {
+            // Fallback: Show all pending requests
+            this.pendingRequests = mappedPermissions.filter(request => request.status === 'Pending');
+            console.warn('User not defined. Showing all pending requests.');
+          }
+        },
+        error: (error) => {
+          console.error('Error loading permission requests:', error);
+        }
+      });
+  }
+
+  // loadPendingRequests() {
+  //   this.permissionRequestService.getAllPermissions().subscribe(
+  //     requests => {
+  //       this.pendingRequests = requests.filter(request => request.status === 'Pending');
+  //     },
+  //     error => {
+  //       console.error('Error loading permission requests:', error);
+  //       // Handle the error appropriately
+  //     }
+  //   );
+  // }
 
   loadAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
@@ -92,7 +172,7 @@ export class SupervisorApprovalComponent implements OnInit {
             this.permissionRequestService.updatePermission(requestId, updatedPermission).subscribe(
               () => {
                 this.toastr.success('Request Approved', 'Success');
-                this.loadPendingRequests(); // Refresh the list
+                this.loadPermissionRequests(); // Refresh the list
                 this.closeModal();
               },
               (error) => {
@@ -125,7 +205,7 @@ export class SupervisorApprovalComponent implements OnInit {
             this.permissionRequestService.updatePermission(requestId, updatedPermission).subscribe(
               () => {
                 this.toastr.error('Request Rejected', 'Rejected');
-                this.loadPendingRequests(); // Refresh the list
+                this.loadPermissionRequests(); // Refresh the list
                 this.closeModal();
               },
               (error) => {

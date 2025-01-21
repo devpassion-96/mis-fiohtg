@@ -104,6 +104,7 @@ import { DriverStatusComponent } from './components/vehicle-management/driver-st
 import { VehicleStatusComponent } from './components/vehicle-management/vehicle-status/vehicle-status.component';
 import { AllocationListComponent } from './components/vehicle-management/allocation-list/allocation-list.component';
 import { VehicleRequestsFormComponent } from './components/vehicle-management/vehicle-request-form/vehicle-request-form.component';
+import { ManagerLeaveListComponent } from './components/leaves/manager-leave-list/manager-leave-list.component';
 
 @NgModule({
   declarations: [
@@ -194,7 +195,8 @@ import { VehicleRequestsFormComponent } from './components/vehicle-management/ve
     DriverStatusComponent,
     VehicleStatusComponent,
     AllocationListComponent,
-    VehicleRequestsFormComponent
+    VehicleRequestsFormComponent,
+    ManagerLeaveListComponent
   ],
   imports: [
     BrowserModule,

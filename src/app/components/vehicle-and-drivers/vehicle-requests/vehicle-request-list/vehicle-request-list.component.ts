@@ -75,23 +75,6 @@ export class VehicleRequestListComponent implements OnInit {
     });
   }
 
-  // approveAndAllocate(request: VehicleRequest): void {
-  //   // Check for the first available driver and vehicle before approving
-  //   const availableDriver = this.drivers.find(driver => driver.status === 'Available');
-  //   const availableVehicle = this.vehicles.find(vehicle => vehicle.status === 'Available');
-  
-  //   if (availableDriver && availableVehicle) {
-  //     // Only approve the request if both resources are available
-  //     request.status = 'Approved';
-  //     this.requestService.updateRequest(request).subscribe(() => {
-  //       // Proceed with allocation since both driver and vehicle are available
-  //       this.allocateDriverAndVehicle(request, availableDriver, availableVehicle);
-  //     });
-  //   } else {
-  //     alert('No available driver or vehicle for allocation.');
-  //   }
-  // }
-
   approveAndAllocate(request: VehicleRequest): void {
     // Find the first available driver, prioritizing by return date
     const availableDriver = this.drivers

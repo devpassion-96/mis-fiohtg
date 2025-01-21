@@ -27,7 +27,7 @@ export class LeaveApplicationComponent implements OnInit {
   leaveForm: FormGroup;
   employees: Employee[] = [];
   leaves: Leave[] = [];
-  leaveTypes: string[] = ['Annual', 'Sick Leave', 'Maternity and Paternity Leave', 'Unpaid Leave', 'Educational Leave', 'Sabbatical Leave'];
+  leaveTypes: string[] = ['Annual', 'Sick Leave', 'Maternity and Paternity Leave', 'Unpaid Leave', 'Educational Leave', 'Sabbatical Leave', 'Toil', 'Compassionate', 'Casual Leave' ];
   leaveBalances: EmployeeLeaveBalances = {};
 
   user: any;
@@ -178,7 +178,7 @@ export class LeaveApplicationComponent implements OnInit {
         this.leavesService.addLeave(leaveRequest).subscribe({
           next: () => {
             this.toastr.success('Leave request submitted', 'Success');
-            this.router.navigate(['/leave-list']);
+            this.router.navigate(['/']);
             this.leaveForm.reset(); // Reset form after submission
             this.submitted = false; // Reset submitted flag
           },

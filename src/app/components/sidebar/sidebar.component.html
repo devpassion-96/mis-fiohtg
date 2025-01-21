@@ -28,8 +28,6 @@
           </a>
         </li>
 
-
-
         <!-- Employees Dropdown -->
         <!-- <li *ngIf="userRole === 'admin'" class="nav-item  "> -->
       <li class="nav-item ">
@@ -141,25 +139,41 @@
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/pending-requests']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
-                <p>Manager Review List</p>
+                <p>Manager Review List
+                  <span *ngif="pendingFundsCount > 0" class="badge badge-warning right">
+                    {{pendingFundsCount}}
+                  </span>
+                                
               </a>
             </li>
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/m-and-e-review-list']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
-                <p>M&E Review List</p>
+                <p>M&E Review List
+                  <span  class="badge badge-warning right">
+                    {{mandeReviewCount}}
+                  </span>
+                </p>
               </a>
             </li>
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/finance-list']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
-                <p>Finance Review List</p>
+                <p>Finance Review List
+                  <span class="badge badge-warning right">
+                    {{financeReviewFundsCount}}
+                  </span>
+                </p>
               </a>
             </li>
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/reviewed-requests']" class="nav-link">
                 <i class="fas fa-check-square nav-icon"></i>
-                <p>Reviewed Requests</p>
+                <p>Director Reviews
+                  <span *ngIf="vehicleRequests > 0" class="badge badge-warning right">
+                    {{directorReviewFundsCount}}
+                  </span>
+                </p>
               </a>
             </li>
 
@@ -213,10 +227,13 @@
               </a>
             </li>
             
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userRole === 'admin'">
               <a [routerLink]="['/vehicle-request-list']" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>Vehicle Request List</p>
+                <span *ngIf="vehicleRequests > 0" class="badge badge-warning right">
+                  {{ vehicleRequests }}
+                </span>
               </a>
             </li>
             
@@ -287,29 +304,50 @@
                 <p>Make Request</p>
               </a>
             </li>
-            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+            <li class="nav-item" *ngIf="userRole === 'admin'">
               <a [routerLink]="['/leave-list']" class="nav-link">
                 <i class="far fa-calendar-alt nav-icon"></i>
                 <p>All Leave Requests</p>
               </a>
             </li>
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/manager-review']" class="nav-link">
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>Manager Review
+                  <span *ngIf="userRole === 'manager'" class="badge badge-primary">
+                    {{ pendingLeaveCount }}
+                  </span>
+                </p>
+              </a>
+            </li>
             <li class="nav-item" *ngIf="userRole === 'admin'">
               <a [routerLink]="['/finance-leave-review']" class="nav-link">
                 <i class="far fa-calendar-alt nav-icon"></i>
-                <p>Finance Leave Review</p>
+                <p>Finance Review
+                  <span class="badge badge-primary">
+                    {{ managerReviewLeaveCount }}
+                  </span>
+                </p>
               </a>
             </li>
             <li class="nav-item" *ngIf="userRole === 'admin'">
               <a [routerLink]="['/hr-leave-review']" class="nav-link">
                 <i class="far fa-calendar-alt nav-icon"></i>
-                <p>HR Leave Review</p>
+                <p>HR Review
+                   <span class="badge badge-primary">
+                  {{ hRReviewLeaveCount }}
+                </span></p>
               </a>
             </li>
 
             <li class="nav-item" *ngIf="userRole === 'admin'">
               <a [routerLink]="['/leave-approval']" class="nav-link">
                 <i class="fas fa-calendar-check nav-icon"></i>
-                <p>Leave Approval</p>
+                <p>Director Approval
+                  <span class="badge badge-primary">
+                    {{ directorReviewLeaveCount }}
+                  </span>
+                </p>
               </a>
             </li>
           </ul>
@@ -334,7 +372,11 @@
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/supervisor-approval']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
-                <p>Pending Requests</p>
+                <p>Pending Requests
+                  <span *ngIf="pendingPermissionRequestsCount > 0" class="badge badge-warning right">
+                    {{ pendingPermissionRequestsCount }}
+                  </span>
+                </p>
               </a>
             </li>
             <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">

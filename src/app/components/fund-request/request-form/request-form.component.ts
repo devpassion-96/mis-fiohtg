@@ -339,7 +339,7 @@ export class RequestFormComponent implements OnInit {
       this.requestService.addRequestRecord(formData as any).subscribe({
         next: () => {
           this.toastr.success('Request submitted successfully');
-          this.router.navigate(['/request-list']);
+          this.router.navigate(['/']);
         },
         error: () => this.toastr.error('Failed to submit request')
       });

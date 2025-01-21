@@ -81,6 +81,7 @@ import { VehicleRequestsFormComponent } from './components/vehicle-management/ve
 import { AllocationListComponent } from './components/vehicle-management/allocation-list/allocation-list.component';
 import { DriverStatusComponent } from './components/vehicle-management/driver-status/driver-status.component';
 import { VehicleStatusComponent } from './components/vehicle-management/vehicle-status/vehicle-status.component';
+import { ManagerLeaveListComponent } from './components/leaves/manager-leave-list/manager-leave-list.component';
 
 const routes: Routes = [
 
@@ -102,6 +103,7 @@ const routes: Routes = [
   { path: 'leave-edit/:id', component: LeaveEditComponent },
   { path: 'leave-approval', component: LeaveApprovalComponent },
 
+{ path: 'manager-review', component: ManagerLeaveListComponent },
   { path: 'finance-leave-review', component: FinanceLeaveListComponent },
   { path: 'hr-leave-review', component: HrLeaveListComponent },
 

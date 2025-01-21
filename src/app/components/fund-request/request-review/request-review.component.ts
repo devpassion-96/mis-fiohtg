@@ -134,7 +134,7 @@ export class RequestReviewComponent implements OnInit {
       this.requestService.updateRequestRecord(this.request._id, this.request).subscribe({
         next: () => {
           this.toastr.success('Request reviewed successfully');
-          this.router.navigate(['/request-list']);
+          this.router.navigate(['/']);
         },
         error: () => this.toastr.error('Error updating request')
       });

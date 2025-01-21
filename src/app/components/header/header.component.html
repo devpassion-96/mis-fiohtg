@@ -1,21 +1,93 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-  <!-- Left navbar links -->
-  <ul class="navbar-nav">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
       <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+          <i class="fas fa-bars"></i>
+        </a>
       </li>
-      <!-- More items can be added here -->
-  </ul>
+    </ul>
+  
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto" *ngIf="counts && (userRole === 'admin' || userRole === 'manager')">
+      <!-- Fund Notifications -->
+      <li class="nav-item" *ngIf="counts.pendingFundsCount > 0 && userRole === 'manager'">
+        <a class="nav-link" [routerLink]="'/pending-requests'" title="Pending Fund Requests">
+          <i class="fas fa-file-alt"></i>
+          <span class="badge badge-warning">{{ counts.pendingFundsCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.mandeReviewCount > 0 && userRole === 'manager'">
+        <a class="nav-link" [routerLink]="'/m-and-e-review-list'" title="M&E Review Requests">
+          <i class="fas fa-hourglass-start"></i>
+          <span class="badge badge-warning">{{ counts.mandeReviewCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.financeReviewFundsCount > 0 && userRole === 'admin'">
+        <a class="nav-link" [routerLink]="'/finance-list'" title="Finance Review Requests">
+          <i class="fas fa-money-check-alt"></i>
+          <span class="badge badge-warning">{{ counts.financeReviewFundsCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.directorReviewFundsCount > 0 && userRole === 'admin'">
+        <a class="nav-link" [routerLink]="'/reviewed-requests'" title="Director Reviews">
+          <i class="fas fa-user-check"></i>
+          <span class="badge badge-warning">{{ counts.directorReviewFundsCount }}</span>
+        </a>
+      </li>
+  
+      <!-- Leave Notifications -->
+      <li class="nav-item" *ngIf="counts.pendingLeaveCount > 0">
+        <a
+          class="nav-link"
+          [routerLink]="userRole === 'manager' ? '/manager-review' : '/manager-review'"
+          title="Pending Leave Requests"
+        >
+          <i class="fas fa-calendar-alt"></i>
+          <span class="badge badge-warning">{{ counts.pendingLeaveCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.managerReviewLeaveCount > 0 && userRole === 'admin'">
+        <a class="nav-link" [routerLink]="'/manager-review'" title="Manager Leave Reviews">
+          <i class="fas fa-user-tie"></i>
+          <span class="badge badge-warning">{{ counts.managerReviewLeaveCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.hRReviewLeaveCount > 0 && userRole === 'admin'">
+        <a class="nav-link" [routerLink]="'/hr-leave-review'" title="HR Leave Reviews">
+          <i class="fas fa-briefcase"></i>
+          <span class="badge badge-warning">{{ counts.hRReviewLeaveCount }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="counts.directorReviewLeaveCount > 0 && userRole === 'admin'">
+        <a class="nav-link" [routerLink]="'/leave-approval'" title="Director Leave Approvals">
+          <i class="fas fa-calendar-check"></i>
+          <span class="badge badge-warning">{{ counts.directorReviewLeaveCount }}</span>
+        </a>
+      </li>
+  
+      <!-- Vehicle Requests -->
+      <li class="nav-item" *ngIf="counts.vehicleRequests > 0 && (userRole === 'admin')">
+        <a class="nav-link" [routerLink]="'/vehicle-request-list'" title="Pending Vehicle Requests">
+          <i class="fas fa-car"></i>
+          <span class="badge badge-warning">{{ counts.vehicleRequests }}</span>
+        </a>
+      </li>
+  
+      <!-- Permission Requests -->
+      <li class="nav-item" *ngIf="counts.pendingPermissionRequestsCount > 0 && (userRole === 'admin' || userRole === 'manager')">
+        <a class="nav-link" [routerLink]="'/supervisor-approval'" title="Pending Permissions">
+          <i class="fas fa-envelope-open-text"></i>
+          <span class="badge badge-warning">{{ counts.pendingPermissionRequestsCount }}</span>
+        </a>
+      </li>
 
-  <!-- Right navbar links -->
-  <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <!-- Notifications Dropdown Menu -->
       <li class="nav-item">
-          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-              <i class="fas fa-expand-arrows-alt"></i>
-          </a>
-      </li>
-      <!-- Other items can be added here -->
-  </ul>
-</nav>
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+    </li>
+    </ul>
+  </nav>
+  
+  

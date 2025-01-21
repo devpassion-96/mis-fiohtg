@@ -34,7 +34,7 @@ export class FinanceLeaveListComponent {
       })
     ).subscribe({
       next: (mappedLeaves) => {
-        this.leaves = mappedLeaves.filter(request => request.status === 'Pending');
+        this.leaves = mappedLeaves.filter(request => request.status === 'Manager Review');
       },
       error: (error) => {
         console.error('Error loading leaves data', error);

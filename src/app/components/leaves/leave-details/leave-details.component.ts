@@ -111,8 +111,23 @@ export class LeaveDetailsComponent implements OnInit {
       this.leave.comments.push(newComment);
       // Update the status based on the current status
       console.log('Current Leave Status:', this.leave.status);
+      // switch (this.leave.status) {
+      //   case 'Pending':
+      //     this.leave.status = 'Finance Review';
+      //     break;
+      //   case 'Finance Review':
+      //     this.leave.status = 'HR Review';
+      //     break;
+      //   case 'HR Review':
+      //     this.leave.status = 'Reviewed'; // Ready for Director Decision
+      //     break;
+      // }
+
       switch (this.leave.status) {
         case 'Pending':
+          this.leave.status = 'Manager Review';
+          break;
+        case 'Manager Review': // New step added
           this.leave.status = 'Finance Review';
           break;
         case 'Finance Review':
@@ -121,7 +136,11 @@ export class LeaveDetailsComponent implements OnInit {
         case 'HR Review':
           this.leave.status = 'Reviewed'; // Ready for Director Decision
           break;
+        default:
+          console.error('Unknown status:', this.leave.status);
+          break;
       }
+      
       this.leave.reviewedAt = new Date();
 
       this.leavesService.updateLeave(this.leave._id, this.leave).subscribe({

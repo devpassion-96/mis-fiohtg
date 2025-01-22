@@ -154,16 +154,51 @@ export class SidebarComponent {
   
 
     
+    // loadUserRole() {
+    //   const userData = this.authService.getCurrentUserData();
+      
+    //   if (userData) {
+    //     this.userRole = userData.role; // Role of the user
+    //     this.userDepartment = userData.department; // Department for managers
+    //     this.userStaffId = userData.staffId; // Staff ID for employees
+    //     console.log("user department-------------------: ", this.userDepartment)
+    //   } else {
+    //     this.userRole = 'Employee';
+    //   }
+    // }
+    userDepartmentName;
     loadUserRole() {
       const userData = this.authService.getCurrentUserData();
       if (userData) {
         this.userRole = userData.role; // Role of the user
-        this.userDepartment = userData.department; // Department for managers
+        this.userDepartment = userData.department; // Department ID for managers
         this.userStaffId = userData.staffId; // Staff ID for employees
+    
+        // Fetch the department name using the department ID
+        this.departmentService.getDepartmentById(this.userDepartment).subscribe({
+          next: (department) => {
+            this.userDepartmentName = department.name; // Save the department name
+
+            console.log("user department name -------------------: " + this.userDepartmentName);
+          },
+          error: (err) => {
+            console.error('Error fetching department name:', err);
+            this.userDepartmentName = null; // Handle error gracefully
+          },
+        });
       } else {
         this.userRole = 'Employee';
+        this.userDepartmentName = null; // No department for regular employees
       }
     }
+
+    canAccessDepartment(departmentName: string): boolean {
+      return (
+        (this.userRole === 'admin' || this.userRole === 'manager') &&
+        this.userDepartmentName === departmentName
+      );
+    }
+    
     
     // Calculate pending leave count for managers
     calculatePendingLeaveCount(leavesWithDepartments: any[]) {

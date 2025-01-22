@@ -103,6 +103,25 @@
                 </div>
               </div>
 
+                  <!-- nonStaffMembers FormArray -->
+            <div class="form-group">
+              <label>Non Staff Members: </label>
+              <div formArrayName="nonStaffMembers">
+                <div *ngFor="let nonStaffMember of nonStaffMembersFormArray.controls; let i = index">
+                  <div class="input-group mb-3">
+                    <!-- Replaced the select with input -->
+                    <input [formControlName]="i" class="form-control" type="text" placeholder="Enter Non-Staff name" />
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-danger" (click)="removeNonStaffMembers(i)">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-primary" (click)="addNonStaffMembers()">Add Person</button>
+            
+            </div>
+
+
               <div class="form-group">
                 <label>Absent With Apology</label>
                 <div formArrayName="absentWithApology">
@@ -120,9 +139,7 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-primary" (click)="addAbsentWithApology()">Add Absent Person</button>
-                <!-- <div *ngIf="submitted && participantsFormArray.length === 0" class="text-danger">
-                  At least one participant is required.
-                </div> -->
+              
               </div>
 
 

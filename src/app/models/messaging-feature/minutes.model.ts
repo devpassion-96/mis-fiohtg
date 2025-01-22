@@ -9,6 +9,7 @@ export interface MeetingMinutes {
   createdBy: string;
   readBy: string[];
   participants: string[];
+  nonStaffMembers: string[];
   absentWithApology: string[];
   agenda: string[];
   secretary: string; // Identifier of the secretary (e.g., name, email)

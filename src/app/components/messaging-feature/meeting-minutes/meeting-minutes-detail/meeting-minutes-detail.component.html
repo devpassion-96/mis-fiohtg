@@ -84,6 +84,13 @@
                     <li *ngFor="let participant of meetingMinute?.participants">{{ getEmployeeNameById(participant) }}</li>
                   </ul>
                 </div>
+
+                <div class="col-md-6">
+                  <strong>Non Staff:</strong>
+                  <ul>
+                    <li *ngFor="let nonStaffMember of meetingMinute?.nonStaffMembers">{{nonStaffMember }}</li>
+                  </ul>
+                </div>
                 <div class="col-md-6">
                   <strong>Meeting Roles:</strong>
                   <p>Secretary: {{ getEmployeeNameById(meetingMinute?.secretary) }}</p>

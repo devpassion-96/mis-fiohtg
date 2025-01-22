@@ -45,6 +45,7 @@ export class MeetingMinutesCreateComponent {
       createdBy: ['', Validators.required],
 
       participants: this.fb.array([], Validators.required), // FormArray for participants
+      nonStaffMembers: this.fb.array([]), // FormArray for nonStaffMembers
       absentWithApology: this.fb.array([],),
       agenda: this.fb.array([], Validators.required), // FormArray for agenda items
       secretary: ['', Validators.required], // FormControl for secretary
@@ -98,6 +99,7 @@ export class MeetingMinutesCreateComponent {
 
         this.meetingMinutesForm.setControl('absentWithApology', this.fb.array(meetingMinute.absentWithApology || []));
         this.meetingMinutesForm.setControl('participants', this.fb.array(meetingMinute.participants || []));
+        this.meetingMinutesForm.setControl('nonStaffMembers', this.fb.array(meetingMinute.nonStaffMembers || []));
       this.meetingMinutesForm.setControl('agenda', this.fb.array(meetingMinute.agenda || []));
       this.meetingMinutesForm.patchValue({
         secretary: meetingMinute.secretary,
@@ -130,6 +132,10 @@ export class MeetingMinutesCreateComponent {
     return this.meetingMinutesForm.get('participants') as FormArray;
   }
 
+  get nonStaffMembersFormArray() {
+    return this.meetingMinutesForm.get('nonStaffMembers') as FormArray;
+  }
+
 
    get absentWithApologyFormArray() {
     return this.meetingMinutesForm.get('absentWithApology') as FormArray;
@@ -152,6 +158,14 @@ export class MeetingMinutesCreateComponent {
 
   removeParticipant(index: number) {
     this.participantsFormArray.removeAt(index);
+  }
+
+  addNonStaffMembers() {
+    this.nonStaffMembersFormArray.push(this.fb.control(''));
+  }
+
+  removeNonStaffMembers(index: number) {
+    this.nonStaffMembersFormArray.removeAt(index);
   }
 
   addAbsentWithApology() {

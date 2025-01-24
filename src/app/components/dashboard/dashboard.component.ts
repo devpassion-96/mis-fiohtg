@@ -259,26 +259,50 @@ calculateLeaveBalances(): EmployeeLeaveBalances {
 //     });
 // }
 
+// forProjectAndBudgetData() {
+//   this.projectService.getAllProjectRecords().subscribe((projects) => {
+//     this.projects = projects;
+
+//     // Fetch budget summaries
+//     this.budgetService.getAllBudgetRecords().subscribe((budgets) => {
+//       this.totalBudget = budgets.reduce((acc, budget) => acc + budget.amount, 0);
+
+//       // Recalculate totalBudgetUsed based on budget amount and balance
+//       this.totalBudgetUsed = budgets.reduce((acc, budget) => {
+//         // The used amount is the original amount minus the balance
+//         const usedAmount = budget.amount - budget.balance;
+//         return acc + usedAmount;
+//       }, 0);
+
+//       // Round totalBudgetUsed to ensure it's a whole number
+//       this.totalBudgetUsed = Math.round(this.totalBudgetUsed);
+//     });
+//   });
+// }
+
 forProjectAndBudgetData() {
-  this.projectService.getAllProjectRecords().subscribe((projects) => {
-    this.projects = projects;
+  this.budgetService.getBudgetSummary().subscribe((summary) => {
+    this.totalBudget = summary.totalBudget;
+    // this.totalBudgetUsed = summary.totalUsed;
+    this.totalBalance = summary.totalBalance;
 
-    // Fetch budget summaries
     this.budgetService.getAllBudgetRecords().subscribe((budgets) => {
-      this.totalBudget = budgets.reduce((acc, budget) => acc + budget.amount, 0);
+      this.totalBudgetUsed = budgets.reduce((acc, budget) => acc + (budget.amount - budget.balance), 0);
 
-      // Recalculate totalBudgetUsed based on budget amount and balance
-      this.totalBudgetUsed = budgets.reduce((acc, budget) => {
-        // The used amount is the original amount minus the balance
-        const usedAmount = budget.amount - budget.balance;
-        return acc + usedAmount;
-      }, 0);
-
-      // Round totalBudgetUsed to ensure it's a whole number
-      this.totalBudgetUsed = Math.round(this.totalBudgetUsed);
-    });
+      
+    
+          });
   });
 }
+
+// forProjectAndBudgetData() {
+//   this.budgetService.getBudgetSummary().subscribe((summary) => {
+//     this.totalBudget = summary.totalBudget;
+//     this.totalBudgetUsed = summary.totalUsed;
+//     this.totalBalance = summary.totalBalance;
+//   });
+// }
+
 
 
 

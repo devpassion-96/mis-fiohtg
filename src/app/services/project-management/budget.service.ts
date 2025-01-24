@@ -53,4 +53,9 @@ export class BudgetService {
   getTransactionHistory(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/history`);
   }
+
+  getBudgetSummary(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/summary`);
+  }
+  
 }

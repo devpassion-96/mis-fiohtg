@@ -53,15 +53,65 @@ export class RetireFundComponent implements OnInit {
       documents: new FormControl(null)
     });
 
-    // Listen for changes on the projectId control and update the selected budget
-    this.retireFundForm.get('projectId').valueChanges.subscribe(projectId => {
+    // // Listen for changes on the projectId control and update the selected budget
+    // this.retireFundForm.get('projectId').valueChanges.subscribe(projectId => {
+    //   this.budgetService.getBudgetByProjectId(projectId).subscribe({
+    //     next: (budgets) => {
+    //       const matchingBudget = budgets.find((budget) => budget.projectId === projectId);
+    //       this.selectedBudget = matchingBudget || null;
+    //     },
+    //     error: () => this.toastr.error('Error fetching budget for selected project')
+    //   });
+    // });
+
+    this.retireFundForm.get('projectId').valueChanges.subscribe((projectId) => {
+      console.log('Selected Project ID:', projectId); // Log the selected project ID from the form control
+    
       this.budgetService.getBudgetByProjectId(projectId).subscribe({
         next: (budgets) => {
-          this.selectedBudget = budgets.length > 0 ? budgets[0] : null;
+          console.log('Budgets fetched for projectId:', projectId, budgets); // Log the budgets fetched from the API
+    
+          const matchingBudget = budgets.find((budget) => {
+            console.log('Checking budget.projectId:', budget.projectId, 'against projectId:', projectId); // Log comparison details
+            return budget.projectId === projectId;
+          });
+    
+          this.selectedBudget = matchingBudget || null;
+    
+          if (this.selectedBudget) {
+            console.log('Matching Budget Found:', this.selectedBudget); // Log the selected budget if found
+          } else {
+            console.log('No Matching Budget Found for projectId:', projectId); // Log if no matching budget is found
+            this.toastr.warning('No matching budget found for the selected project');
+          }
         },
-        error: () => this.toastr.error('Error fetching budget for selected project')
+        error: (err) => {
+          console.error('Error fetching budget for selected project:', err); // Log the error details
+          this.toastr.error('Error fetching budget for selected project');
+        },
       });
     });
+    
+
+
+    // Listen for changes on the projectId control and update the selected budget
+// this.retireFundForm.get('projectId').valueChanges.subscribe((projectId) => {
+//   this.budgetService.getBudgetByProjectId(projectId).subscribe({
+//     next: (budgets) => {
+//       // Compare the projectId and find the correct budget
+//       const matchingBudget = budgets.find((budget) => budget.projectId === projectId);
+      
+//       if (matchingBudget) {
+//         this.selectedBudget = matchingBudget; // Assign the correct budget
+//       } else {
+//         this.selectedBudget = null;
+//         this.toastr.warning('No matching budget found for the selected project');
+//       }
+//     },
+//     error: () => this.toastr.error('Error fetching budget for selected project'),
+//   });
+// });
+
 
     this.populateStaffId();
   }
@@ -154,45 +204,4 @@ export class RetireFundComponent implements OnInit {
     }
   }
 
-
-  // onSubmit() {
-  //   this.submitted = true;
-  //   if (this.retireFundForm.valid && this.selectedBudget) {
-  //     const formValues = this.retireFundForm.value;
-  //     const newBalance = this.selectedBudget.balance + formValues.amount;
-
-  //         // Check if new balance exceeds the project amount
-  //   if (newBalance > this.selectedBudget.amount) {
-  //     this.toastr.error('New balance cannot exceed the total project amount');
-  //     return; // Exit the function to prevent further processing
-  //   }
-
-  //     const updatedBudget: Budget = {
-  //       ...this.selectedBudget,
-  //       balance: newBalance
-  //     };
-
-  //     this.budgetService.updateBudgetRecord(this.selectedBudget._id, updatedBudget).subscribe({
-  //       next: () => {
-  //         const retireFundData: RetireFund = {
-  //           ...formValues,
-  //           projectId: this.selectedBudget.projectId,
-  //           staffId: this.user.staffId, // Replace with actual staff ID
-  //           date: new Date() // Captures the current date and time
-  //         };
-
-  //         this.retireFundService.addRetireFundRecord(retireFundData).subscribe({
-  //           next: () => {
-  //             this.toastr.success('Retire fund action submitted successfully');
-  //             this.router.navigate(['/retire-fund-list']);
-  //           },
-  //           error: () => this.toastr.error('Failed to record retire fund action')
-  //         });
-  //       },
-  //       error: () => this.toastr.error('Error updating budget')
-  //     });
-  //   } else {
-  //     this.toastr.error('Please fill all required fields or select a valid project');
-  //   }
-  // }
 }

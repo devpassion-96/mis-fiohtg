@@ -3,6 +3,7 @@ export interface Budget {
   projectId: string;
   amount: number;
   balance: number;
+  amountUsed:number;
   departmentId:string;
   createdBy: string;   //logged in user
 }

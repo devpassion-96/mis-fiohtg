@@ -46,29 +46,6 @@ export class PendingRequestsComponent implements OnInit {
     }
   }
 
-  // loadRequests() {
-  //   forkJoin({
-  //     requests: this.requestService.getAllRequestRecords(),
-  //     projects: this.projectService.getAllProjectRecords(),
-  //     employees: this.employeeService.getAllEmployees()
-  //   }).pipe(
-  //     map(({ requests, projects, employees }) => {
-  //       return requests.map(request => ({
-  //         ...request,
-  //         projectName: projects.find(p => p._id === request.projectId)?.name,
-  //         employeeName: employees.find(e => e.staffId === request.staffId)?.firstName + ' ' + employees.find(e => e.staffId === request.staffId)?.lastName
-  //       }));
-  //     })
-  //   ).subscribe({
-  //     next: (mappedRequests) => {
-  //       this.requests = mappedRequests.filter(request => request.status === 'Pending');
-  //     },
-  //     error: () => {
-  //       // Handle error
-  //     }
-  //   });
-  // }
-
   loadRequests() {
     forkJoin({
       requests: this.requestService.getAllRequestRecords(),
@@ -88,13 +65,15 @@ export class PendingRequestsComponent implements OnInit {
   
           // Apply role-based filtering logic
           if (this.userRole === 'admin') {
-            return enhancedRequests; // Admin sees all requests
+            return enhancedRequests.filter(
+              request => request.status === 'Pending' // Admin sees only Pending requests
+            );
           } else if (this.userRole === 'manager') {
             return enhancedRequests.filter(
               request =>
                 employees.find(e => e.staffId === request.staffId)?.department ===
-                this.userDepartment && request.status === 'Pending'
-            ); // Manager sees requests from their department
+                  this.userDepartment && request.status === 'Pending'
+            ); // Manager sees requests from their department with Pending status
           } else if (this.userRole === 'employee') {
             return enhancedRequests.filter(
               request => request.staffId === this.userStaffId
@@ -106,14 +85,15 @@ export class PendingRequestsComponent implements OnInit {
       )
       .subscribe({
         next: (filteredRequests) => {
-          this.requests = filteredRequests;
+          this.requests = filteredRequests; // Assign filtered requests to the component
           this.applyFilter(); // Apply additional status-based filtering
         },
         error: () => {
-          // Handle error
+          console.error('Error fetching requests');
         }
       });
   }
+  
 
   // pendingFundsCount: number = 0; // Count of pending funds
   //   managerReviewFundsCount: number = 0; // Count for manager review

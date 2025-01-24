@@ -149,7 +149,9 @@
                                 
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccessDepartment('IT')">
+
+            <!-- <li class="nav-item" *ngIf="canAccessDepartment('IT')"> -->
+            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/m-and-e-review-list']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
                 <p>M&E Review List

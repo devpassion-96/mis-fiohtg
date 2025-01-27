@@ -2,8 +2,11 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DailyPermission } from 'src/app/models/daily-permission.model';
 import { Employee } from 'src/app/models/employee.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { DailyPermissionService } from 'src/app/services/hrm/daily-permission.service';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-daily-permission-list',
@@ -18,26 +21,82 @@ export class DailyPermissionListComponent {
   pendingRequests: DailyPermission[] = [];
   employees: Employee[] = [];
 
+    userRole: string; // Admin, Manager, or Employee
+userDepartment: string; // Department for managers
+userStaffId: string; // Staff ID for employees
+
   constructor(private permissionRequestService: DailyPermissionService,
-    private employeeService: EmployeeService,
+    private employeeService: EmployeeService,private authService: AuthService,
     private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.loadUserRole();
     this.loadPendingRequests();
     this.loadAllEmployees();
   }
 
-  loadPendingRequests() {
-    this.permissionRequestService.getAllPermissions().subscribe(
-      requests => {
-        this.pendingRequests = requests;
-      },
-      error => {
-        console.error('Error loading permission requests:', error);
-        // Handle the error appropriately
-      }
-    );
+  loadUserRole(): void {
+    const userData = this.authService.getCurrentUserData();
+    if (userData) {
+      this.userRole = userData.role;
+      this.userDepartment = userData.department; // Only for managers
+      this.userStaffId = userData.staffId; // Only for employees
+    } else {
+      this.userRole = 'employee'; // Default to employee if no user data is found
+    }
   }
+
+  // loadPendingRequests() {
+  //   this.permissionRequestService.getAllPermissions().subscribe(
+  //     requests => {
+  //       this.pendingRequests = requests;
+  //     },
+  //     error => {
+  //       console.error('Error loading permission requests:', error);
+  //       // Handle the error appropriately
+  //     }
+  //   );
+  // }
+
+  loadPendingRequests() {
+    forkJoin({
+      requests: this.permissionRequestService.getAllPermissions(),
+      employees: this.employeeService.getAllEmployees()
+    })
+      .pipe(
+        map(({ requests, employees }) => {
+          // Enrich permission requests with employee details
+          const enrichedRequests = requests.map(request => ({
+            ...request,
+            employeeName: employees.find(emp => emp.staffId === request.staffId)?.firstName + ' ' +
+                          employees.find(emp => emp.staffId === request.staffId)?.lastName || 'Unknown'
+          }));
+  
+          // Apply role-based filtering
+          if (this.userRole === 'admin') {
+            return enrichedRequests; // Admin sees all requests
+          } else if (this.userRole === 'manager') {
+            return enrichedRequests.filter(request =>
+              employees.find(emp => emp.staffId === request.staffId)?.department === this.userDepartment
+            ); // Manager sees requests from their department
+          } else if (this.userRole === 'employee') {
+            return enrichedRequests.filter(request => request.staffId === this.userStaffId); // Employee sees only their own requests
+          }
+  
+          return []; // Default to an empty list if no role matches
+        })
+      )
+      .subscribe({
+        next: (filteredRequests) => {
+          this.pendingRequests = filteredRequests; // Store filtered requests
+        },
+        error: (error) => {
+          console.error('Error loading permission requests:', error);
+          this.toastr.error('Error loading permission requests', 'Error');
+        }
+      });
+  }
+  
 
   loadAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({

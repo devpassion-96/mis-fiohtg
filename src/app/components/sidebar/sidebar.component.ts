@@ -27,6 +27,8 @@ export class SidebarComponent {
 
   userDepartment: string;
   userStaffId: string;
+  allDepartments: any[] = [];
+  selectedDesignations: string[] = []; // Designations for access control
 
   private apiUrl = `${environment.apiUrl}/auth/profile`;
   // Use BehaviorSubject to store and emit user data
@@ -67,6 +69,7 @@ export class SidebarComponent {
       this.initializeFundRequestCounts();
       this.loadVehicleRequests();
       this.loadPermissionRequests(); // Fetch pending permission request count
+      this.fetchDepartmentsAndDesignations();
     }
 
     initializeCounts() {
@@ -151,54 +154,117 @@ export class SidebarComponent {
           }
         });
     }
-  
 
-    
-    // loadUserRole() {
-    //   const userData = this.authService.getCurrentUserData();
-      
-    //   if (userData) {
-    //     this.userRole = userData.role; // Role of the user
-    //     this.userDepartment = userData.department; // Department for managers
-    //     this.userStaffId = userData.staffId; // Staff ID for employees
-    //     console.log("user department-------------------: ", this.userDepartment)
-    //   } else {
-    //     this.userRole = 'Employee';
-    //   }
-    // }
     userDepartmentName;
-    loadUserRole() {
-      const userData = this.authService.getCurrentUserData();
-      if (userData) {
-        this.userRole = userData.role; // Role of the user
-        this.userDepartment = userData.department; // Department ID for managers
-        this.userStaffId = userData.staffId; // Staff ID for employees
+    userDesignation;
+   loadUserRole() {
+  const userData = this.authService.getCurrentUserData();
+  if (userData) {
+    this.userRole = userData.role; // Role of the user (e.g., "manager")
+    this.userDepartment = userData.department; // Department ID
+    this.userStaffId = userData.staffId; // Staff ID for employees
+
+    // Fetch the department details using the department ID
+    this.departmentService.getDepartmentById(this.userDepartment).subscribe({
+      next: (department) => {
+        if (department) {
+          this.userDepartmentName = department.name; // Save the department name
+          this.userDesignation = department.designations.find(
+            (designation) => designation.title.toLowerCase() === this.userRole.toLowerCase()
+          )?.title; // Match the role with the department's designations
+
+      
+        } else {
+          this.userDepartmentName = null;
+          this.userDesignation = null;
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching department details:', err);
+        this.userDepartmentName = null;
+        this.userDesignation = null;
+      },
+    });
+  } else {
+    this.userRole = 'Employee';
+    this.userDepartmentName = null;
+    this.userDesignation = null;
+  }
+}
+
     
-        // Fetch the department name using the department ID
-        this.departmentService.getDepartmentById(this.userDepartment).subscribe({
-          next: (department) => {
-            this.userDepartmentName = department.name; // Save the department name
 
-            console.log("user department name -------------------: " + this.userDepartmentName);
-          },
-          error: (err) => {
-            console.error('Error fetching department name:', err);
-            this.userDepartmentName = null; // Handle error gracefully
-          },
-        });
-      } else {
-        this.userRole = 'Employee';
-        this.userDepartmentName = null; // No department for regular employees
-      }
+    fetchDepartmentsAndDesignations() {
+      this.departmentService.getDepartments().subscribe({
+        next: (departments) => {
+          this.allDepartments = departments; // Store departments and their designations
+        },
+        error: (err) => {
+          console.error('Error fetching departments and designations:', err);
+        },
+      });
     }
+    
 
-    canAccessDepartment(departmentName: string): boolean {
-      return (
-        (this.userRole === 'admin' || this.userRole === 'manager') &&
-        this.userDepartmentName === departmentName
+    canAccessDepartmentWithDesignations(departmentName: string): boolean {
+      // Find the department by name
+      const department = this.allDepartments.find(
+        (dept) => dept.name.toLowerCase() === departmentName.toLowerCase()
       );
+    
+      if (!department) {
+        return false; // Deny access if the department is not found
+      }
+    
+      // Check if the user's designation matches any of the department's designations
+      const isDesignationMatching = department.designations.some(
+        (designation) => designation.title.toLowerCase() === this.userDesignation?.toLowerCase()
+      );
+    
+      // Return true only if both the department matches and the designation matches
+      return isDesignationMatching;
     }
     
+    
+    
+    
+    
+
+// Helper for granular access control
+
+canAccess(departmentDesignationPairs: { department: string; designations: string[] }[]): boolean {
+  // If the user is an admin, grant full access
+  if (this.userRole?.toLowerCase() === 'admin') {
+    console.log('Admin access granted to all.');
+    return true;
+  }
+
+  // Normal access logic for other users
+  const result = departmentDesignationPairs.some(({ department, designations }) => {
+    // Check if the department matches
+    const departmentData = this.allDepartments.find(
+      (dept) => dept.name.toLowerCase() === department.toLowerCase()
+    );
+
+    if (!departmentData) {
+      return false; // Deny access if department doesn't exist
+    }
+
+    // Check if any of the provided designations match the user's designation
+    const isDesignationMatching = designations.some(
+      (designation) => designation.toLowerCase() === this.userDesignation?.toLowerCase()
+    );
+
+    // Grant access only if the department matches and the designation matches
+    return (
+      departmentData.name.toLowerCase() === this.userDepartmentName?.toLowerCase() &&
+      isDesignationMatching
+    );
+  });
+  return result;
+}
+
+  
     
     // Calculate pending leave count for managers
     calculatePendingLeaveCount(leavesWithDepartments: any[]) {

@@ -11,25 +11,25 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto" *ngIf="counts && (userRole === 'admin' || userRole === 'manager')">
       <!-- Fund Notifications -->
-      <li class="nav-item" *ngIf="counts.pendingFundsCount > 0 && userRole === 'manager'">
+      <li class="nav-item" *ngIf="userRole === 'manager'">
         <a class="nav-link" [routerLink]="'/pending-requests'" title="Pending Fund Requests">
           <i class="fas fa-file-alt"></i>
           <span class="badge badge-warning">{{ counts.pendingFundsCount }}</span>
         </a>
       </li>
-      <li class="nav-item" *ngIf="counts.mandeReviewCount > 0 && userRole === 'manager'">
+      <li class="nav-item" *ngIf="userRole === 'manager'">
         <a class="nav-link" [routerLink]="'/m-and-e-review-list'" title="M&E Review Requests">
           <i class="fas fa-hourglass-start"></i>
           <span class="badge badge-warning">{{ counts.mandeReviewCount }}</span>
         </a>
       </li>
-      <li class="nav-item" *ngIf="counts.financeReviewFundsCount > 0 && userRole === 'admin'">
+      <li class="nav-item" *ngIf="userRole === 'admin'">
         <a class="nav-link" [routerLink]="'/finance-list'" title="Finance Review Requests">
           <i class="fas fa-money-check-alt"></i>
           <span class="badge badge-warning">{{ counts.financeReviewFundsCount }}</span>
         </a>
       </li>
-      <li class="nav-item" *ngIf="counts.directorReviewFundsCount > 0 && userRole === 'admin'">
+      <li class="nav-item" *ngIf="userRole === 'admin'">
         <a class="nav-link" [routerLink]="'/reviewed-requests'" title="Director Reviews">
           <i class="fas fa-user-check"></i>
           <span class="badge badge-warning">{{ counts.directorReviewFundsCount }}</span>
@@ -37,7 +37,7 @@
       </li>
   
       <!-- Leave Notifications -->
-      <li class="nav-item" *ngIf="counts.pendingLeaveCount > 0">
+      <li class="nav-item">
         <a
           class="nav-link"
           [routerLink]="userRole === 'manager' ? '/manager-review' : '/manager-review'"
@@ -47,7 +47,7 @@
           <span class="badge badge-warning">{{ counts.pendingLeaveCount }}</span>
         </a>
       </li>
-      <li class="nav-item" *ngIf="counts.managerReviewLeaveCount > 0 && userRole === 'admin'">
+      <li class="nav-item" *ngIf="userRole === 'admin'">
         <a class="nav-link" [routerLink]="'/manager-review'" title="Manager Leave Reviews">
           <i class="fas fa-user-tie"></i>
           <span class="badge badge-warning">{{ counts.managerReviewLeaveCount }}</span>

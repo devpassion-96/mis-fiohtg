@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PerformanceIndicator } from 'src/app/models/m-and-e/performance-indicator.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { PerformanceIndicatorService } from 'src/app/services/mis/performanceIndicator';
 import { ProjectService } from 'src/app/services/project-management/project.service';
 
@@ -13,13 +14,29 @@ import { ProjectService } from 'src/app/services/project-management/project.serv
 export class PerformanceListComponent implements OnInit {
   performanceIndicators: PerformanceIndicator[] = [];
 
+  userRole: string; // Admin, Manager, or Employee
+  userDepartment: string; // Department for managers
+  userStaffId: string; // Staff ID for employees
+
   constructor(
-    private performanceIndicatorService: PerformanceIndicatorService,
+    private performanceIndicatorService: PerformanceIndicatorService,private authService: AuthService,
     private projectService: ProjectService
   ) {}
 
   ngOnInit() {
+    this.loadUserRole();
     this.loadPerformanceIndicators();
+  }
+
+  loadUserRole(): void {
+    const userData = this.authService.getCurrentUserData();
+    if (userData) {
+      this.userRole = userData.role;
+      this.userDepartment = userData.department; // Only for managers
+      this.userStaffId = userData.staffId; // Only for employees
+    } else {
+      this.userRole = 'employee'; // Default to employee if no user data is found
+    }
   }
 
   loadPerformanceIndicators(): void {

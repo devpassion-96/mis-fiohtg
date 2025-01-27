@@ -56,31 +56,6 @@ export class RequestListComponent implements OnInit {
     }
   }
 
-  // loadRequests() {
-  //   forkJoin({
-  //     requests: this.requestService.getAllRequestRecords(),
-  //     projects: this.projectService.getAllProjectRecords(),
-  //     employees: this.employeeService.getAllEmployees()
-  //   }).pipe(
-  //     map(({ requests, projects, employees }) => {
-  //       return requests.map(request => ({
-  //         ...request,
-  //         projectName: projects.find(p => p._id === request.projectId)?.name,
-  //         employeeName: employees.find(e => e.staffId === request.staffId)?.firstName + ' ' + employees.find(e => e.staffId === request.staffId)?.lastName
-  //       })).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  //     })
-  //   ).subscribe({
-  //     next: (mappedRequests) => {
-  //       this.requests = mappedRequests;
-  //       this.calculateTotalAmount();
-  //       this.applyFilter();
-  //     },
-  //     error: () => {
-  //       // Handle error
-  //     }
-  //   });
-  // }
-
   loadRequests() {
     forkJoin({
       requests: this.requestService.getAllRequestRecords(),
@@ -134,11 +109,7 @@ export class RequestListComponent implements OnInit {
                             this.calculateTotalAmount();
   }
 
-  // calculateTotalAmount() {
-  //   this.totalAmountCollected = this.requests
-  //     .filter(request => request.status === 'Approved')
-  //     .reduce((sum, request) => sum + request.amountRequested, 0);
-  // }
+
   calculateTotalAmount() {
     this.totalAmountCollected = this.filteredRequests
       .filter(request => request.status === 'Approved')

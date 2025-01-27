@@ -5,10 +5,12 @@ import { Allocation } from 'src/app/models/vehicle-drivers/allocation.model';
 import { Driver } from 'src/app/models/vehicle-drivers/driver.model';
 import { VehicleRequest } from 'src/app/models/vehicle-drivers/vehicle-request.model';
 import { Vehicle } from 'src/app/models/vehicle-drivers/vehicle.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { AllocationService } from 'src/app/services/vehicle-drivers/allocation.service';
 import { DriverService } from 'src/app/services/vehicle-drivers/driver.service';
 import { VehicleRequestService } from 'src/app/services/vehicle-drivers/vehicle-request.service';
 import { VehicleService } from 'src/app/services/vehicle-drivers/vehicle.service';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-vehicle-request-list',
@@ -39,15 +41,31 @@ export class VehicleRequestListComponent implements OnInit {
   isEditing = false;
   requestToEdit?: VehicleRequest;
 
+  userRole: string; // Admin, Manager, or Employee
+userDepartment: string; // For managers
+userStaffId: string; // For employees
+
   constructor(private requestService: VehicleRequestService, private vehicleService: VehicleService,
     private driverService: DriverService, private router: Router,
-    private allocationService: AllocationService) {}
+    private allocationService: AllocationService,private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadRequests();
     this.loadDrivers();
     this.loadVehicles();
     this.loadAllocations();
+    this.loadUserRole();
+  }
+
+  loadUserRole(): void {
+    const userData = this.authService.getCurrentUserData();
+    if (userData) {
+      this.userRole = userData.role;
+      this.userDepartment = userData.department; // Only for managers
+      this.userStaffId = userData.staffId; // Only for employees
+    } else {
+      this.userRole = 'employee'; // Default to employee if no user data is found
+    }
   }
 
   loadRequests(): void {
@@ -55,6 +73,52 @@ export class VehicleRequestListComponent implements OnInit {
       this.requests = data;
     });
   }
+
+  // loadRequests(): void {
+  //   forkJoin({
+  //     requests: this.requestService.getRequests(),
+  //     drivers: this.driverService.getDrivers(),
+  //     vehicles: this.vehicleService.getVehicles(),
+  //     allocations: this.allocationService.getAllocations()
+  //   })
+  //     .pipe(
+  //       map(({ requests, drivers, vehicles, allocations }) => {
+  //         // Enrich requests with driver, vehicle, and allocation details
+  //         const enrichedRequests = requests.map(request => {
+  //           const allocation = allocations.find(a => a.requestId === request._id);
+  //           const driver = allocation ? drivers.find(d => d._id === allocation.driverId) : null;
+  //           const vehicle = allocation ? vehicles.find(v => v._id === allocation.vehicleId) : null;
+  
+  //           return {
+  //             ...request,
+  //             driverName: driver ? `${driver.name}` : 'Unassigned',
+  //             vehicleName: vehicle ? vehicle.vehicleNumber : 'Unassigned',
+  //             allocationStatus: allocation ? (allocation.completed ? 'Completed' : 'Active') : 'Pending'
+  //           };
+  //         });
+  
+  //         // Apply role-based filtering
+  //         if (this.userRole === 'admin') {
+  //           return enrichedRequests; // Admin sees all requests
+  //         } else if (this.userRole === 'manager') {
+  //           return enrichedRequests.filter(request => request.unit === this.userDepartment); // Manager sees only their department's requests
+  //         } else if (this.userRole === 'employee') {
+  //           return enrichedRequests.filter(request => request.requestingOfficer === this.userStaffId); // Employee sees only their own requests
+  //         }
+  
+  //         return []; // Default to an empty list if no role matches
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: (filteredRequests) => {
+  //         this.requests = filteredRequests; // Store filtered/enriched requests
+  //       },
+  //       error: (error) => {
+  //         console.error('Failed to load requests:', error); // Log error
+  //       }
+  //     });
+  // }
+  
 
   loadDrivers(): void {
     this.driverService.getDrivers().subscribe(data => {
@@ -133,128 +197,6 @@ export class VehicleRequestListComponent implements OnInit {
   }
   
   // Method to handle return from trek
-  // returnFromTrek(request: VehicleRequest): void {
-  //   const allocation = this.allocations.find(a => a.requestId === request.id);
-  
-  //   if (allocation) {
-  //     // Retrieve the driver by ID to get a complete object, then update its status
-  //     const driver = this.drivers.find(d => d.id === allocation.driverId);
-  //     if (driver) {
-  //       this.driverService.updateDriver({ ...driver, status: 'Available', returnDate: null }).subscribe(() => {
-  //         this.loadDrivers();  // Reload drivers after status change
-  //       });
-  //     }
-  
-  //     // Retrieve the vehicle by ID to get a complete object, then update its status
-  //     const vehicle = this.vehicles.find(v => v.id === allocation.vehicleId);
-  //     if (vehicle) {
-  //       this.vehicleService.updateVehicle({ ...vehicle, status: 'Available' }).subscribe(() => {
-  //         this.loadVehicles(); // Reload vehicles after status change
-  //       });
-  //     }
-  
-  //     // Update request status to "Completed"
-  //     request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';  // Type assertion to allow "Completed"
-  //     this.requestService.updateRequest(request).subscribe(() => {
-  //       this.loadRequests(); // Reload requests to reflect the change
-  //     });
-  //   }
-  // }
-
-  // Method to handle return from trek
-// returnFromTrek(request: VehicleRequest): void {
-
-  
-//   const allocation = this.allocations.find(a => a.requestId.toISOString() == request._id);
-
-//   if (allocation) {
-//     // Retrieve the driver by ID to get a complete object, then update its status and clear return date
-//     const driver = this.drivers.find(d => d._id === allocation.driverId);
-//     if (driver) {
-//       this.driverService.updateDriver({ ...driver, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
-//         this.loadDrivers();  // Reload drivers after status change
-//       });
-//     }
-
-//     // Retrieve the vehicle by ID to get a complete object, then update its status and clear return date
-//     const vehicle = this.vehicles.find(v => v._id === allocation.vehicleId);
-//     if (vehicle) {
-//       this.vehicleService.updateVehicle({ ...vehicle, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
-//         this.loadVehicles(); // Reload vehicles after status change
-//       });
-//     }
-
-//     // Update request status to "Completed"
-//     request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';  // Type assertion to allow "Completed"
-//     this.requestService.updateRequest(request).subscribe(() => {
-//       this.loadRequests(); // Reload requests to reflect the change
-//     });
-//   }
-// }
-
-// returnFromTrek(request: VehicleRequest): void {
-//   // Log all allocations to check the data
-//   console.log("All Allocations: ", this.allocations);
-
-//   // Log the request ID for debugging
-//   console.log("Request ID: ", request._id);
-
-//   // Find the allocation for the specific request
-//   const allocation = this.allocations.find((a) => {
-//     console.log("Checking Allocation: ", a); // Log each allocation being checked
-//     return a.requestId.toString() === request._id.toString();
-//   });
-
-//   if (!allocation) {
-//     console.error('Allocation not found for the request.');
-//     return;
-//   }
-
-//   console.log("Found Allocation: ", allocation); // Log the found allocation
-
-//   // Update the driver
-//   const driver = this.drivers.find((d) => d._id === allocation.driverId);
-//   if (driver) {
-//     const updatedDriver = { ...driver, status: 'Available' as 'Available', returnDate: null };
-//     this.driverService.updateDriver(updatedDriver).subscribe(
-//       () => {
-//         console.log('Driver status updated successfully.');
-//         this.loadDrivers(); // Reload drivers to reflect changes
-//       },
-//       (error) => {
-//         console.error('Failed to update driver status:', error);
-//       }
-//     );
-//   }
-
-//   // Update the vehicle
-//   const vehicle = this.vehicles.find((v) => v._id === allocation.vehicleId);
-//   if (vehicle) {
-//     const updatedVehicle = { ...vehicle, status: 'Available' as 'Available', returnDate: null };
-//     this.vehicleService.updateVehicle(updatedVehicle).subscribe(
-//       () => {
-//         console.log('Vehicle status updated successfully.');
-//         this.loadVehicles(); // Reload vehicles to reflect changes
-//       },
-//       (error) => {
-//         console.error('Failed to update vehicle status:', error);
-//       }
-//     );
-//   }
-
-//   // Mark the request as completed
-//   request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';
-//   this.requestService.updateRequest(request).subscribe(
-//     () => {
-//       console.log('Request status updated successfully.');
-//       this.loadRequests(); // Reload requests to reflect changes
-//     },
-//     (error) => {
-//       console.error('Failed to update request status:', error);
-//     }
-//   );
-// }
-
 returnFromTrek(request: VehicleRequest): void {
   const allocation = this.allocations.find(a => a.requestId === request._id);
   if (allocation) {
@@ -300,10 +242,6 @@ returnFromTrek(request: VehicleRequest): void {
     });
   }
 
-  // editRequest(request: VehicleRequest): void {
-  //   this.isEditing = true;
-  //   this.requestToEdit = { ...request };
-  // }
 
   editRequest(request: VehicleRequest): void {
     this.isEditing = true;

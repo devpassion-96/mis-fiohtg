@@ -47,31 +47,103 @@ export class SupervisorApprovalComponent implements OnInit {
     );
   }
 
+  // loadPermissionRequests() {
+  //   forkJoin({
+  //     permissions: this.permissionRequestService.getAllPermissions(),
+  //     employees: this.employeeService.getAllEmployees(),
+  //     departments: this.departmentService.getDepartments() // Add departments for filtering
+  //   })
+  //     .pipe(
+  //       map(({ permissions, employees, departments }) => {
+  //         return permissions.map(permission => {
+  //           const employee = employees.find(emp => emp.staffId === permission.staffId);
+
+  //           let employeeDepartmentName = 'Unknown Department';
+  //           let employeeDepartmentId = null;
+
+  //           if (employee) {
+  //             const employeeDepartment = departments.find(dept => {
+  //               return dept._id.toString() === employee.department.toString();
+  //             });
+
+  //             if (employeeDepartment) {
+  //               employeeDepartmentName = employeeDepartment.name;
+  //               employeeDepartmentId = employeeDepartment._id;
+  //             }
+  //           }
+
+  //           return {
+  //             ...permission,
+  //             employeeName: `${employee?.firstName || 'Unknown'} ${employee?.lastName || ''}`,
+  //             department: employeeDepartmentName,
+  //             departmentId: employeeDepartmentId || 'Unknown Department'
+  //           };
+  //         });
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: (mappedPermissions) => {
+  //         if (this.user) {
+  //           if (this.user.role === 'admin') {
+  //             // Admins see all pending requests
+  //             this.pendingRequests = mappedPermissions.filter(request => request.status === 'Pending');
+  //           } else if (this.user.role === 'manager') {
+  //             // Managers see pending requests for their department
+  //             this.pendingRequests = mappedPermissions.filter(request => {
+  //               const isSameDepartment = request.departmentId === this.user.department;
+  //               const isPending = request.status === 'Pending';
+  //               return isSameDepartment && isPending;
+  //             });
+  //           }
+  //         } else {
+  //           // Fallback: Show all pending requests
+  //           this.pendingRequests = mappedPermissions.filter(request => request.status === 'Pending');
+  //           console.warn('User not defined. Showing all pending requests.');
+  //         }
+  //       },
+  //       error: (error) => {
+  //         console.error('Error loading permission requests:', error);
+  //       }
+  //     });
+  // }
+
+  // loadPendingRequests() {
+  //   this.permissionRequestService.getAllPermissions().subscribe(
+  //     requests => {
+  //       this.pendingRequests = requests.filter(request => request.status === 'Pending');
+  //     },
+  //     error => {
+  //       console.error('Error loading permission requests:', error);
+  //       // Handle the error appropriately
+  //     }
+  //   );
+  // }
+
   loadPermissionRequests() {
     forkJoin({
       permissions: this.permissionRequestService.getAllPermissions(),
       employees: this.employeeService.getAllEmployees(),
-      departments: this.departmentService.getDepartments() // Add departments for filtering
+      departments: this.departmentService.getDepartments() // Include departments for department-based filtering
     })
       .pipe(
         map(({ permissions, employees, departments }) => {
           return permissions.map(permission => {
+            // Find the corresponding employee
             const employee = employees.find(emp => emp.staffId === permission.staffId);
-
+  
+            // Determine the employee's department name and ID
             let employeeDepartmentName = 'Unknown Department';
             let employeeDepartmentId = null;
-
+  
             if (employee) {
-              const employeeDepartment = departments.find(dept => {
-                return dept._id.toString() === employee.department.toString();
-              });
-
+              const employeeDepartment = departments.find(dept => dept._id.toString() === employee.department?.toString());
               if (employeeDepartment) {
                 employeeDepartmentName = employeeDepartment.name;
                 employeeDepartmentId = employeeDepartment._id;
               }
             }
-
+  
+            // Return enriched permission request with employee details, including role
             return {
               ...permission,
               employeeName: `${employee?.firstName || 'Unknown'} ${employee?.lastName || ''}`,
@@ -94,6 +166,13 @@ export class SupervisorApprovalComponent implements OnInit {
                 const isPending = request.status === 'Pending';
                 return isSameDepartment && isPending;
               });
+            } else if (this.user.role === 'employee') {
+              // Employees see only their own pending requests
+              this.pendingRequests = mappedPermissions.filter(request => {
+                const isOwnRequest = request.staffId === this.user.staffId;
+                const isPending = request.status === 'Pending';
+                return isOwnRequest && isPending;
+              });
             }
           } else {
             // Fallback: Show all pending requests
@@ -103,21 +182,11 @@ export class SupervisorApprovalComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error loading permission requests:', error);
+          this.toastr.error('Error loading permission requests', 'Error');
         }
       });
   }
-
-  // loadPendingRequests() {
-  //   this.permissionRequestService.getAllPermissions().subscribe(
-  //     requests => {
-  //       this.pendingRequests = requests.filter(request => request.status === 'Pending');
-  //     },
-  //     error => {
-  //       console.error('Error loading permission requests:', error);
-  //       // Handle the error appropriately
-  //     }
-  //   );
-  // }
+  
 
   loadAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({

@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DepartmentService } from 'src/app/services/hrm/department.service';
 
 
 interface ExtendedLeave extends Leave {
@@ -26,7 +27,7 @@ export class LeaveListComponent implements OnInit {
 userDepartment: string; // Department for managers
 userStaffId: string; // Staff ID for employees
 
-  constructor(private leavesService: LeavesService,private authService: AuthService,
+  constructor(private leavesService: LeavesService,private authService: AuthService,private departmentService: DepartmentService,
     private toastr: ToastrService, private router: Router, private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
@@ -44,68 +45,76 @@ userStaffId: string; // Staff ID for employees
       this.userRole = 'employee'; // Default to employee if no user data is found
     }
   }
-
-  // loadLeaves() {
-  //   forkJoin({
-  //     leaves: this.leavesService.getAllLeaves(),
-  //     employees: this.employeeService.getAllEmployees()
-  //   }).pipe(
-  //     map(({ leaves, employees }) => {
-  //       return leaves.map(leave => ({
-  //         ...leave,
-  //         employeeName: employees.find(emp => emp.staffId === leave.staffId)?.firstName + ' ' +
-  //                       employees.find(emp => emp.staffId === leave.staffId)?.lastName
-  //       }));
-  //     })
-  //   ).subscribe({
-  //     next: (mappedLeaves) => {
-  //       this.leaves = mappedLeaves;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error loading leaves data', error);
-  //       // Handle errors here
-  //     }
-  //   });
-  // }
   
 
   loadLeaves() {
     forkJoin({
       leaves: this.leavesService.getAllLeaves(),
-      employees: this.employeeService.getAllEmployees()
+      employees: this.employeeService.getAllEmployees(),
+      departments: this.departmentService.getDepartments() // Fetch all departments
     })
       .pipe(
-        map(({ leaves, employees }) => {
+        map(({ leaves, employees, departments }) => {
           // Enrich leave requests with employee names
-          const enrichedLeaves = leaves.map(leave => ({
-            ...leave,
-            employeeName: employees.find(emp => emp.staffId === leave.staffId)?.firstName + ' ' +
-                          employees.find(emp => emp.staffId === leave.staffId)?.lastName
-          }));
+          const enrichedLeaves = leaves.map(leave => {
+            const employee = employees.find(emp => emp.staffId === leave.staffId);
+            return {
+              ...leave,
+              employeeName: employee ? `${employee.firstName} ${employee.lastName}` : 'Unknown'
+            };
+          });
   
-          // Apply role-based filtering
+          // 🔍 Get the current user's details
+          const currentUser = employees.find(emp => emp.staffId === this.userStaffId);
+          if (!currentUser) return []; // If user details are missing, return empty
+  
+          // Fetch the user's department details
+          const userDepartment = departments.find(dept => dept._id === currentUser.department);
+          if (!userDepartment) return []; // If department not found, return empty
+  
+          // Fetch the user's designation from the department
+          const userDesignation = userDepartment.designations.find(
+            des => des.title.toLowerCase() === currentUser.designation.toLowerCase()
+          )?.title;
+  
+          // 🛠 Apply role-based filtering
           if (this.userRole === 'admin') {
             return enrichedLeaves; // Admin sees all leaves
-          } else if (this.userRole === 'manager') {
-            return enrichedLeaves.filter(leave =>
-              employees.find(emp => emp.staffId === leave.staffId)?.department === this.userDepartment
-            ); // Manager sees leaves from employees in their department
-          } else if (this.userRole === 'employee') {
-            return enrichedLeaves.filter(leave => leave.staffId === this.userStaffId); // Employee sees only their own leaves
+          } 
+          
+          else if (this.userRole === 'manager') {
+            // Finance Manager or Assistant sees all leave requests
+            if (
+              userDepartment.name.toLowerCase() === 'finance' &&
+              ['finance manager', 'finance assistant'].includes(userDesignation?.toLowerCase())
+            ) {
+              return enrichedLeaves;
+            }
+  
+            // Other managers only see requests from their department
+            return enrichedLeaves.filter(leave => {
+              const leaveEmployee = employees.find(emp => emp.staffId === leave.staffId);
+              return leaveEmployee && leaveEmployee.department === currentUser.department;
+            });
+          } 
+          
+          else if (this.userRole === 'employee') {
+            return enrichedLeaves.filter(leave => leave.staffId === this.userStaffId); // ✅ Employee sees only their own leaves
           }
   
-          return []; // Default to an empty list if no role matches
+          return []; // 🔄 Default to an empty list if no role matches
         })
       )
       .subscribe({
         next: (filteredLeaves) => {
-          this.leaves = filteredLeaves; // Assign filtered leaves to the component property
+          this.leaves = filteredLeaves; // ✅ Assign filtered leaves to the component property
         },
         error: (error) => {
           console.error('Error loading leaves data', error);
         }
       });
   }
+  
   
 
 

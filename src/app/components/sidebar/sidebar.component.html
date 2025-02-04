@@ -190,7 +190,7 @@
               <a [routerLink]="['/reviewed-requests']" class="nav-link">
                 <i class="fas fa-check-square nav-icon"></i>
                 <p>Director Reviews
-                  <span *ngIf="vehicleRequests > 0" class="badge badge-warning right">
+                  <span class="badge badge-warning right">
                     {{directorReviewFundsCount}}
                   </span>
                 </p>
@@ -276,7 +276,9 @@
               </a>
             </li>
             
-            <li class="nav-item" *ngIf="userRole === 'admin'">
+            <li class="nav-item" *ngIf="userRole === 'admin' || canAccess([
+            { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
+            ])">
               <a [routerLink]="['/vehicle-request-list']" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>Vehicle Request List</p>
@@ -314,12 +316,13 @@
               <a [routerLink]="['/manager-review']" class="nav-link">
                 <i class="far fa-calendar-alt nav-icon"></i>
                 <p>Manager Review
-                  <span *ngIf="userRole === 'manager'" class="badge badge-primary">
+                  <span class="badge badge-primary">
                     {{ pendingLeaveCount }}
                   </span>
                 </p>
               </a>
             </li>
+            
             <li class="nav-item" *ngIf="canAccess([
             { department: 'Finance', designations: ['Finance Manager', 'Finance Assistant'] }
             ])">
@@ -332,6 +335,8 @@
                 </p>
               </a>
             </li>
+
+
             <li class="nav-item" *ngIf="canAccess([
             { department: 'Admin and HR', designations: ['Manager', 'Senior Programme Officer'] }
             ])">

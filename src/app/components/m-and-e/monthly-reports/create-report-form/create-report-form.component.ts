@@ -20,11 +20,11 @@ export class CreateReportFormComponent implements OnInit {
     private router: Router
   ) {
     this.reportForm = this.fb.group({
-      month: ['February', Validators.required],
-      officeActivities: ['Office Activities', Validators.required],
-      govNgoMeetings: ['Gov Meetings', Validators.required],
+      month: ['', Validators.required],
+      officeActivities: ['', Validators.required],
+      govNgoMeetings: ['', Validators.required],
       workshopReports: this.fb.array([this.initWorkshopReportGroup()]), // Initialized as a FormArray
-      officeActivityPlans: ['Office activity plans', Validators.required],
+      officeActivityPlans: ['', Validators.required],
       otherActivityPlans: this.fb.array([this.initOtherActivitiesReportGroup()]), // Initialized as a FormArray
     });
   }
@@ -39,36 +39,36 @@ export class CreateReportFormComponent implements OnInit {
   // Helper to initialize a single workshop report group
   initWorkshopReportGroup(): FormGroup {
     return this.fb.group({
-      activityTitle: ['activityTitle'],
-      community: ['community'],
-      facilitator: ['facilitator'],
+      activityTitle: [''],
+      community: [''],
+      facilitator: [''],
       date: [''],
       beneficiaries: this.fb.group({
-        male: [3],
-        female: [10],
-        pwds: [30]
+        male: [],
+        female: [],
+        pwds: []
       }),
-      budget: [70000],
-      followUp: ['followUp'],
-      projectOrDonor: ['projectOrDonor']
+      budget: [],
+      followUp: [''],
+      projectOrDonor: ['']
     });
   }
 
   // Helper to initialize a single other activity plan group
   initOtherActivitiesReportGroup(): FormGroup {
     return this.fb.group({
-      oap_activityTitle: ['oap_activityTitle'],
-      oap_community: ['oap_community'],
-      oap_facilitator: ['oap_facilitator'],
+      oap_activityTitle: [''],
+      oap_community: [''],
+      oap_facilitator: [''],
       oap_date: [''],
       oap_beneficiaries: this.fb.group({
-        oap_male: [5],
-        oap_female: [10],
-        oap_pwds: [20]
+        oap_male: [],
+        oap_female: [],
+        oap_pwds: []
       }),
-      oap_budget: [30000],
-      oap_followUp: ['oap_followUp'],
-      oap_projectOrDonor: ['oap_projectOrDonor']
+      oap_budget: [],
+      oap_followUp: [''],
+      oap_projectOrDonor: ['']
     });
   }
 

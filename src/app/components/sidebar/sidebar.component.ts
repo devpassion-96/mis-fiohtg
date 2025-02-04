@@ -157,40 +157,110 @@ export class SidebarComponent {
 
     userDepartmentName;
     userDesignation;
-   loadUserRole() {
-  const userData = this.authService.getCurrentUserData();
-  if (userData) {
-    this.userRole = userData.role; // Role of the user (e.g., "manager")
-    this.userDepartment = userData.department; // Department ID
-    this.userStaffId = userData.staffId; // Staff ID for employees
+//    loadUserRole() {
+//   const userData = this.authService.getCurrentUserData();
+//   if (userData) {
+//     this.userRole = userData.role; // Role of the user (e.g., "manager")
+//     this.userDepartment = userData.department; // Department ID
+//     this.userStaffId = userData.staffId; // Staff ID for employees
 
-    // Fetch the department details using the department ID
-    this.departmentService.getDepartmentById(this.userDepartment).subscribe({
-      next: (department) => {
-        if (department) {
-          this.userDepartmentName = department.name; // Save the department name
-          this.userDesignation = department.designations.find(
-            (designation) => designation.title.toLowerCase() === this.userRole.toLowerCase()
-          )?.title; // Match the role with the department's designations
+//     // Fetch the department details using the department ID
+//     this.departmentService.getDepartmentById(this.userDepartment).subscribe({
+//       next: (department) => {
+//         if (department) {
+//           this.userDepartmentName = department.name; // Save the department name
+//           this.userDesignation = department.designations.find(
+//             (designation) => designation.title.toLowerCase() === this.userRole.toLowerCase()
+//           )?.title; // Match the role with the department's designations
 
       
+//         } else {
+//           this.userDepartmentName = null;
+//           this.userDesignation = null;
+//         }
+//       },
+//       error: (err) => {
+//         console.error('Error fetching department details:', err);
+//         this.userDepartmentName = null;
+//         this.userDesignation = null;
+//       },
+//     });
+//   } else {
+//     this.userRole = 'Employee';
+//     this.userDepartmentName = null;
+//     this.userDesignation = null;
+//   }
+// }
+
+loadUserRole() {
+  const userData = this.authService.getCurrentUserData();
+  console.log('User Data:', userData); // Debugging line
+
+  this.userRole = userData.role;
+
+  if (userData) {
+    this.userDepartment = userData.department; // Get department ID
+    this.userStaffId = userData.staffId; // Get employee Staff ID
+
+    console.log('User Department ID:', this.userDepartment);
+    console.log('User Staff ID:', this.userStaffId);
+
+    // Fetch employee details based on staff ID
+    this.employeeService.getAllEmployees().subscribe({
+      next: (employees) => {
+        const employee = employees.find(emp => emp.staffId === this.userStaffId);
+
+        if (employee) {
+          this.userDesignation = employee.designation; // Get designation from employees table
+          console.log('User Designation from Employee Table:', this.userDesignation);
         } else {
-          this.userDepartmentName = null;
+          console.warn('Employee not found for Staff ID:', this.userStaffId);
           this.userDesignation = null;
         }
+
+        // Now fetch department details
+        this.departmentService.getDepartmentById(this.userDepartment).subscribe({
+          next: (department) => {
+            if (department) {
+              console.log('Department Data:', department);
+
+              this.userDepartmentName = department.name; // Store department name
+
+              // Check if the user's designation exists in the department
+              const matchingDesignation = department.designations.find(
+                (designation) => designation.title.toLowerCase() === this.userDesignation?.toLowerCase()
+              );
+
+              if (matchingDesignation) {
+                this.userDesignation = matchingDesignation.title;
+                console.log('Matching Designation Found:', this.userDesignation);
+              } else {
+                console.warn('No matching designation found in department');
+                this.userDesignation = null;
+              }
+            } else {
+              this.userDepartmentName = null;
+              this.userDesignation = null;
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching department details:', err);
+            this.userDepartmentName = null;
+            this.userDesignation = null;
+          },
+        });
       },
       error: (err) => {
-        console.error('Error fetching department details:', err);
-        this.userDepartmentName = null;
-        this.userDesignation = null;
+        console.error('Error fetching employees:', err);
       },
     });
   } else {
-    this.userRole = 'Employee';
     this.userDepartmentName = null;
     this.userDesignation = null;
   }
 }
+
+
 
     
 

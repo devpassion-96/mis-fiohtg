@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let fund of retiredFunds">
+        <tr *ngFor="let fund of retiredFunds | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ fund._id }}</td>
           <td>{{ getEmployeeNameById(fund.staffId) }}</td>
           <td>{{ getProjectNameById(fund.projectId) }}</td>
@@ -43,6 +43,10 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
 
   </div>
 </div>

@@ -29,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let request of filteredRequests">
+        <tr *ngFor="let request of filteredRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ request._id }}</td>
           <td>{{ request.employeeName }}</td>
           <td>{{ request.projectName }}</td>
@@ -72,5 +72,9 @@
   </div>
   <div class="card-footer">
     <h5>Total Amount from Approved Requests: D {{ totalAmountCollected }}</h5>
+  </div>
+
+  <div class="card-footer">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 </div>

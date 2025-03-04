@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="#" class="brand-link">
+  <a class="brand-link">
     <span class="brand-text font-weight-light">FIOHTG System</span>
   </a>
 
@@ -21,7 +21,7 @@
           
         
         <!-- Dashboard Item -->
-        <li class="nav-item" *ngIf="userRole === 'admin'" >
+        <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'" >
           <a [routerLink]="['/dashboard']" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
@@ -33,7 +33,7 @@
 
         <!-- Employees Dropdown -->
       <li class="nav-item ">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-users"></i>
             <p>
               Employees
@@ -84,7 +84,7 @@
 
         <!-- Project Management Dropdown -->
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-project-diagram"></i> <!-- Icon for Project Management -->
             <p>
               Project Management
@@ -128,7 +128,7 @@
 
         <!-- Request Management Dropdown -->
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i> <!-- Icon for Request Management -->
             <p>
               Fund Requests
@@ -242,7 +242,7 @@
 
         <!-- vehicle and driver feature -->
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-car"></i>
             <p>
               Vehicles & Driver
@@ -251,7 +251,26 @@
           </a>
           <ul class="nav nav-treeview">
 
+            <!-- <li class="nav-item">
+              <a [routerLink]="['/my-vehicle-requests']" class="nav-link">
+                <i class="nav-icon fas fa-car"></i>
+                <p>My Vehicle Requests</p>
+              </a>
+            </li> -->
+
             <li class="nav-item" *ngIf="canAccess([
+            { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
+            ])">
+              <a [routerLink]="['/pending-vehicle-requests']" class="nav-link">
+                <i class="nav-icon fas fa-car"></i>
+                <p>Pending Requests</p>
+                <span *ngIf="vehicleRequests > 0" class="badge badge-warning right">
+                  {{ vehicleRequests }}
+                </span>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="userRole === 'admin' || canAccess([
             { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
             ])">
               <a [routerLink]="['/vehicle-list']" class="nav-link">
@@ -282,9 +301,7 @@
               <a [routerLink]="['/vehicle-request-list']" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>Vehicle Request List</p>
-                <span *ngIf="vehicleRequests > 0" class="badge badge-warning right">
-                  {{ vehicleRequests }}
-                </span>
+             
               </a>
             </li>
           </ul>
@@ -292,7 +309,7 @@
 
         <!-- Leaves Dropdown -->
         <li class="nav-item  ">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-calendar-alt"></i>
             <p>
               Leaves
@@ -366,7 +383,7 @@
 
         <!-- Daily Permission Dropdown -->
         <li class="nav-item  ">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-envelope-open-text"></i>
             <p>
               Permissions
@@ -401,7 +418,7 @@
 
         <!-- activity report -->
 <li class="nav-item">
-  <a href="#" class="nav-link">
+  <a class="nav-link">
     <i class="nav-icon fas fa-chart-line"></i> <!-- Updated icon for M & E -->
     <p>
       M & E
@@ -460,7 +477,7 @@
 
             <!-- Messaging Dropdown -->
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a class="nav-link">
             <i class="nav-icon fas fa-envelope"></i>
             <p>
               Messaging

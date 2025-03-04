@@ -13,6 +13,7 @@ import { saveAs } from 'file-saver';
 
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DepartmentService } from 'src/app/services/hrm/department.service';
 
 
 
@@ -33,9 +34,12 @@ export class RequestListComponent implements OnInit {
   userDepartment: string;
   userStaffId: string;
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
 
   constructor(
-    private requestService: RequestService,
+    private requestService: RequestService,private departmentService: DepartmentService,
     private projectService: ProjectService,private authService: AuthService,
     private employeeService: EmployeeService, private router: Router
   ) {}
@@ -60,10 +64,11 @@ export class RequestListComponent implements OnInit {
     forkJoin({
       requests: this.requestService.getAllRequestRecords(),
       projects: this.projectService.getAllProjectRecords(),
-      employees: this.employeeService.getAllEmployees()
+      employees: this.employeeService.getAllEmployees(),
+      departments: this.departmentService.getDepartments() // Fetch all departments
     })
       .pipe(
-        map(({ requests, projects, employees }) => {
+        map(({ requests, projects, employees,departments }) => {
           // Enhance requests with project and employee details
           const enhancedRequests = requests.map(request => ({
             ...request,
@@ -72,16 +77,40 @@ export class RequestListComponent implements OnInit {
                           ' ' + 
                           employees.find(e => e.staffId === request.staffId)?.lastName
           }));
+
+           // 🔍 Get the current user's details
+           const currentUser = employees.find(emp => emp.staffId === this.userStaffId);
+           if (!currentUser) return []; // If user details are missing, return empty
+   
+           // Fetch the user's department details
+           const userDepartment = departments.find(dept => dept._id === currentUser.department);
+           if (!userDepartment) return []; // If department not found, return empty
+   
+           // Fetch the user's designation from the department
+           const userDesignation = userDepartment.designations.find(
+             des => des.title.toLowerCase() === currentUser.designation.toLowerCase()
+           )?.title;
   
           // Apply role-based filtering logic
           if (this.userRole === 'admin') {
             return enhancedRequests; // Admin sees all requests
           } else if (this.userRole === 'manager') {
+
+            if (
+              userDepartment.name.toLowerCase() === 'finance' &&
+              ['finance manager', 'finance assistant'].includes(userDesignation?.toLowerCase())
+            ) {
+              return enhancedRequests;
+            }
+
+            // Other managers only see requests from their department
             return enhancedRequests.filter(
               request =>
                 employees.find(e => e.staffId === request.staffId)?.department ===
                 this.userDepartment
             ); // Manager sees requests from their department
+
+           
           } else if (this.userRole === 'employee') {
             return enhancedRequests.filter(
               request => request.staffId === this.userStaffId

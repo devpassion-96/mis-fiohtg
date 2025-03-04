@@ -33,7 +33,7 @@
               <span class="badge badge-warning">{{ counts.directorReviewFundsCount }}</span>
           </a>
       </li>
-
+      
       <!-- Leave Notifications -->
       <!-- <li class="nav-item" *ngIf="userRole === 'manager'">
           <a class="nav-link" [routerLink]="'/manager-review'" title="Pending Leave Requests">
@@ -70,7 +70,7 @@
 
       <!-- Vehicle Requests -->
       <li class="nav-item" *ngIf="canAccess([{ department: 'Admin and HR', designations: ['Manager', 'Senior Programme Officer'] }])">
-          <a class="nav-link" [routerLink]="'/vehicle-request-list'" title="Pending Vehicle Requests">
+          <a class="nav-link" [routerLink]="'/pending-vehicle-requests'" title="Pending Vehicle Requests">
               <i class="fas fa-car"></i>
               <span class="badge badge-warning">{{ counts.vehicleRequests }}</span>
           </a>

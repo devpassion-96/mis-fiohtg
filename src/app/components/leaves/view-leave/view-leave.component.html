@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-info">
+        <h4 class="card-title text-white">Leave Details</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <dl class="row">
+              <dt class="col-sm-5">Staff Name:</dt>
+              <dd class="col-sm-7 text-secondary">{{ getEmployeeNameByStaffId(leave.staffId) }}</dd>
+  
+              <dt class="col-sm-5">Leave Type:</dt>
+              <dd class="col-sm-7 text-secondary">{{ leave.type }}</dd>
+  
+              <dt class="col-sm-5">Start Date:</dt>
+              <dd class="col-sm-7 text-secondary">{{ leave.startDate | date:'mediumDate' }}</dd>
+  
+              <dt class="col-sm-5">End Date:</dt>
+              <dd class="col-sm-7 text-secondary">{{ leave.endDate | date:'mediumDate' }}</dd>
+  
+              <dt class="col-sm-5">Status:</dt>
+              <dd class="col-sm-7"><span class="badge" [ngClass]="{'badge-success': leave.status === 'Approved', 'badge-warning': leave.status === 'Pending', 'badge-danger': leave.status === 'Rejected'}">{{ leave.status }}</span></dd>
+            </dl>
+          </div>
+          <div class="col-md-6">
+            <dl class="row">
+              <dt class="col-sm-5">Applied On:</dt>
+              <dd class="col-sm-7 text-secondary">{{ leave.appliedOn | date:'mediumDate' }}</dd>
+  
+              <dt class="col-sm-5">Explanation:</dt>
+              <dd class="col-sm-7 text-secondary">{{ leave.remarks }}</dd>
+  
+              <dt class="col-sm-5">Handed over To:</dt>
+              <dd class="col-sm-7 text-secondary">{{ getEmployeeNameByStaffId(leave.handingOverTo) }}</dd>
+  
+              <dt *ngIf="leave.approvedBy" class="col-sm-5">Approved By:</dt>
+              <dd *ngIf="leave.approvedBy" class="col-sm-7 text-secondary">{{ getEmployeeNameByStaffId(leave.approvedBy) }}</dd>
+  
+              <dt *ngIf="leave.approverComments" class="col-sm-5">Approver Comment:</dt>
+              <dd *ngIf="leave.approverComments" class="col-sm-7 text-secondary">{{ leave.approverComments }}</dd>
+  
+              <dt *ngIf="leave.approvedBy" class="col-sm-5">Approved On:</dt>
+              <dd *ngIf="leave.approvedBy" class="col-sm-7 text-secondary">{{ leave.approvedOn | date:'mediumDate' }}</dd>
+            </dl>
+          </div>
+        </div>
+        <!-- Reviews Section -->
+        <div *ngIf="leave.comments && leave.comments.length > 0" class="mt-4">
+          <h5 class="text-info">Reviews:</h5>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let comment of leave.comments">
+              <i class="fas fa-quote-left text-muted pr-2"></i>
+              <!-- {{ comment.text }}, -->
+              <small class="text-muted">Reviewed on {{ comment.reviewedAt | date:'medium' }}, <strong>By:</strong> {{ getEmployeeNameByStaffId(comment.reviewedBy) }}</small>
+            </li>
+          </ul>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

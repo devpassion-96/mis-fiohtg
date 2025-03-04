@@ -27,6 +27,9 @@ export class LeaveListComponent implements OnInit {
 userDepartment: string; // Department for managers
 userStaffId: string; // Staff ID for employees
 
+itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private leavesService: LeavesService,private authService: AuthService,private departmentService: DepartmentService,
     private toastr: ToastrService, private router: Router, private employeeService: EmployeeService) {}
 
@@ -140,6 +143,11 @@ applyFilter() {
   viewLeave(id: string) {
     // Navigate to leave details page
     this.router.navigate(['/leave-details', id]);
+  }
+
+  viewLeaveOnly(id: string) {
+    // Navigate to leave details page
+    this.router.navigate(['/leave-view', id]);
   }
 
   editLeave(id: string) {

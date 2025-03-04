@@ -305,7 +305,7 @@ loadUserRole() {
 canAccess(departmentDesignationPairs: { department: string; designations: string[] }[]): boolean {
   // If the user is an admin, grant full access
   if (this.userRole?.toLowerCase() === 'admin') {
-    console.log('Admin access granted to all.');
+    // console.log('Admin access granted to all.');
     return true;
   }
 

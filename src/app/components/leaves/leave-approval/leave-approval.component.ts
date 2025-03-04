@@ -26,6 +26,9 @@ export class LeaveApprovalComponent implements OnInit {
 
   employees: Employee[] = [];
   user: any;
+  
+  itemsPerPage: number = 10;
+  p: number = 1;
 
   constructor(
     private leavesService: LeavesService,

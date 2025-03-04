@@ -45,6 +45,9 @@ export class VehicleRequestListComponent implements OnInit {
 userDepartment: string; // For managers
 userStaffId: string; // For employees
 
+itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private requestService: VehicleRequestService, private vehicleService: VehicleService,
     private driverService: DriverService, private router: Router,
     private allocationService: AllocationService,private authService: AuthService) {}

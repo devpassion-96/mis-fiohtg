@@ -28,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let request of requests">
+            <tr *ngFor="let request of requests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
               <td>{{ request.requestingOfficer }}</td>
               <td>{{ request.unit }}</td>
               <td>{{ request.purpose }}</td>
@@ -82,6 +82,9 @@
           </tbody>
         </table>
         <p *ngIf="requests.length === 0">No requests available.</p>
+        <div class="card-footer">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
       </div>
     </div>
   </section>

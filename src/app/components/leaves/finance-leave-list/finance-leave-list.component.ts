@@ -14,6 +14,9 @@ export class FinanceLeaveListComponent {
   leaves: ExtendedLeave[] = [];
   filter: string = '';
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private leavesService: LeavesService,private router: Router, private employeeService: EmployeeService) {}
 
   ngOnInit(): void {

@@ -14,7 +14,7 @@
   </div>
 
 
-  <div class="container-fluid" *ngIf="userRole === 'admin'">
+  <div class="container-fluid" *ngIf="userRole === 'admin' || userRole === 'manager'">
 
     <div class="row" >
       <div class="col-12 col-sm-6 col-md-3">
@@ -198,7 +198,7 @@
   </div>
 
 
-  <div class="card">
+  <!-- <div class="card">
   <div class="card-header border-transparent">
   <h3 class="card-title">Latest Leave Requests</h3>
   <div class="card-tools">
@@ -241,10 +241,10 @@
   <a [routerLink]="['/leave-approval']" class="btn btn-sm btn-info float-right">View All Leaves</a>
   </div>
 
-  </div>
+  </div> -->
 
   <!-- Modal for Leave Details -->
-<div class="modal fade" id="leaveDetailsModal" #leaveDetailsModal tabindex="-1" role="dialog" aria-labelledby="leaveDetailsModalLabel">
+<!-- <div class="modal fade" id="leaveDetailsModal" #leaveDetailsModal tabindex="-1" role="dialog" aria-labelledby="leaveDetailsModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -277,7 +277,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
   </div>
 

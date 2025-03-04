@@ -20,6 +20,9 @@ export class ReviewedRequestsComponent {
 
   totalAmountCollected: number = 0;
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(
     private requestService: RequestService,
     private projectService: ProjectService,

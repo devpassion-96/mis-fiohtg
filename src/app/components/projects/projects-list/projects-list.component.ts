@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from 'src/app/services/project-management/project.service';
 import { Project } from 'src/app/models/project-management/project.model';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-projects-list',
@@ -19,13 +20,30 @@ export class ProjectsListComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 16;
 
+  userRole: string; // To store the role of the logged-in user
+  
+  userDepartment: string;
+  userStaffId: string;
+
   constructor(
-    private projectService: ProjectService,
+    private projectService: ProjectService,private authService: AuthService,
     private toastr: ToastrService, private router: Router
   ) {}
 
   ngOnInit() {
     this.loadProjects();
+    this.loadUserRole();
+  }
+
+  loadUserRole() {
+    const userData = this.authService.getCurrentUserData();
+    if (userData) {
+      this.userRole = userData.role; // Role of the user
+      this.userDepartment = userData.department; // Department for managers
+      this.userStaffId = userData.staffId; // Staff ID for employees
+    } else {
+      this.userRole = 'Employee';
+    }
   }
 
   loadProjects() {

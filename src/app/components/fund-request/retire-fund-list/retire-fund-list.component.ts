@@ -26,6 +26,9 @@ export class RetireFundListComponent {
   userDepartment: string; // Store the user's department (for managers)
   userStaffId: string; // Store the user's staff ID (for employees)
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private retiredFundservice: RetireFundService,
     private router: Router,  private authService: AuthService,
     private employeeService: EmployeeService,

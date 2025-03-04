@@ -85,6 +85,9 @@ import { ManagerLeaveListComponent } from './components/leaves/manager-leave-lis
 import { BudgetCashflowComponent } from './components/budgets/budget-cashflow/budget-cashflow.component';
 import { BudgetTransferComponent } from './components/budgets/budget-transfer/budget-transfer.component';
 import { TransactionHistoryComponent } from './components/budgets/transaction-history/transaction-history.component';
+import { ViewLeaveComponent } from './components/leaves/view-leave/view-leave.component';
+import { PendingVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/pending-vehicle-requests/pending-vehicle-requests.component';
+import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/my-vehicle-requests/my-vehicle-requests.component';
 
 const routes: Routes = [
 
@@ -103,6 +106,7 @@ const routes: Routes = [
   { path: 'leave-form/:id', component: LeaveApplicationComponent },
   { path: 'leave-list', component: LeaveListComponent },
   { path: 'leave-details/:id', component: LeaveDetailsComponent },
+  { path: 'leave-view/:id', component: ViewLeaveComponent },
   { path: 'leave-edit/:id', component: LeaveEditComponent },
   { path: 'leave-approval', component: LeaveApprovalComponent },
 
@@ -184,6 +188,8 @@ const routes: Routes = [
   { path: 'meeting-minutes-create', component: MeetingMinutesCreateComponent },
   { path: 'meeting-minute-details/:id', component: MeetingMinutesDetailComponent },
   { path: 'meeting-minutes-edit/:id', component: MeetingMinutesCreateComponent },
+  { path: 'pending-vehicle-requests', component: PendingVehicleRequestsComponent },
+  { path: 'my-vehicle-requests', component:  MyVehicleRequestsComponent},
 
   { path: 'memos', component: MemoListComponent },
   { path: 'memo-form', component: MemoFormComponent },

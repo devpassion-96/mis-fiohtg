@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { LeavesService } from 'src/app/services/hrm/leaves.service';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
 import { Employee } from 'src/app/models/employee.model';
@@ -75,6 +75,23 @@ export class LeaveApplicationComponent implements OnInit {
     });
   }
 
+  // loadLeaveData(leaveId: string) {
+  //   this.leavesService.getLeaveById(leaveId).subscribe({
+  //     next: (leave) => {
+  //       this.leaveForm.patchValue({
+  //         staffId: leave.staffId,
+  //         handingOverTo: leave.handingOverTo,
+  //         type: leave.type,
+  //         startDate: this.formatDate(leave.startDate),
+  //         endDate: this.formatDate(leave.endDate),
+  //         remarks: leave.remarks,
+  //         status: leave.status
+  //       });
+  //     },
+  //     error: () => this.toastr.error('Error loading leave data')
+  //   });
+  // }
+
   loadLeaveData(leaveId: string) {
     this.leavesService.getLeaveById(leaveId).subscribe({
       next: (leave) => {
@@ -87,10 +104,18 @@ export class LeaveApplicationComponent implements OnInit {
           remarks: leave.remarks,
           status: leave.status
         });
+  
+        // Disable fields if status is "Approved"
+        if (leave.status === 'Approved' || leave.status === 'Rejected') {
+          this.leaveForm.disable();
+        } else {
+          this.leaveForm.enable();
+        }
       },
       error: () => this.toastr.error('Error loading leave data')
     });
   }
+  
 
   populateStaffId() {
     this.userProfileService.user.subscribe(
@@ -194,8 +219,28 @@ export class LeaveApplicationComponent implements OnInit {
     }
   }
 
+  // updateLeave() {
+  //   const leaveRequest = { ...this.leaveForm.value, staffId: this.user.staffId };
+  //   this.leavesService.updateLeave(this.currentLeaveId, leaveRequest).subscribe({
+  //     next: () => {
+  //       this.toastr.success('Leave updated successfully', 'Success');
+  //       this.router.navigate(['/leave-list']);
+  //       this.leaveForm.reset(); // Reset form after update
+  //       this.submitted = false; // Reset submitted flag
+  //     },
+  //     error: (err) => this.toastr.error('Failed to update leave', 'Error')
+  //   });
+  // }
+
+  // formatDate(date: Date): string {
+  //   if (date instanceof Date) {
+  //     return new Date(date).toISOString().split('T')[0];
+  //   }
+  //   return '';
+  // }
+
   updateLeave() {
-    const leaveRequest = { ...this.leaveForm.value, staffId: this.user.staffId };
+    const { staffId, ...leaveRequest } = this.leaveForm.value; // Exclude staffId
     this.leavesService.updateLeave(this.currentLeaveId, leaveRequest).subscribe({
       next: () => {
         this.toastr.success('Leave updated successfully', 'Success');
@@ -206,12 +251,10 @@ export class LeaveApplicationComponent implements OnInit {
       error: (err) => this.toastr.error('Failed to update leave', 'Error')
     });
   }
-
-  formatDate(date: Date): string {
-    if (date instanceof Date) {
-      return new Date(date).toISOString().split('T')[0];
-    }
-    return '';
+  
+  formatDate(date: any): string {
+    if (!date) return ''; // Avoids errors if date is null/undefined
+    return new Date(date).toISOString().split('T')[0];
   }
 
   dateValidator(control: AbstractControl): ValidationErrors | null {
@@ -222,4 +265,16 @@ export class LeaveApplicationComponent implements OnInit {
     }
     return null;
   }
+
+  // dateValidator(): ValidatorFn {
+  //   return (control: AbstractControl): ValidationErrors | null => {
+  //     const startDate = control.get('startDate')?.value;
+  //     const endDate = control.get('endDate')?.value;
+  //     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+  //       return { dateInvalid: true };
+  //     }
+  //     return null;
+  //   };
+  // }
+  
 }

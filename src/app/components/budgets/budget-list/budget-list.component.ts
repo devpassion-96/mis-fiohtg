@@ -23,6 +23,9 @@ export class BudgetListComponent implements OnInit {
   // budgets: Budget[] = [];
   budgets: ExtendedBudget[] = []; // Use the extended interface
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(
     private budgetService: BudgetService,
     private toastr: ToastrService, private router: Router,

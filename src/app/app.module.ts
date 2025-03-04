@@ -108,6 +108,9 @@ import { ManagerLeaveListComponent } from './components/leaves/manager-leave-lis
 import { BudgetTransferComponent } from './components/budgets/budget-transfer/budget-transfer.component';
 import { BudgetCashflowComponent } from './components/budgets/budget-cashflow/budget-cashflow.component';
 import { TransactionHistoryComponent } from './components/budgets/transaction-history/transaction-history.component';
+import { ViewLeaveComponent } from './components/leaves/view-leave/view-leave.component';
+import { PendingVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/pending-vehicle-requests/pending-vehicle-requests.component';
+import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/my-vehicle-requests/my-vehicle-requests.component';
 
 @NgModule({
   declarations: [
@@ -202,7 +205,10 @@ import { TransactionHistoryComponent } from './components/budgets/transaction-hi
     ManagerLeaveListComponent,
     BudgetTransferComponent,
     BudgetCashflowComponent,
-    TransactionHistoryComponent
+    TransactionHistoryComponent,
+    ViewLeaveComponent,
+    PendingVehicleRequestsComponent,
+    MyVehicleRequestsComponent
   ],
   imports: [
     BrowserModule,

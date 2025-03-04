@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let budget of budgets">
+          <tr *ngFor="let budget of budgets | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
             <td>{{ budget.projectName }}</td>
             <td>{{ budget.departmentName }}</td>
             <td>D {{ budget.amount }}</td>
@@ -31,6 +31,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="card-footer">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
     </div>
   </div>
 </div>

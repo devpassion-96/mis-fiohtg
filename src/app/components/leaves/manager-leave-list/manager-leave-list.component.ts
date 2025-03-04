@@ -17,6 +17,9 @@ leaves: ExtendedLeave[] = [];
   filter: string = '';
   user: any; // Logged-in user details  
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private leavesService: LeavesService, private departmentService: DepartmentService,
     private userProfileService: UserProfileService, private router: Router, private employeeService: EmployeeService) {}
 

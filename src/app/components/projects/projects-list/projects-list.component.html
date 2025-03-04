@@ -37,8 +37,8 @@
             <!-- Action Icons -->
             <div class="action-icons">
               <i (click)="viewProject(project._id)" class="fas fa-eye action-icon view-icon" title="View Project"></i>
-              <i (click)="editProject(project._id)" class="fas fa-edit action-icon edit-icon" title="Edit Project"></i>
-              <i (click)="deleteProject(project._id)" class="fas fa-trash action-icon delete-icon" title="Delete Project"></i>
+              <i *ngIf="userRole === 'admin' || userRole === 'manager'" (click)="editProject(project._id)" class="fas fa-edit action-icon edit-icon" title="Edit Project"></i>
+              <i *ngIf="userRole === 'admin'" (click)="deleteProject(project._id)" class="fas fa-trash action-icon delete-icon" title="Delete Project"></i>
             </div>
           </div>
         </div>

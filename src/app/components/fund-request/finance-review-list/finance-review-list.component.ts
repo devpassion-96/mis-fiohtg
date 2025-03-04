@@ -15,6 +15,9 @@ import { environment } from 'src/environments/environment';
 export class FinanceReviewListComponent {
   requests: Request[] = [];
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(
     private requestService: RequestService,
     private projectService: ProjectService,

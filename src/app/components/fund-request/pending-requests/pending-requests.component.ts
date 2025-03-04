@@ -24,6 +24,9 @@ export class PendingRequestsComponent implements OnInit {
   userDepartment: string;
   userStaffId: string;
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(
     private requestService: RequestService,
     private projectService: ProjectService,private authService: AuthService,

@@ -24,12 +24,12 @@
               <th>Villages</th>
               <th>Remarks</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th *ngIf="canAccessActions()">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let request of requests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
-              <td>{{ request.requestingOfficer }}</td>
+              <td>{{ request.employeeName }}</td>
               <td>{{ request.unit }}</td>
               <td>{{ request.purpose }}</td>
               <td>{{ request.projectGoalNumber }}</td>
@@ -48,7 +48,7 @@
                   {{ request.status }}
                 </span>
               </td>
-              <td>
+              <td *ngIf="canAccessActions()">
                 <button class="btn btn-info btn-sm mr-1" (click)="editRequest(request)">
                   <i class="fas fa-edit"></i> Edit
                 </button>

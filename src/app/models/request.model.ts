@@ -17,6 +17,9 @@ export interface Request {
 
   // attachment: File | null;
   outputs?: string;
+
+  // New Payment Details (optional for Approved requests)
+  paymentDetails?: PaymentDetails;
 }
 
 
@@ -26,4 +29,10 @@ export interface Comment {
   reviewedAt: Date;
 }
 
+export interface PaymentDetails {
+  paymentMadeVia: 'Cash' | 'Check' | 'Bank Transfer';
+  referenceNumber: string;
+  processedBy: string;  // Finance Manager's ID or Name
+  processedAt: Date;
+}
 

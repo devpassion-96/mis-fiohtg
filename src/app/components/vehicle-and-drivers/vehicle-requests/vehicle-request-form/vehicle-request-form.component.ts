@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { VehicleRequest } from 'src/app/models/vehicle-drivers/vehicle-request.model';
+import { UserProfileService } from 'src/app/services/auth/user-profile.service';
 import { VehicleRequestService } from 'src/app/services/vehicle-drivers/vehicle-request.service';
 
 @Component({
@@ -27,17 +29,44 @@ export class VehicleRequestFormComponent implements OnInit {
   isEditing = false;
   requestToEdit?: VehicleRequest;
 
+  user: any; // Store logged-in user info
+
   constructor(
     private requestService: VehicleRequestService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router, private toastr: ToastrService,
+    private userProfileService: UserProfileService
   ) {}
 
   ngOnInit() {
+    this.populateRequestingOfficer();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditing = true;
       this.loadRequestById(id);
+    }
+    
+  }
+
+  populateRequestingOfficer() {
+    this.userProfileService.user.subscribe(
+      (userData) => {
+        if (userData && userData.staffId) {
+          this.user = userData;
+
+          // Only set requestingOfficer if adding a new request
+          if (!this.isEditing) {
+            this.newRequest.requestingOfficer = userData.staffId;
+          }
+        }
+      },
+      (error) => {
+        console.error('Error fetching user profile:', error);
+      }
+    );
+
+    if (!this.user) {
+      this.userProfileService.getUserProfile();
     }
   }
 
@@ -53,11 +82,40 @@ export class VehicleRequestFormComponent implements OnInit {
     );
   }
 
+  // addRequest(): void {
+  //   this.requestService.createRequest(this.newRequest).subscribe(
+  //     (request) => {
+  //       this.requests.push(request);
+  //       this.newRequest = { ...this.newRequest, status: 'Pending' }; // Reset form
+  //     },
+  //     (error) => console.error('Error adding the request:', error)
+  //   );
+  // }
+
   addRequest(): void {
+    // Ensure requestingOfficer is set before sending the request
+    this.newRequest.requestingOfficer = this.user?.staffId || '';
+
     this.requestService.createRequest(this.newRequest).subscribe(
       (request) => {
         this.requests.push(request);
-        this.newRequest = { ...this.newRequest, status: 'Pending' }; // Reset form
+         // Show success message and navigate to home (or any desired page)
+         this.toastr.success('Request submitted', 'Success');
+         this.router.navigate(['/']);
+        this.newRequest = {
+          requestingOfficer: this.user?.staffId || '',
+          unit: '',
+          purpose: '',
+          projectGoalNumber: '',
+          travelingDay: '',
+          returnDay: '',
+          cumulativeDays: 0,
+          regions: '',
+          district: '',
+          villages: '',
+          remarks: '',
+          status: 'Pending'
+        };
       },
       (error) => console.error('Error adding the request:', error)
     );

@@ -122,7 +122,6 @@ export class PendingRequestsComponent implements OnInit {
   }
 
   viewFile(fileUrl: string): void {
-    const baseUrl = environment.apiUrl.replace('/api', ''); // Remove '/api' for file paths
-    window.open(`${baseUrl}${fileUrl}`, '_blank');
+    window.open(fileUrl, '_blank');
   }
 }

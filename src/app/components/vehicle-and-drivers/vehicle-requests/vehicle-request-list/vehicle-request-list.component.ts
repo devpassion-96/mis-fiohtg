@@ -11,6 +11,7 @@ import { DriverService } from 'src/app/services/vehicle-drivers/driver.service';
 import { VehicleRequestService } from 'src/app/services/vehicle-drivers/vehicle-request.service';
 import { VehicleService } from 'src/app/services/vehicle-drivers/vehicle.service';
 import { forkJoin, map } from 'rxjs';
+import { EmployeeService } from 'src/app/services/hrm/employee.service';
 
 @Component({
   selector: 'app-vehicle-request-list',
@@ -49,7 +50,8 @@ itemsPerPage: number = 10;
   p: number = 1;
 
   constructor(private requestService: VehicleRequestService, private vehicleService: VehicleService,
-    private driverService: DriverService, private router: Router,
+    private driverService: DriverService, private router: Router,private employeeService: EmployeeService
+,
     private allocationService: AllocationService,private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -59,23 +61,146 @@ itemsPerPage: number = 10;
     this.loadAllocations();
     this.loadUserRole();
   }
-
+  userDepartmentName;
+  userDesignation;
   loadUserRole(): void {
     const userData = this.authService.getCurrentUserData();
+    console.log('User Data:', userData); // Debugging log
+  
     if (userData) {
       this.userRole = userData.role;
-      this.userDepartment = userData.department; // Only for managers
-      this.userStaffId = userData.staffId; // Only for employees
+      this.userDepartment = userData.department; 
+      this.userStaffId = userData.staffId; 
+  
+      // Fetch employee details from the employee service
+      this.employeeService.getAllEmployees().subscribe({
+        next: (employees) => {
+          const employee = employees.find(emp => emp.staffId === this.userStaffId);
+          if (employee) {
+            this.userDesignation = employee.designation;
+            console.log('User Designation:', this.userDesignation);
+          } else {
+            console.warn('Employee details not found for Staff ID:', this.userStaffId);
+            this.userDesignation = null;
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching employees:', err);
+        }
+      });
     } else {
-      this.userRole = 'employee'; // Default to employee if no user data is found
+      this.userRole = 'Employee'; // Default role
+      this.userDepartment = null;
+      this.userDesignation = null;
     }
   }
+  
+  canAccessActions(): boolean {
+    if (this.userRole?.toLowerCase() === 'admin') {
+      return true; // Admins have full access
+    }
+  
+    // Check if the user belongs to 'Admin and HR' department
+    const isDepartmentMatching = this.userDepartment?.toLowerCase() === 'admin and hr';
+  
+    // Allowed designations
+    const allowedDesignations = ['manager', 'senior programme officer', 'programme officer'];
+    const isDesignationMatching = allowedDesignations.includes(this.userDesignation?.toLowerCase());
+  
+    return isDepartmentMatching && isDesignationMatching;
+  }
+  
+  
+  // loadRequests(): void {
+  //   this.requestService.getRequests().subscribe(data => {
+  //     this.requests = data;
+  //   });
+  // }
+
+  // loadRequests(): void {
+  //   forkJoin({
+  //     requests: this.requestService.getRequests(),
+  //     employees: this.employeeService.getAllEmployees()
+  //   }).pipe(
+  //     map(({ requests, employees }) => {
+  //       return requests.map(request => ({
+  //         ...request,
+  //         employeeName: employees.find(emp => emp.staffId === request.requestingOfficer)?.firstName + ' ' +
+  //                       employees.find(emp => emp.staffId === request.requestingOfficer)?.lastName || 'Unknown'
+  //       }));
+  //     })
+  //   ).subscribe({
+  //     next: (enrichedRequests) => {
+  //       this.requests = enrichedRequests;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error loading requests or employees:', error);
+  //     }
+  //   });
+  // }
 
   loadRequests(): void {
-    this.requestService.getRequests().subscribe(data => {
-      this.requests = data;
+    forkJoin({
+      requests: this.requestService.getRequests(),
+      employees: this.employeeService.getAllEmployees()
+    }).pipe(
+      map(({ requests, employees }) => {
+        // Enrich requests with employee names and departments
+        const enrichedRequests = requests.map(request => {
+          const employee = employees.find(emp => emp.staffId === request.requestingOfficer);
+          return {
+            ...request,
+            employeeName: employee ? `${employee.firstName} ${employee.lastName}` : 'Unknown',
+            employeeDepartment: employee?.department || 'Unknown',
+            employeeDesignation: employee?.designation || 'Unknown'
+          };
+        });
+  
+        const currentUser = employees.find(emp => emp.staffId === this.userStaffId);
+        if (!currentUser) {
+          console.warn('Current user details not found');
+          return [];
+        }
+  
+        const userDepartment = currentUser.department;
+        const userDesignation = currentUser.designation?.toLowerCase();
+  
+        // Admin sees everything
+        if (this.userRole === 'admin') {
+          return enrichedRequests;
+        }
+  
+        // Special case: Admin and HR Managers and Senior Programme Officers see all requests
+        if (
+          userDepartment.toLowerCase() === 'admin and hr' &&
+          (userDesignation === 'manager' || userDesignation === 'senior programme officer')
+        ) {
+          return enrichedRequests; // Special view for HR/ADMIN managers
+        }
+  
+        // Managers see requests from their department
+        if (this.userRole === 'manager') {
+          return enrichedRequests.filter(request => request.employeeDepartment === userDepartment);
+        }
+  
+        // Regular employees see only their own requests
+        if (this.userRole === 'employee') {
+          return enrichedRequests.filter(request => request.requestingOfficer === this.userStaffId);
+        }
+  
+        return []; // Default to empty if none of the cases match
+      })
+    ).subscribe({
+      next: (filteredRequests) => {
+        this.requests = filteredRequests;
+      },
+      error: (error) => {
+        console.error('Error loading requests or employees:', error);
+      }
     });
   }
+  
+  
 
   // loadRequests(): void {
   //   forkJoin({

@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let indicator of performanceIndicators">
+        <tr *ngFor="let indicator of performanceIndicators | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ indicator._id }}</td>
           <td>{{ indicator.projectName }}</td>
           <td>
@@ -29,5 +29,8 @@
         </tr>
       </tbody>
     </table>
+    <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
   </div>
 </div>

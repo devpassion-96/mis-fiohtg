@@ -13,5 +13,7 @@ export interface VehicleRequest {
   remarks: string;               // Any additional comments
   status: 'Pending' | 'Approved' | 'Rejected' | 'Completed';  // Status of the request
   updatedAt?: string | Date;
+
+  employeeName?: string;
 }
 

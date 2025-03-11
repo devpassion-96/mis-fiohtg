@@ -229,6 +229,7 @@ export class RequestApprovalComponent implements OnInit {
     this.updateRequestStatus('Rejected');
   }
 
+  
   private updateRequestStatus(status: 'Approved' | 'Rejected') {
     const updatedRequest = {
       ...this.request,

@@ -56,15 +56,6 @@ export class RequestFormComponent implements OnInit {
       this.project = data;
     });
 
-    // this.requestForm = this.fb.group({
-    //   projectId: ['', Validators.required],
-    //   amountRequested: ['', [Validators.required, Validators.min(1)]],
-    //   description: ['', Validators.required],
-    //   // new code
-    //   // attachment: [null],
-    //   outputs:['']
-
-    // });
 
     this.requestForm = this.fb.group({
       projectId: ['', Validators.required],
@@ -161,152 +152,8 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
-  // submitRequest(): void {
-  //   this.submitted = true;
-  //   if (this.requestForm.valid && this.selectedBudget) {
-  //     const requestAmount = this.requestForm.value.amountRequested;
-
-  //     if (requestAmount > this.selectedBudget.balance) {
-  //       this.toastr.error('Requested amount exceeds available budget balance');
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append('projectId', this.requestForm.value.projectId);
-  //     formData.append('amountRequested', this.requestForm.value.amountRequested);
-  //     formData.append('description', this.requestForm.value.description);
-  //     formData.append('outputs', this.requestForm.value.outputs);
-  //     formData.append('staffId', this.user.staffId);
-  //     formData.append('status', 'Pending');
-
-  //     // Attach selected files
-  //     this.selectedFiles.forEach((file) => {
-  //       formData.append('files', file);
-  //     });
-
-  //     this.requestService.addRequestRecord(formData).subscribe({
-  //       next: () => {
-  //         this.toastr.success('Request submitted successfully');
-  //         this.router.navigate(['/request-list']);
-  //       },
-  //       error: () => this.toastr.error('Failed to submit request')
-  //     });
-  //   } else {
-  //     this.toastr.error('Please fill all required fields');
-  //   }
-  // }
-
-  // submitRequest() {
-  //   this.submitted = true;
-  //   if (this.requestForm.valid && this.selectedBudget) {
-  //     const requestAmount = this.requestForm.value.amountRequested;
-
-  //     if (requestAmount > this.selectedBudget.balance) {
-  //       this.toastr.error('Requested amount exceeds available budget balance');
-  //       return;
-  //     }
-    //  const newRequest = {
-    //     ...this.requestForm.value,
-    //     projectId:this.requestForm.value.projectId,
-    //     staffId: this.user.staffId,
-    //     status: 'Pending',
-    //     // attachment: [null],
-    //     comments: [],
-    //     createdAt: new Date()
-    //   };
-
-
-    //   this.requestService.addRequestRecord(newRequest).subscribe({
-    //     next: () => {
-    //       this.toastr.success('Request submitted successfully');
-    //       this.router.navigate(['/request-list']);
-    //     },
-    //     error: () => this.toastr.error('Failed to submit request')
-    //   });
-    // } else {
-    //   this.toastr.error('Please fill all required fields');
-    // }
-  // }
-
-  // onFileChange(event): void {
-  //   const files = event.target.files;
-  //   const fileArray = Array.from(files).map(file => URL.createObjectURL(file as File));
-  //   this.requestForm.patchValue({ files: fileArray });
-  // }
-
-  // submitRequest() {
-  //   this.submitted = true;
   
-  //   if (this.requestForm.valid && this.selectedBudget) {
-  //     const requestAmount = this.requestForm.value.amountRequested;
-  
-  //     if (requestAmount > this.selectedBudget.balance) {
-  //       this.toastr.error('Requested amount exceeds available budget balance');
-  //       return;
-  //     }
-  
-  //     const newRequest = {
-  //       ...this.requestForm.value,
-  //       projectId: this.requestForm.value.projectId,
-  //       staffId: this.user.staffId,
-  //       status: 'Pending',
-  //       attachments: this.selectedFiles.map((file) => ({
-  //         fileName: file.name,
-  //         fileType: file.type,
-  //         fileContent: file // This could be the raw file or processed as needed
-  //       })),
-  //       comments: [],
-  //       createdAt: new Date()
-  //     };
-  
-  //     this.requestService.addRequestRecord(newRequest).subscribe({
-  //       next: () => {
-  //         this.toastr.success('Request submitted successfully');
-  //         this.router.navigate(['/request-list']);
-  //       },
-  //       error: () => this.toastr.error('Failed to submit request')
-  //     });
-  //   } else {
-  //     this.toastr.error('Please fill all required fields');
-  //   }
-  // }
-
-  // submitRequest() {
-  //   this.submitted = true;
-  
-  //   if (this.requestForm.valid && this.selectedBudget) {
-  //     const requestAmount = this.requestForm.value.amountRequested;
-  
-  //     if (requestAmount > this.selectedBudget.balance) {
-  //       this.toastr.error('Requested amount exceeds available budget balance');
-  //       return;
-  //     }
-  
-  //     // Convert selected files to a suitable format
-  //     const files: File[] = this.selectedFiles;
-  
-  //     const newRequest = {
-  //       ...this.requestForm.value,
-  //       projectId: this.requestForm.value.projectId,
-  //       staffId: this.user.staffId,
-  //       status: 'Pending',
-  //       files: files, // Attach files directly
-  //       comments: [],
-  //       createdAt: new Date()
-  //     };
-  
-  //     this.requestService.addRequestRecord(newRequest).subscribe({
-  //       next: () => {
-  //         this.toastr.success('Request submitted successfully');
-  //         this.router.navigate(['/request-list']);
-  //       },
-  //       error: () => this.toastr.error('Failed to submit request')
-  //     });
-  //   } else {
-  //     this.toastr.error('Please fill all required fields');
-  //   }
-  // }
-
+  isSubmitting = false; // Track submission state
   submitRequest() {
     this.submitted = true;
   
@@ -317,7 +164,11 @@ export class RequestFormComponent implements OnInit {
         this.toastr.error('Requested amount exceeds available budget balance');
         return;
       }
-  
+
+  // Disable button and show loading message
+    this.isSubmitting = true;
+  //  // Show loading spinner
+  //  this.toastr.info('Uploading files, please wait...');
       // Create FormData object to handle file uploads
       const formData = new FormData();
   

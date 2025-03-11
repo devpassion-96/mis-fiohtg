@@ -111,6 +111,8 @@ import { TransactionHistoryComponent } from './components/budgets/transaction-hi
 import { ViewLeaveComponent } from './components/leaves/view-leave/view-leave.component';
 import { PendingVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/pending-vehicle-requests/pending-vehicle-requests.component';
 import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/my-vehicle-requests/my-vehicle-requests.component';
+import { FundProcessListComponent } from './components/fund-request/finance-process/fund-process-list/fund-process-list.component';
+import { FundProcessViewComponent } from './components/fund-request/finance-process/fund-process-view/fund-process-view.component';
 
 @NgModule({
   declarations: [
@@ -208,7 +210,9 @@ import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/veh
     TransactionHistoryComponent,
     ViewLeaveComponent,
     PendingVehicleRequestsComponent,
-    MyVehicleRequestsComponent
+    MyVehicleRequestsComponent,
+    FundProcessListComponent,
+    FundProcessViewComponent
   ],
   imports: [
     BrowserModule,

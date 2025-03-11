@@ -4,20 +4,25 @@ import { forkJoin, map } from 'rxjs';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
 import { RequestService } from 'src/app/services/hrm/request.service';
 import { ProjectService } from 'src/app/services/project-management/project.service';
+import { environment } from 'src/environments/environment';
 import { Request } from 'src/app/models/request.model';
 
-import { environment } from 'src/environments/environment';
-
 @Component({
-  selector: 'app-m-and-e-review-list',
-  templateUrl: './m-and-e-review-list.component.html',
-  styleUrls: ['./m-and-e-review-list.component.css']
+  selector: 'app-fund-process-list',
+  templateUrl: './fund-process-list.component.html',
+  styleUrls: ['./fund-process-list.component.css']
 })
-export class MAndEReviewListComponent {
+export class FundProcessListComponent {
+
   requests: Request[] = [];
+  filteredRequests: Request[] = []; // Use ExtendedRequest type here
+  filterStatus: 'Pending' | 'Reviewed' | 'Approved' | 'Rejected' | 'All' = 'All';
+
+  totalAmountCollected: number = 0;
 
   itemsPerPage: number = 10;
   p: number = 1;
+
   constructor(
     private requestService: RequestService,
     private projectService: ProjectService,
@@ -43,7 +48,7 @@ export class MAndEReviewListComponent {
       })
     ).subscribe({
       next: (mappedRequests) => {
-        this.requests = mappedRequests.filter(request => request.status === 'ManagerReview');
+        this.requests = mappedRequests.filter(request => request.status === 'Approved' && !request.paymentDetails);;
       },
       error: () => {
         // Handle error
@@ -52,11 +57,9 @@ export class MAndEReviewListComponent {
   }
 
   reviewRequest(_id: string) {
-    this.router.navigate(['/request-review', _id]);
+    this.router.navigate(['/fund-process', _id]);
   }
-
   viewFile(fileUrl: string): void {
     window.open(fileUrl, '_blank');
   }
-
 }

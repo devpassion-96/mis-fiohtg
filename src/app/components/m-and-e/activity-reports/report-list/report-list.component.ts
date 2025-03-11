@@ -10,6 +10,9 @@ import { ActivityReportService } from 'src/app/services/mis/activity-report.serv
 export class ReportListComponent {
   reports: ActivityReport[] = [];
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private reportService: ActivityReportService) {}
 
   ngOnInit(): void {

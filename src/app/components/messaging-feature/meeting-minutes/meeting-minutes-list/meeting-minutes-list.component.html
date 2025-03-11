@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let meetingMinute of meetingMinutesList">
+        <tr *ngFor="let meetingMinute of meetingMinutesList | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ meetingMinute.title }}</td>
           <td>{{ meetingMinute.meetingDate | date:'medium' }}</td>
           <td>{{ getEmployeeNameByStaffId(meetingMinute.createdBy) }}</td>
@@ -21,12 +21,15 @@
             <button class="btn btn-info btn-sm mr-2" (click)="viewMeetingMinuteDetails(meetingMinute._id)">
               <i class="fas fa-eye"></i>
             </button>
-            <button class="btn btn-primary btn-sm" (click)="editMeetingMinute(meetingMinute._id)">
+            <button *ngIf="userRole === 'admin'" class="btn btn-primary btn-sm" (click)="editMeetingMinute(meetingMinute._id)">
               <i class="fas fa-edit"></i>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
   </div>
 </div>

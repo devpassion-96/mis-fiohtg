@@ -1,0 +1,131 @@
+<div *ngIf="!isLoading" class="card mt-5">
+    <div class="card-header bg-secondary">
+      <h5 class="card-title text-white">Process Fund View</h5>
+    </div>
+    <div class="card-body">
+      <!-- Display Request Details -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <p><strong>Request ID:</strong> {{ request._id }}</p>
+          <p><strong>Project Name:</strong> {{ getProjectNameById(request.projectId) }}</p>
+          <p><strong>Requested By:</strong> {{ getEmployeeNameById(request.staffId) }}</p>
+          <p><strong>Amount Requested:</strong> D {{ request.amountRequested }}</p>
+          <p><strong>Status:</strong> {{ request.status }}</p>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <p><strong>Created At:</strong> {{ request.createdAt | date:'mediumDate' }}</p>
+          <p><strong>Description:</strong> {{ request.description }}</p>
+          <p><strong>Outputs:</strong> {{ request.outputs }}</p>
+          <p *ngIf="request.reviewedAt"><strong>Reviewed At:</strong> {{ request.reviewedAt | date:'mediumDate' }}</p>
+          <p *ngIf="request.approvedOrRejectedAt"><strong>Approved/Rejected At:</strong> {{ request.approvedOrRejectedAt | date:'mediumDate' }}</p>
+        </div>
+      </div>
+
+      <div *ngIf="request.paymentDetails?.referenceNumber">
+        <h3>Payment Details</h3>
+        <p><strong>Payment Made Via:</strong> {{ request.paymentDetails?.paymentMadeVia }}</p>
+        <p><strong>Reference Number:</strong> {{ request.paymentDetails?.referenceNumber }}</p>
+        <p><strong>Processed By:</strong> {{ getEmployeeNameById(request.paymentDetails?.processedBy) }}</p>
+        <p><strong>Processed At:</strong> {{ request.paymentDetails?.processedAt | date:'short' }}</p>
+    </div>
+  
+      <!-- List Existing Comments -->
+      <div *ngIf="request.comments && request.comments.length > 0" class="mb-3">
+        <h6>Comments:</h6>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let comment of request.comments">
+            "{{ comment.text }}"
+            <small class="text-muted">Reviewed By: {{getEmployeeNameById(comment.reviewedBy)}}, at {{ comment.reviewedAt | date:'medium' }}</small>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Add Comment Form -->
+      <!-- <div class="card card-outline card-info">
+        <div class="card-header">
+          <h6 class="card-title">Add Comment</h6>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+            <div class="form-group">
+              <textarea id="comment" formControlName="comment" class="form-control" rows="3" placeholder="Enter your comment"></textarea>
+              <div *ngIf="submitted && commentForm.controls['comment'].errors?.['required']" class="text-danger mt-1">
+                Please enter a comment.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-info">Submit Review</button>
+          </form>
+        </div>
+      </div> -->
+    
+      <!-- process payment -->
+     <div *ngIf="!request.paymentDetails?.referenceNumber">
+        <!-- <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+            <label for="paymentMethod">Payment Made Via:</label>
+            <select formControlName="paymentMadeVia" required>
+                <option value="Cash">Cash</option>
+                <option value="Check">Check</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+        
+            <label for="referenceNumber">Reference Number:</label>
+            <input type="text" formControlName="referenceNumber" required>
+        
+            <button type="submit">Process Payment</button>
+        </form> -->
+
+
+        <div class="card card-primary">
+            <!-- <div class="card-header"> -->
+                <h3 class="card-title pt-2 pl-2">Process Payment</h3>
+            <!-- </div> -->
+        
+            <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="form-horizontal">
+                <div class="card-body">
+                    <!-- Payment Method -->
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="paymentMethod">Payment Made Via</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" formControlName="paymentMadeVia" id="paymentMethod" required>
+                                <option value="">-- Select Payment Method --</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Check">Check</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                            </select>
+                            <div *ngIf="paymentForm.controls['paymentMadeVia'].invalid && paymentForm.controls['paymentMadeVia'].touched" class="text-danger">
+                                Payment Method is required.
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Reference Number -->
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="referenceNumber">Reference Number</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="referenceNumber" id="referenceNumber" placeholder="Enter Reference Number" required>
+                            <div *ngIf="paymentForm.controls['referenceNumber'].invalid && paymentForm.controls['referenceNumber'].touched" class="text-danger">
+                                Reference Number is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-success" [disabled]="paymentForm.invalid">
+                        <i class="fas fa-check"></i> Process Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        
+     </div>
+    </div>
+  </div>
+  
+  <div *ngIf="isLoading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  

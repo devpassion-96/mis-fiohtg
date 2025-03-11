@@ -60,6 +60,12 @@ export class LeaveApplicationComponent implements OnInit {
 
     this.employeeService.getAllEmployees().subscribe(employeesData => {
       this.employees = employeesData;
+      
+      //   // Filter employees to exclude the logged-in user
+      //   if (this.user?.staffId) {
+      //     this.employees = this.employees.filter(emp => emp.staffId !== this.user.staffId);
+      // }
+
       this.leavesService.getAllLeaves().subscribe(leavesData => {
         this.leaves = leavesData;
         this.leaveBalances = this.calculateLeaveBalances();
@@ -106,7 +112,7 @@ export class LeaveApplicationComponent implements OnInit {
         });
   
         // Disable fields if status is "Approved"
-        if (leave.status === 'Approved' || leave.status === 'Rejected') {
+        if (leave.status === 'Approved' || leave.status === 'Rejected' || leave.status === 'Finance Review' || leave.status === 'HR Review' || leave.status === 'Reviewed' ) {
           this.leaveForm.disable();
         } else {
           this.leaveForm.enable();

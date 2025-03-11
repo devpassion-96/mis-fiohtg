@@ -153,6 +153,7 @@ export class RetireFundComponent implements OnInit {
     });
   }
 
+  isSubmitting = false; // Track submission state
   onSubmit() {
     this.submitted = true;
     if (this.retireFundForm.valid && this.selectedBudget) {
@@ -165,6 +166,9 @@ export class RetireFundComponent implements OnInit {
         return; // Exit the function to prevent further processing
       }
 
+      // Disable button and show loading message
+    this.isSubmitting = true;
+    
       // Prepare FormData to send files and data
       const formData = new FormData();
       formData.append('projectId', formValues.projectId);

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Employee } from 'src/app/models/employee.model';
 import { MeetingMinutes } from 'src/app/models/messaging-feature/minutes.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { EmployeeService } from 'src/app/services/hrm/employee.service';
 import { MeetingMinutesService } from 'src/app/services/messaging-feature/meetings.service';
 
@@ -15,13 +16,33 @@ export class MeetingMinutesListComponent implements OnInit {
   meetingMinutesList: MeetingMinutes[] = [];
   employees: Employee[] = [];
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
+  userRole: string; // To store the role of the logged-in user
+  
+  userDepartment: string;
+  userStaffId: string;
+
   constructor(private meetingMinutesService: MeetingMinutesService,
-    private employeeService: EmployeeService,
+    private employeeService: EmployeeService,private authService: AuthService,
     private toastr: ToastrService,private router: Router) {}
 
   ngOnInit(): void {
     this.loadMeetingMinutes();
-    this.loadAllEmployees()
+    this.loadAllEmployees();
+    this.loadUserRole();
+  }
+
+  loadUserRole() {
+    const userData = this.authService.getCurrentUserData();
+    if (userData) {
+      this.userRole = userData.role; // Role of the user
+      this.userDepartment = userData.department; // Department for managers
+      this.userStaffId = userData.staffId; // Staff ID for employees
+    } else {
+      this.userRole = 'Employee';
+    }
   }
 
   loadMeetingMinutes() {
@@ -34,6 +55,7 @@ export class MeetingMinutesListComponent implements OnInit {
       }
     );
   }
+  
   loadAllEmployees() {
     this.employeeService.getAllEmployees().subscribe({
       next: (employees) => {

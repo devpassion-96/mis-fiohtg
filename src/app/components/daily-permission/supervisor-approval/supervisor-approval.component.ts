@@ -22,6 +22,9 @@ export class SupervisorApprovalComponent implements OnInit {
   employees: Employee[] = [];
   user: any; // Logged-in user details
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private permissionRequestService: DailyPermissionService,
     private employeeService: EmployeeService,private userProfileService: UserProfileService,
     private toastr: ToastrService,private departmentService: DepartmentService) {}

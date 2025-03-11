@@ -11,6 +11,9 @@ import { Report } from 'src/app/models/m-and-e/report.model';
 export class ListReportComponent implements OnInit {
   reports: Report[] = [];
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(private reportService: ReportService) {}
 
   ngOnInit(): void {

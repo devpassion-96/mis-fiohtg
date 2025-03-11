@@ -99,7 +99,7 @@ export class SidebarComponent {
           next: ({ leaves, leavesWithDepartments }) => {
             // Calculate counts
             this.calculatePendingLeaveCount(leavesWithDepartments);
-            this.managerReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Manager Review');
+            this.managerReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Pending');
             this.hRReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Finance Review');
             this.directorReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'HR Review');
           },
@@ -157,40 +157,7 @@ export class SidebarComponent {
 
     userDepartmentName;
     userDesignation;
-//    loadUserRole() {
-//   const userData = this.authService.getCurrentUserData();
-//   if (userData) {
-//     this.userRole = userData.role; // Role of the user (e.g., "manager")
-//     this.userDepartment = userData.department; // Department ID
-//     this.userStaffId = userData.staffId; // Staff ID for employees
 
-//     // Fetch the department details using the department ID
-//     this.departmentService.getDepartmentById(this.userDepartment).subscribe({
-//       next: (department) => {
-//         if (department) {
-//           this.userDepartmentName = department.name; // Save the department name
-//           this.userDesignation = department.designations.find(
-//             (designation) => designation.title.toLowerCase() === this.userRole.toLowerCase()
-//           )?.title; // Match the role with the department's designations
-
-      
-//         } else {
-//           this.userDepartmentName = null;
-//           this.userDesignation = null;
-//         }
-//       },
-//       error: (err) => {
-//         console.error('Error fetching department details:', err);
-//         this.userDepartmentName = null;
-//         this.userDesignation = null;
-//       },
-//     });
-//   } else {
-//     this.userRole = 'Employee';
-//     this.userDepartmentName = null;
-//     this.userDesignation = null;
-//   }
-// }
 
 loadUserRole() {
   const userData = this.authService.getCurrentUserData();
@@ -332,6 +299,12 @@ canAccess(departmentDesignationPairs: { department: string; designations: string
     );
   });
   return result;
+}
+
+canAccessDirector(): boolean {
+  
+  return this.userDepartmentName?.toLowerCase() === 'directorate' &&
+         this.userDesignation?.toLowerCase() === 'country director';
 }
 
   

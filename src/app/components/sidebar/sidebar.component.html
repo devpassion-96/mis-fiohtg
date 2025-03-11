@@ -148,11 +148,13 @@
                 <p>Request List</p>
               </a>
             </li>
+            
             <li class="nav-item" *ngIf="userRole === 'manager'">
+              
               <a [routerLink]="['/pending-requests']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
                 <p>Manager Review List
-                  <span *ngif="pendingFundsCount > 0" class="badge badge-warning right">
+                  <span class="badge badge-warning right">
                     {{pendingFundsCount}}
                   </span>
                                 
@@ -184,15 +186,26 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccess([
-            { department: 'Directorate', designations: ['Country Director'] }
-            ])">
+            <li class="nav-item" *ngIf="canAccessDirector()">
               <a [routerLink]="['/reviewed-requests']" class="nav-link">
                 <i class="fas fa-check-square nav-icon"></i>
                 <p>Director Reviews
                   <span class="badge badge-warning right">
                     {{directorReviewFundsCount}}
                   </span>
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="canAccess([
+            { department: 'Finance', designations: ['Finance Manager', 'Finance Assistant'] }
+            ])">
+              <a [routerLink]="['/fund-process-list']" class="nav-link">
+                <i class="fas fa-hourglass-start nav-icon"></i>
+                <p>Process Fund
+                  <!-- <span class="badge badge-warning right">
+                    {{financeReviewFundsCount}}
+                  </span> -->
                 </p>
               </a>
             </li>
@@ -295,9 +308,7 @@
               </a>
             </li>
             
-            <li class="nav-item" *ngIf="userRole === 'admin' || canAccess([
-            { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
-            ])">
+            <li class="nav-item">
               <a [routerLink]="['/vehicle-request-list']" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>Vehicle Request List</p>
@@ -366,9 +377,7 @@
               </a>
             </li>
 
-            <li class="nav-item" *ngIf="canAccess([
-            { department: 'Directorate', designations: ['Country Director'] }
-            ])">
+            <li class="nav-item" *ngIf="canAccessDirector()">
               <a [routerLink]="['/leave-approval']" class="nav-link">
                 <i class="fas fa-calendar-check nav-icon"></i>
                 <p>Director Approval

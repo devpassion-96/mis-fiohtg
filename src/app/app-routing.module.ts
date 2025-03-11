@@ -88,6 +88,8 @@ import { TransactionHistoryComponent } from './components/budgets/transaction-hi
 import { ViewLeaveComponent } from './components/leaves/view-leave/view-leave.component';
 import { PendingVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/pending-vehicle-requests/pending-vehicle-requests.component';
 import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/my-vehicle-requests/my-vehicle-requests.component';
+import { FundProcessListComponent } from './components/fund-request/finance-process/fund-process-list/fund-process-list.component';
+import { FundProcessViewComponent } from './components/fund-request/finance-process/fund-process-view/fund-process-view.component';
 
 const routes: Routes = [
 
@@ -165,6 +167,9 @@ const routes: Routes = [
   { path: 'print-request/:id', component: RequestPrintViewComponent },
   { path: 'm-and-e-review-list', component: MAndEReviewListComponent},
   { path: 'finance-list', component: FinanceReviewListComponent},
+
+  { path: 'fund-process-list', component: FundProcessListComponent},
+  { path: 'fund-process/:id', component: FundProcessViewComponent},
 
 
   { path: 'driver-form', component: DriverFormComponent },

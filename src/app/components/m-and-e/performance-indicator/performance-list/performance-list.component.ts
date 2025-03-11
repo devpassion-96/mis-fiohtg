@@ -18,6 +18,9 @@ export class PerformanceListComponent implements OnInit {
   userDepartment: string; // Department for managers
   userStaffId: string; // Staff ID for employees
 
+  itemsPerPage: number = 10;
+  p: number = 1;
+
   constructor(
     private performanceIndicatorService: PerformanceIndicatorService,private authService: AuthService,
     private projectService: ProjectService

@@ -25,6 +25,9 @@ export class DailyPermissionListComponent {
 userDepartment: string; // Department for managers
 userStaffId: string; // Staff ID for employees
 
+itemsPerPage: number = 10;
+p: number = 1;
+
   constructor(private permissionRequestService: DailyPermissionService,
     private employeeService: EmployeeService,private authService: AuthService,
     private toastr: ToastrService) {}

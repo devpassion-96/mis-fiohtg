@@ -171,9 +171,14 @@ exportExcel() {
   XLSX.writeFile(wb, fileName);
 }
 
+// viewFile(fileUrl: string): void {
+//   const baseUrl = environment.apiUrl.replace('/api', ''); // Remove '/api' for file paths
+//   window.open(`${baseUrl}${fileUrl}`, '_blank');
+// }
+
 viewFile(fileUrl: string): void {
-  const baseUrl = environment.apiUrl.replace('/api', ''); // Remove '/api' for file paths
-  window.open(`${baseUrl}${fileUrl}`, '_blank');
+  window.open(fileUrl, '_blank');
 }
+
 
 }

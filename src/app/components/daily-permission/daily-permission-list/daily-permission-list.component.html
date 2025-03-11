@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let request of pendingRequests">
+        <tr *ngFor="let request of pendingRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ getEmployeeNameByStaffId(request.staffId) }}</td>
           <td>{{ request.date | date }}</td>
           <td>{{ request.timeFrom | date:'shortTime' }}</td>
@@ -36,6 +36,9 @@
         </tr>
       </tbody>
     </table>
+    <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
   </div>
 </div>
 

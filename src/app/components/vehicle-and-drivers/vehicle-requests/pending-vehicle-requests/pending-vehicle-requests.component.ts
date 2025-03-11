@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { forkJoin, map } from 'rxjs';
 import { Allocation } from 'src/app/models/vehicle-drivers/allocation.model';
 import { Driver } from 'src/app/models/vehicle-drivers/driver.model';
 import { VehicleRequest } from 'src/app/models/vehicle-drivers/vehicle-request.model';
 import { Vehicle } from 'src/app/models/vehicle-drivers/vehicle.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { EmployeeService } from 'src/app/services/hrm/employee.service';
 import { AllocationService } from 'src/app/services/vehicle-drivers/allocation.service';
 import { DriverService } from 'src/app/services/vehicle-drivers/driver.service';
 import { VehicleRequestService } from 'src/app/services/vehicle-drivers/vehicle-request.service';
@@ -48,7 +50,7 @@ export class PendingVehicleRequestsComponent {
   p: number = 1;
  
    constructor(private requestService: VehicleRequestService, private vehicleService: VehicleService,
-     private driverService: DriverService, private router: Router,
+     private driverService: DriverService, private router: Router,private employeeService: EmployeeService,
      private allocationService: AllocationService,private authService: AuthService) {}
  
    ngOnInit(): void {
@@ -70,11 +72,33 @@ export class PendingVehicleRequestsComponent {
      }
    }
  
+  //  loadRequests(): void {
+  //    this.requestService.getRequests().subscribe(data => {
+  //      this.requests = data.filter(request => request.status === 'Pending');
+  //    });
+  //  }
+
    loadRequests(): void {
-     this.requestService.getRequests().subscribe(data => {
-       this.requests = data.filter(request => request.status === 'Pending');
-     });
-   }
+       forkJoin({
+         requests: this.requestService.getRequests(),
+         employees: this.employeeService.getAllEmployees()
+       }).pipe(
+         map(({ requests, employees }) => {
+           return requests.map(request => ({
+             ...request,
+             employeeName: employees.find(emp => emp.staffId === request.requestingOfficer)?.firstName + ' ' +
+                           employees.find(emp => emp.staffId === request.requestingOfficer)?.lastName || 'Unknown'
+           }));
+         })
+       ).subscribe({
+         next: (enrichedRequests) => {
+           this.requests = enrichedRequests.filter(request => request.status === 'Pending');;
+         },
+         error: (error) => {
+           console.error('Error loading requests or employees:', error);
+         }
+       });
+     }
  
    // loadRequests(): void {
    //   forkJoin({

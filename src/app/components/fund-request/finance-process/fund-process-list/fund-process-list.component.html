@@ -1,0 +1,49 @@
+<div class="card mt-5">
+    <div class="card-header">
+      <h3 class="card-title">Funds to Process Fund <b></b> </h3>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Staff</th>
+            <th>Project ID</th>
+            <th>Amount Requested</th>
+            <th>Description</th>
+            <th>Files</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let request of requests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+            <td>{{ request._id }}</td>
+            <td>{{request.employeeName}}</td>
+            <td>{{ request.projectName }}</td>
+            <td>D {{ request.amountRequested }}</td>
+            <td>{{ request.description }}</td>
+            <td>
+                  
+              <span 
+                *ngFor="let file of request.files" 
+                (click)="viewFile(file)" 
+                class="file-link badge badge-primary mr-1 mb-1"
+                role="button"
+              >
+                {{ file.split('/').pop() }}
+              </span>
+            </td>
+            <td>
+              <!-- Add a button to navigate to the review component -->
+              <button (click)="reviewRequest(request._id)" class="btn btn-primary">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="card-footer">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+  

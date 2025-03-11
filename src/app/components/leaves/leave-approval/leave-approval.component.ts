@@ -128,7 +128,7 @@ getEmployeeNameByStaffId(staffId: string): string {
           this.toastr.success('Leave Approved', 'Success');
           this.fetchPendingLeaves();
           this.closeModal();
-          this.router.navigate(['/leave-list']);
+          this.router.navigate(['/leave-approval']);
 
         },
         error => this.toastr.error('Error Occurred', 'Error')

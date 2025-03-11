@@ -146,7 +146,7 @@ export class LeaveDetailsComponent implements OnInit {
       this.leavesService.updateLeave(this.leave._id, this.leave).subscribe({
         next: () => {
           this.toastr.success('Request reviewed successfully');
-          this.router.navigate(['/leave-list']);
+          this.router.navigate(['/dashboard']);
         },
         error: () => this.toastr.error('Error updating request')
       });

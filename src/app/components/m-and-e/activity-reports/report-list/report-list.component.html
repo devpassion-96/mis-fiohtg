@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let report of reports">
+        <tr *ngFor="let report of reports | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
           <td>{{ report.reportFiledBy }}</td>
           <td>{{ report.dateOfFiling | date }}</td>
           <td>{{ report.activityTitle }}</td>
@@ -30,5 +30,8 @@
         </tr>
       </tbody>
     </table>
+    <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
   </div>
 </div>

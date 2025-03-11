@@ -99,7 +99,7 @@ export class SidebarComponent {
           next: ({ leaves, leavesWithDepartments }) => {
             // Calculate counts
             this.calculatePendingLeaveCount(leavesWithDepartments);
-            this.managerReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Pending');
+            this.managerReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Manager Review');
             this.hRReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'Finance Review');
             this.directorReviewLeaveCount = this.calculateLeaveCountByStatus(leaves, 'HR Review');
           },

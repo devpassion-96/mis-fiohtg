@@ -149,7 +149,7 @@
               </a>
             </li>
             
-            <li class="nav-item" *ngIf="userRole === 'manager'">
+            <li class="nav-item" *ngIf="userRole === 'manager' || userRole === 'admin'">
               
               <a [routerLink]="['/pending-requests']" class="nav-link">
                 <i class="fas fa-hourglass-start nav-icon"></i>
@@ -207,6 +207,15 @@
                     {{financeReviewFundsCount}}
                   </span> -->
                 </p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="canAccess([
+            { department: 'Finance', designations: ['Finance Manager', 'Finance Assistant'] }
+            ])">
+              <a [routerLink]="['/processed-funds']" class="nav-link">
+                <i class="fas fa-list nav-icon"></i>
+                <p>Processed funds</p>
               </a>
             </li>
 

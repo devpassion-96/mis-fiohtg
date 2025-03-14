@@ -136,7 +136,7 @@ export class FundProcessViewComponent {
             next: (response) => {
               this.toastr.success('Payment processed successfully!');
               // Navigate to a different page or refresh the list
-              this.router.navigate(['/']);
+              this.router.navigate(['/fund-process-list']);
             },
             error: (error) => {
               this.toastr.error('Failed to process payment');

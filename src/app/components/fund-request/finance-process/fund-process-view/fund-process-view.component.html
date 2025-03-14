@@ -23,10 +23,10 @@
 
       <div *ngIf="request.paymentDetails?.referenceNumber">
         <h3>Payment Details</h3>
-        <p><strong>Payment Made Via:</strong> {{ request.paymentDetails?.paymentMadeVia }}</p>
-        <p><strong>Reference Number:</strong> {{ request.paymentDetails?.referenceNumber }}</p>
-        <p><strong>Processed By:</strong> {{ getEmployeeNameById(request.paymentDetails?.processedBy) }}</p>
-        <p><strong>Processed At:</strong> {{ request.paymentDetails?.processedAt | date:'short' }}</p>
+        <p><strong>Payment Made Via :</strong> {{ request.paymentDetails?.paymentMadeVia }}</p>
+        <p><strong>Reference Number :</strong> {{ request.paymentDetails?.referenceNumber }}</p>
+        <p><strong>Processed By :</strong> {{ getEmployeeNameById(request.paymentDetails?.processedBy) }}</p>
+        <p><strong>Processed At :</strong> {{ request.paymentDetails?.processedAt | date:'short' }}</p>
     </div>
   
       <!-- List Existing Comments -->

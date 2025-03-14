@@ -113,6 +113,7 @@ import { PendingVehicleRequestsComponent } from './components/vehicle-and-driver
 import { MyVehicleRequestsComponent } from './components/vehicle-and-drivers/vehicle-requests/my-vehicle-requests/my-vehicle-requests.component';
 import { FundProcessListComponent } from './components/fund-request/finance-process/fund-process-list/fund-process-list.component';
 import { FundProcessViewComponent } from './components/fund-request/finance-process/fund-process-view/fund-process-view.component';
+import { ProcessedFundsComponent } from './components/fund-request/finance-process/processed-funds/processed-funds.component';
 
 @NgModule({
   declarations: [
@@ -212,7 +213,8 @@ import { FundProcessViewComponent } from './components/fund-request/finance-proc
     PendingVehicleRequestsComponent,
     MyVehicleRequestsComponent,
     FundProcessListComponent,
-    FundProcessViewComponent
+    FundProcessViewComponent,
+    ProcessedFundsComponent
   ],
   imports: [
     BrowserModule,

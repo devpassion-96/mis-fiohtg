@@ -214,7 +214,7 @@ export class DashboardComponent implements OnInit {
 
 calculateLeaveBalances(): EmployeeLeaveBalances {
   const balances: EmployeeLeaveBalances = {};
-  const maxLeaveEntitlement = 21; // Maximum leave days allowed per year
+  const maxLeaveEntitlement = 60; // Maximum leave days allowed per year
 
   this.employees.forEach(employee => {
     const employeeLeaves = this.leaves.filter(leave => leave.staffId === employee.staffId);

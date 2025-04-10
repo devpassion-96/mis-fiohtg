@@ -143,7 +143,7 @@ export class LeaveApplicationComponent implements OnInit {
 
   calculateLeaveBalances(): EmployeeLeaveBalances {
     const balances: EmployeeLeaveBalances = {};
-    const maxLeaveEntitlement = 21; // Maximum leave days allowed per year
+    const maxLeaveEntitlement = 60; // Maximum leave days allowed per year
     const currentYear = new Date().getFullYear();
 
     // Initialize balances for all employees

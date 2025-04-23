@@ -234,7 +234,8 @@ calculateLeaveBalances(): EmployeeLeaveBalances {
   });
 
   return balances;
-} // end of leave data.................................................
+} 
+// end of leave data.................................................
 
 
 // for projects and budget dashboard.............................................

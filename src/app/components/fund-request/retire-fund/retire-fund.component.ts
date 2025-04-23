@@ -47,7 +47,7 @@ export class RetireFundComponent implements OnInit {
 
     this.retireFundForm = new FormGroup({
       projectId: new FormControl('', Validators.required),
-      amount: new FormControl(null, [Validators.required, Validators.min(1)]),
+      amount: new FormControl(null, [Validators.required, Validators.min(0)]),
       staffId: new FormControl(''),
       date: new FormControl(''),
       documents: new FormControl(null)

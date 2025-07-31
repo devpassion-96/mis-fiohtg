@@ -14,7 +14,7 @@
       </div>
       <div class="col-lg-6 mb-4">
         <p><strong>Created At:</strong> {{ request.createdAt | date:'mediumDate' }}</p>
-        <p><strong>Description:</strong> {{ request.description }}</p>
+        
         <p><strong>Outputs:</strong> {{ request.outputs }}</p>
         <p *ngIf="request.reviewedAt"><strong>Reviewed At:</strong> {{ request.reviewedAt | date:'mediumDate' }}</p>
         <p *ngIf="request.approvedOrRejectedAt"><strong>Approved/Rejected At:</strong> {{ request.approvedOrRejectedAt | date:'mediumDate' }}</p>

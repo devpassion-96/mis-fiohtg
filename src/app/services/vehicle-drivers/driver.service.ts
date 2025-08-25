@@ -11,31 +11,7 @@ export class DriverService {
   private readonly apiUrl = `${environment.apiUrl}/drivers`;
 
 
-  // constructor(private http: HttpClient) {}
-
-  // getAllDriverRecords(): Observable<Driver[]> {
-  //   return this.http.get<Driver[]>(this.apiUrl);
-  // }
-
-  // getDriverById(id: string): Observable<Driver> {
-  //   return this.http.get<Driver>(`${this.apiUrl}/${id}`);
-  // }
-
-  // addDriverRecord(driver: Driver): Observable<Driver> {
-  //   return this.http.post<Driver>(this.apiUrl, driver);
-  // }
-
-  // updateDriverRecord(id: string, driver: Driver): Observable<Driver> {
-  //   return this.http.put<Driver>(`${this.apiUrl}/${id}`, driver);
-  // }
-
-  // deleteDriverRecord(id: string): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  // }
-
-  // addTrekToDriver(driverId: number, trekRecord: TrekRecord): Observable<Driver> {
-  //   return this.http.post<Driver>(`${this.apiUrl}/${driverId}/treks`, trekRecord);
-  // }
+ 
 
   constructor(private http: HttpClient) {}
 

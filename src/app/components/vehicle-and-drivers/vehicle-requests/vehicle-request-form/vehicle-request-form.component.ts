@@ -70,17 +70,40 @@ export class VehicleRequestFormComponent implements OnInit {
     }
   }
 
+  // loadRequestById(id: string): void {
+  //   this.requestService.getRequest(id).subscribe(
+  //     (request) => {
+  //       this.requestToEdit = request;
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching the request:', error);
+  //       this.router.navigate(['/']);
+  //     }
+  //   );
+  // }
+
   loadRequestById(id: string): void {
-    this.requestService.getRequest(id).subscribe(
-      (request) => {
-        this.requestToEdit = request;
-      },
-      (error) => {
-        console.error('Error fetching the request:', error);
-        this.router.navigate(['/']);
-      }
-    );
-  }
+  this.requestService.getRequest(id).subscribe(
+    (request) => {
+      this.requestToEdit = {
+        ...request,
+        travelingDay: this.formatDateForInput(request.travelingDay),
+        returnDay: this.formatDateForInput(request.returnDay)
+      };
+    },
+    (error) => {
+      console.error('Error fetching the request:', error);
+      this.router.navigate(['/']);
+    }
+  );
+}
+
+private formatDateForInput(date: any): string {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  return d.toISOString().split('T')[0]; // ✅ "YYYY-MM-DD"
+}
 
   // addRequest(): void {
   //   this.requestService.createRequest(this.newRequest).subscribe(

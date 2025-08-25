@@ -19,7 +19,9 @@
               <th>Officer's Name</th>
               <th>Unit</th>
               <th>Purpose</th>
-              <th>Project Goal No</th>
+              <!-- <th>Project Goal No</th> -->
+               <th>Traveling Day</th>
+               <th>Return Day</th>
               <th>District</th>
               <th>Villages</th>
               <th>Remarks</th>
@@ -32,7 +34,9 @@
               <td>{{ request.employeeName }}</td>
               <td>{{ request.unit }}</td>
               <td>{{ request.purpose }}</td>
-              <td>{{ request.projectGoalNumber }}</td>
+              <!-- <td>{{ request.projectGoalNumber }}</td> -->
+               <td>{{ request.travelingDay | date:'mediumDate' }}</td>
+               <td>{{ request.returnDay | date:'mediumDate' }}</td>
               <td>{{ request.district }}</td>
               <td>{{ request.villages }}</td>
               <td>{{ request.remarks }}</td>

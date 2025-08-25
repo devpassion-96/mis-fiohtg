@@ -1,0 +1,13 @@
+.desc-panel {
+  max-height: 220px;        /* scroll when long */
+  overflow: auto;
+  white-space: pre-wrap;     /* preserve line breaks */
+  word-break: break-word;
+  overflow-wrap: anywhere;   /* break very long tokens */
+  padding: .75rem .875rem;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: .5rem;
+  background: #fafafa;       /* neutral, not input-like */
+  font-family: inherit;
+  line-height: 1.45;
+}

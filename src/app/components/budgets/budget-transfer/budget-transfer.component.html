@@ -19,10 +19,32 @@
                   <option *ngFor="let budget of budgets" [value]="budget._id">{{ getProjectNameById(budget.projectId) }}</option>
                 </select>
               </div>
+
+                  <div class="text-danger" *ngIf="transferForm.errors?.['sameBudget']">
+              Source and Target budgets must be different.
+            </div>
               <div class="form-group">
                 <label for="amount">Amount</label>
                 <input type="number" id="amount" formControlName="amount" class="form-control" placeholder="Enter amount">
               </div>
+
+              <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                class="form-control"
+                formControlName="description"
+                rows="3"
+                placeholder="Describe the reason for this transfer"
+              ></textarea>
+              <small class="text-muted">
+                Provide enough context.
+              </small>
+              <div class="text-danger" *ngIf="transferForm.get('description')?.invalid && (transferForm.get('description')?.dirty || transferForm.get('description')?.touched)">
+                Description is required.
+              </div>
+              </div>
+
             </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-primary" [disabled]="transferForm.invalid">Transfer</button>

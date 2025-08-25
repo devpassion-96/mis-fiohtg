@@ -12,26 +12,6 @@ export class VehicleService {
 
   constructor(private http: HttpClient) {}
 
-  // getAllVehicleRecords(): Observable<Vehicle[]> {
-  //   return this.http.get<Vehicle[]>(this.apiUrl);
-  // }
-
-  // getVehicleById(id: string): Observable<Vehicle> {
-  //   return this.http.get<Vehicle>(`${this.apiUrl}/${id}`);
-  // }
-
-  // addVehicleRecord(vehicle: Vehicle): Observable<Vehicle> {
-  //   return this.http.post<Vehicle>(this.apiUrl, vehicle);
-  // }
-
-  // updateVehicleRecord(id: string, vehicle: Vehicle): Observable<Vehicle> {
-  //   return this.http.put<Vehicle>(`${this.apiUrl}/${id}`, vehicle);
-  // }
-
-  // deleteVehicleRecord(id: string): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  // }
-
 
   // Get all vehicles
   getVehicles(): Observable<Vehicle[]> {

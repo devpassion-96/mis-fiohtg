@@ -239,92 +239,27 @@ calculateLeaveBalances(): EmployeeLeaveBalances {
 
 
 // for projects and budget dashboard.............................................
-
-// forProjectAndBudgetData(){
-//      // Fetch all projects
-//      this.projectService.getAllProjectRecords().subscribe((projects) => {
-//       this.projects = projects;
-
-//       // Filter ongoing projects (In Progress)
-//       this.projects = this.projects.filter(
-//         (project) => project.status === 'In Progress'
-//       );
-
-//       // Sort projects by upcoming deadlines
-//       this.projects.sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
-
-//       // Fetch budget summaries
-//       this.budgetService.getAllBudgetRecords().subscribe((budgets) => {
-//         this.calculateBudgetUtilization(budgets);
-//       });
-//     });
-// }
-
-// forProjectAndBudgetData() {
-//   this.projectService.getAllProjectRecords().subscribe((projects) => {
-//     this.projects = projects;
-
-//     // Fetch budget summaries
-//     this.budgetService.getAllBudgetRecords().subscribe((budgets) => {
-//       this.totalBudget = budgets.reduce((acc, budget) => acc + budget.amount, 0);
-
-//       // Recalculate totalBudgetUsed based on budget amount and balance
-//       this.totalBudgetUsed = budgets.reduce((acc, budget) => {
-//         // The used amount is the original amount minus the balance
-//         const usedAmount = budget.amount - budget.balance;
-//         return acc + usedAmount;
-//       }, 0);
-
-//       // Round totalBudgetUsed to ensure it's a whole number
-//       this.totalBudgetUsed = Math.round(this.totalBudgetUsed);
-//     });
-//   });
-// }
-
 forProjectAndBudgetData() {
-  this.budgetService.getBudgetSummary().subscribe((summary) => {
-    this.totalBudget = summary.totalBudget;
-    // this.totalBudgetUsed = summary.totalUsed;
-    this.totalBalance = summary.totalBalance;
+  forkJoin({
+    budgets: this.budgetService.getAllBudgetRecords(),
+    projects: this.projectService.getAllProjectRecords()
+  }).subscribe(({ budgets, projects }) => {
+    const nameById = new Map(projects.map(p => [p._id, p.name]));
+    const filtered = budgets.filter(b => nameById.get(b.projectId) !== 'Unreachable Funds');
 
-    this.budgetService.getAllBudgetRecords().subscribe((budgets) => {
-      this.totalBudgetUsed = budgets.reduce((acc, budget) => acc + (budget.amount - budget.balance), 0);
+    const toNum = (v: any) => typeof v === 'number' ? v : parseFloat(v ?? '0') || 0;
 
-      
-    
-          });
+    // Exclude "Unreachable Funds" from totalBudget and totalBalance
+    this.totalBudget  = filtered.reduce((sum, b) => sum + toNum(b.amount), 0);
+    this.totalBalance = filtered.reduce((sum, b) => sum + toNum(b.balance), 0);
+
+    // Leave as-is; switch to `filtered` here too if you also want to exclude it
+    this.totalBudgetUsed = budgets.reduce((sum, b) => sum + (toNum(b.amount) - toNum(b.balance)), 0);
   });
 }
 
-// forProjectAndBudgetData() {
-//   this.budgetService.getBudgetSummary().subscribe((summary) => {
-//     this.totalBudget = summary.totalBudget;
-//     this.totalBudgetUsed = summary.totalUsed;
-//     this.totalBalance = summary.totalBalance;
-//   });
-// }
 
 
-
-
-
-
-// private calculateBudgetUtilization(budgets: Budget[]): void {
-//   this.totalBudget = budgets.reduce((acc, budget) => acc + budget.amount, 0);
-
-//   // Calculate budget utilization for each project
-//   this.projects.forEach((project) => {
-//     const projectBudget = budgets.find((budget) => budget.projectId === project.id);
-
-//     console.log("projectBudget : "+ projectBudget)
-//     if (projectBudget) {
-//       const budgetUtilization = (projectBudget.amount / projectBudget.amount) * 100;
-//       this.budgetSummaries.push({ project, budgetUtilization });
-//       this.totalBudgetUsed += projectBudget.amount;
-
-//     }
-//   });
-// }
 
 // end of project dashboard...............................................................
 

@@ -24,21 +24,6 @@ export class VehicleRequestListComponent implements OnInit {
   vehicles: Vehicle[] = [];
   requests: VehicleRequest[] = [];
   allocations: Allocation[] = [];  // Keep track of allocations
-
-  newRequest: VehicleRequest = {
-    requestingOfficer: 'Modou Jallow',
-    unit: 'Manager',
-    purpose: 'Research',
-    projectGoalNumber: 'AJS34UY',
-    travelingDay: '2024-10-27',
-    returnDay: '2024-11-27',
-    cumulativeDays: 12,
-    regions: 'CRR',
-    district: 'Badibu',
-    villages: 'Bondali',
-    remarks: 'Remarks',
-    status: 'Pending'
-  };
   isEditing = false;
   requestToEdit?: VehicleRequest;
 
@@ -110,34 +95,6 @@ itemsPerPage: number = 10;
     return isDepartmentMatching && isDesignationMatching;
   }
   
-  
-  // loadRequests(): void {
-  //   this.requestService.getRequests().subscribe(data => {
-  //     this.requests = data;
-  //   });
-  // }
-
-  // loadRequests(): void {
-  //   forkJoin({
-  //     requests: this.requestService.getRequests(),
-  //     employees: this.employeeService.getAllEmployees()
-  //   }).pipe(
-  //     map(({ requests, employees }) => {
-  //       return requests.map(request => ({
-  //         ...request,
-  //         employeeName: employees.find(emp => emp.staffId === request.requestingOfficer)?.firstName + ' ' +
-  //                       employees.find(emp => emp.staffId === request.requestingOfficer)?.lastName || 'Unknown'
-  //       }));
-  //     })
-  //   ).subscribe({
-  //     next: (enrichedRequests) => {
-  //       this.requests = enrichedRequests;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error loading requests or employees:', error);
-  //     }
-  //   });
-  // }
 
   loadRequests(): void {
     forkJoin({
@@ -199,54 +156,7 @@ itemsPerPage: number = 10;
       }
     });
   }
-  
-  
-
-  // loadRequests(): void {
-  //   forkJoin({
-  //     requests: this.requestService.getRequests(),
-  //     drivers: this.driverService.getDrivers(),
-  //     vehicles: this.vehicleService.getVehicles(),
-  //     allocations: this.allocationService.getAllocations()
-  //   })
-  //     .pipe(
-  //       map(({ requests, drivers, vehicles, allocations }) => {
-  //         // Enrich requests with driver, vehicle, and allocation details
-  //         const enrichedRequests = requests.map(request => {
-  //           const allocation = allocations.find(a => a.requestId === request._id);
-  //           const driver = allocation ? drivers.find(d => d._id === allocation.driverId) : null;
-  //           const vehicle = allocation ? vehicles.find(v => v._id === allocation.vehicleId) : null;
-  
-  //           return {
-  //             ...request,
-  //             driverName: driver ? `${driver.name}` : 'Unassigned',
-  //             vehicleName: vehicle ? vehicle.vehicleNumber : 'Unassigned',
-  //             allocationStatus: allocation ? (allocation.completed ? 'Completed' : 'Active') : 'Pending'
-  //           };
-  //         });
-  
-  //         // Apply role-based filtering
-  //         if (this.userRole === 'admin') {
-  //           return enrichedRequests; // Admin sees all requests
-  //         } else if (this.userRole === 'manager') {
-  //           return enrichedRequests.filter(request => request.unit === this.userDepartment); // Manager sees only their department's requests
-  //         } else if (this.userRole === 'employee') {
-  //           return enrichedRequests.filter(request => request.requestingOfficer === this.userStaffId); // Employee sees only their own requests
-  //         }
-  
-  //         return []; // Default to an empty list if no role matches
-  //       })
-  //     )
-  //     .subscribe({
-  //       next: (filteredRequests) => {
-  //         this.requests = filteredRequests; // Store filtered/enriched requests
-  //       },
-  //       error: (error) => {
-  //         console.error('Failed to load requests:', error); // Log error
-  //       }
-  //     });
-  // }
-  
+   
 
   loadDrivers(): void {
     this.driverService.getDrivers().subscribe(data => {
@@ -324,31 +234,70 @@ itemsPerPage: number = 10;
     });
   }
   
-  // Method to handle return from trek
+//   // Method to handle return from trek
+// returnFromTrek(request: VehicleRequest): void {
+//   const allocation = this.allocations.find(a => a.requestId === request._id);
+//   if (allocation) {
+//     // Retrieve the driver by ID to get a complete object, then update its status and clear return date
+//     const driver = this.drivers.find(d => d._id === allocation.driverId);
+//     if (driver) {
+//       this.driverService.updateDriver({ ...driver, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
+//         this.loadDrivers();  // Reload drivers after status change
+//       });
+//     }
+//     // Retrieve the vehicle by ID to get a complete object, then update its status and clear return date
+//     const vehicle = this.vehicles.find(v => v._id === allocation.vehicleId);
+//     if (vehicle) {
+//       this.vehicleService.updateVehicle({ ...vehicle, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
+//         this.loadVehicles(); // Reload vehicles after status change
+//       });
+//     }
+//     // Update request status to "Completed"
+//     request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';  // Type assertion to allow "Completed"
+//     this.requestService.updateRequest(request).subscribe(() => {
+//       this.loadRequests(); // Reload requests to reflect the change
+//     });
+//   }
+// }
+
+// Method to handle return from trek
 returnFromTrek(request: VehicleRequest): void {
   const allocation = this.allocations.find(a => a.requestId === request._id);
+
   if (allocation) {
-    // Retrieve the driver by ID to get a complete object, then update its status and clear return date
+    // --- Update Driver ---
     const driver = this.drivers.find(d => d._id === allocation.driverId);
     if (driver) {
-      this.driverService.updateDriver({ ...driver, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
-        this.loadDrivers();  // Reload drivers after status change
-      });
+      this.driverService.updateDriver({
+        ...driver,
+        status: 'Available',
+        returnDate: new Date().toISOString()
+      }).subscribe(() => this.loadDrivers());
     }
-    // Retrieve the vehicle by ID to get a complete object, then update its status and clear return date
+
+    // --- Update Vehicle ---
     const vehicle = this.vehicles.find(v => v._id === allocation.vehicleId);
     if (vehicle) {
-      this.vehicleService.updateVehicle({ ...vehicle, status: 'Available', returnDate: new Date().toISOString() }).subscribe(() => {
-        this.loadVehicles(); // Reload vehicles after status change
-      });
+      this.vehicleService.updateVehicle({
+        ...vehicle,
+        status: 'Available',
+        returnDate: new Date().toISOString()
+      }).subscribe(() => this.loadVehicles());
     }
-    // Update request status to "Completed"
-    request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';  // Type assertion to allow "Completed"
-    this.requestService.updateRequest(request).subscribe(() => {
-      this.loadRequests(); // Reload requests to reflect the change
+
+    // --- Update Request to Completed ---
+    request.status = 'Completed' as 'Pending' | 'Approved' | 'Rejected' | 'Completed';
+    this.requestService.updateRequest(request).subscribe(() => this.loadRequests());
+
+    // --- Update Allocation to completed:true ---
+    this.allocationService.updateAllocation({
+      ...allocation,
+      completed: true,
+    }).subscribe(() => { // refresh allocations table
     });
   }
 }
+
 
 
   
@@ -359,17 +308,6 @@ returnFromTrek(request: VehicleRequest): void {
   completedAllocations(): Allocation[] {
     return this.allocations.filter(a => a.completed);
   }
-  
-  
-  
-
-  addRequest(): void {
-    this.requestService.createRequest(this.newRequest).subscribe(request => {
-      this.requests.push(request);
-      this.newRequest = { ...this.newRequest, status: 'Pending' };  // Reset form with default status
-    });
-  }
-
 
   editRequest(request: VehicleRequest): void {
     this.isEditing = true;

@@ -13,28 +13,6 @@ export class VehicleRequestService {
   private readonly apiUrl = `${environment.apiUrl}/vehicle-requests`;
 
 
-  // constructor(private http: HttpClient) {}
-
-  // getAllVehicleRequestRecords(): Observable<VehicleRequest[]> {
-  //   return this.http.get<VehicleRequest[]>(this.apiUrl);
-  // }
-
-  // getVehicleRequestById(id: string): Observable<VehicleRequest> {
-  //   return this.http.get<VehicleRequest>(`${this.apiUrl}/${id}`);
-  // }
-
-  // addVehicleRequestRecord(VehicleRequest: VehicleRequest): Observable<VehicleRequest> {
-  //   return this.http.post<VehicleRequest>(this.apiUrl, VehicleRequest);
-  // }
-
-  // updateVehicleRequestRecord(id: string, VehicleRequest: VehicleRequest): Observable<VehicleRequest> {
-  //   return this.http.put<VehicleRequest>(`${this.apiUrl}/${id}`, VehicleRequest);
-  // }
-
-  // deleteVehicleRequestRecord(id: string): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  // }
-
   constructor(private http: HttpClient) {}
 
   // Get all requests

@@ -1,42 +1,148 @@
-<section class="content">
-   <div class="container mt-5">
-    <div class="container-fluid">
-        <div class="card card-info">
-          <div class="card-header">
-            <h3 class="card-title">Transaction History</h3>
-          </div>
-          <div class="card-body">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Type</th>
-                  <th>Details</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let transaction of transactions; index as i">
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ transaction.type }}</td>
-                  <td>
-                    <ng-container *ngIf="transaction.type === 'transfer'">
-                      From: {{ transaction.sourceBudgetId }}<br />
-                      To: {{ transaction.targetBudgetId }}
-                    </ng-container>
-                    <ng-container *ngIf="transaction.type === 'cashflow'">
-                      Project: {{ getProjectNameById(transaction.projectId) }}
-                    </ng-container>
-                  </td>
-                  <td>{{ transaction.amount }}</td>
-                  <td>{{ transaction.date | date: 'medium' }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div class="card mt-5">
+  <div class="card-header d-flex flex-wrap gap-2 align-items-center">
+    <h3 class="card-title mb-0">Transaction History</h3>
+    <div class="ml-auto d-flex gap-2 align-items-center">
+      <select class="form-control" style="width: 160px" [(ngModel)]="typeFilter" (change)="applyFilters()">
+        <option value="all">All types</option>
+        <option value="transfer">Transfers</option>
+        <option value="cashflow">Cashflows</option>
+      </select>
+      <input class="form-control" style="width: 240px" [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search (description or project)" />
+      <button class="btn btn-outline-secondary" (click)="loadData()" [disabled]="loading">Refresh</button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="loading">Loading…</div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <div class="table-responsive" *ngIf="!loading && !error && filteredRows.length">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>By</th>
+            <th>Date</th>
+            <th>Type</th>
+            <!-- <th>Description</th> -->
+            <th>Source Project</th>
+            <th>Target Project</th>
+            <th>Cashflow Project</th>
+            <th class="text-right">Amount</th>
+            <th class="text-right" style="width: 110px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of filteredRows | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+            <td>{{ t.createdByName || t.createdByStaffId || '—' }}</td>
+            <td>{{ formatDate(t.createdAtResolved || t.date || t.createdAt) }}</td>
+            <td>
+              <span class="badge" [ngClass]="t.type === 'transfer' ? 'badge-info' : 'badge-success'">
+                {{ t.type | titlecase }}
+              </span>
+            </td>
+            <!-- <td>{{ t.description }}</td> -->
+            <td>{{ t.type === 'transfer' ? (t.sourceProjectName || '-') : '-' }}</td>
+            <td>{{ t.type === 'transfer' ? (t.targetProjectName || '-') : '-' }}</td>
+            <td>{{ t.type === 'cashflow' ? (t.projectName || '-') : '-' }}</td>
+            <td class="text-right">{{ t.amount | number:'1.0-2' }}</td>
+            <td class="text-right">
+              <button class="btn btn-sm btn-outline-primary" (click)="openModal(t)">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="card-footer">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+    </div>
+
+    <div *ngIf="!loading && !error && !filteredRows.length" class="text-muted">
+      No transactions found.
+    </div>
+  </div>
+</div>
+
+
+<!-- modal view -->
+<div class="modal fade"
+     [ngClass]="{ 'show': modalOpen }"
+     [style.display]="modalOpen ? 'block' : 'none'"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="txModalLabel"
+     [attr.aria-hidden]="!modalOpen">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" *ngIf="selected">
+      <div class="modal-header">
+        <h5 class="modal-title" id="txModalLabel">
+          Transaction Details — {{ selected.type | titlecase }}
+        </h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-   </div>
-  </section>
-  
+
+      <div class="modal-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Date</dt>
+          <dd class="col-sm-8">{{ formatDate(selected.createdAtResolved || selected.date || selected.createdAt) }}</dd>
+
+          <dt class="col-sm-4">Type</dt>
+          <dd class="col-sm-8">
+            <span class="badge" [ngClass]="selected.type === 'transfer' ? 'badge-info' : 'badge-success'">
+              {{ selected.type | titlecase }}
+            </span>
+          </dd>
+
+          <dt class="col-sm-4">Amount</dt>
+          <dd class="col-sm-8">{{ selected.amount | number:'1.0-2' }}</dd>
+
+          <!-- <dt class="col-sm-4">Description</dt>
+          <dd class="col-sm-8">{{ selected.description }}</dd> -->
+
+          <dt class="col-sm-4">Description</dt>
+<dd class="col-sm-8">
+  <div
+    class="desc-panel"
+    tabindex="0"
+    aria-label="Transaction description">
+    {{ selected.description || '—' }}
+  </div>
+</dd>
+
+
+          <!-- Transfer-specific -->
+          <ng-container *ngIf="selected.type === 'transfer'">
+            <dt class="col-sm-4">Source Project</dt>
+            <dd class="col-sm-8">{{ selected.sourceProjectName || '—' }}</dd>
+
+            <dt class="col-sm-4">Target Project</dt>
+            <dd class="col-sm-8">{{ selected.targetProjectName || '—' }}</dd>
+          </ng-container>
+
+          <!-- Cashflow-specific -->
+          <ng-container *ngIf="selected.type === 'cashflow'">
+            <dt class="col-sm-4">Project</dt>
+            <dd class="col-sm-8">{{ selected.projectName || '—' }}</dd>
+          </ng-container>
+
+            <dt class="col-sm-4">Created By:</dt>
+            <dd class="col-sm-8">{{ selected.createdByName || '—' }}</dd>
+
+          <dt class="col-sm-4">ID</dt>
+          <dd class="col-sm-8"><code>{{ selected._id }}</code></dd>
+        </dl>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <!-- Optional: add a print/export button here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="modal-backdrop fade show" *ngIf="modalOpen"></div>

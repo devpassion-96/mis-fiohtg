@@ -34,9 +34,10 @@ export class RequestListComponent implements OnInit {
   userDepartment: string;
   userStaffId: string;
 
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 15;
   p: number = 1;
 
+  staffQuery: string = '';  // NEW
 
   constructor(
     private requestService: RequestService,private departmentService: DepartmentService,
@@ -130,12 +131,36 @@ export class RequestListComponent implements OnInit {
         }
       });
   }
+
+  // NEW: update handler for the staff filter input
+  onStaffNameChange(val: string) {
+    this.staffQuery = (val || '').trim().toLowerCase();
+    this.applyFilter();
+  }
   
+  // applyFilter() {
+  //   this.filteredRequests = this.filterStatus === 'All' ?
+  //                           this.requests :
+  //                           this.requests.filter(request => request.status === this.filterStatus);
+  //                           this.calculateTotalAmount();
+  // }
+
   applyFilter() {
-    this.filteredRequests = this.filterStatus === 'All' ?
-                            this.requests :
-                            this.requests.filter(request => request.status === this.filterStatus);
-                            this.calculateTotalAmount();
+    // status filter
+    let list = this.filterStatus === 'All'
+      ? this.requests
+      : this.requests.filter(r => r.status === this.filterStatus);
+
+    // NEW: staff name filter (case-insensitive)
+    if (this.staffQuery) {
+      list = list.filter(r => (r.employeeName || '').toLowerCase().includes(this.staffQuery));
+    }
+
+    this.filteredRequests = list;
+    this.calculateTotalAmount();
+
+     const totalPages = Math.max(1, Math.ceil(this.filteredRequests.length / this.itemsPerPage));
+  this.p = Math.min(this.p || 1, totalPages);
   }
 
 

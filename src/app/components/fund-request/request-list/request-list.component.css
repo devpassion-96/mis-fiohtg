@@ -1,0 +1,6 @@
+.id-cell { max-width: 200px; }           /* truncate long IDs nicely */
+.cursor-pointer { cursor: pointer; }
+.table-head-fixed thead tr th {
+  position: sticky; top: 0; z-index: 1;  /* keep header visible while scrolling */
+  background: #fff;
+}

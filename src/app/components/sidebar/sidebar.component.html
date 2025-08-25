@@ -253,7 +253,14 @@
               </a>
             </li>
             
-            <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+            <!-- <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
+              <a [routerLink]="['/transaction-history']" class="nav-link">
+                <i class="nav-icon fas fa-history"></i>
+                <p>Transaction History</p>
+              </a>
+            </li> -->
+
+              <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a [routerLink]="['/transaction-history']" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
                 <p>Transaction History</p>
@@ -274,13 +281,6 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-
-            <!-- <li class="nav-item">
-              <a [routerLink]="['/my-vehicle-requests']" class="nav-link">
-                <i class="nav-icon fas fa-car"></i>
-                <p>My Vehicle Requests</p>
-              </a>
-            </li> -->
 
             <li class="nav-item" *ngIf="canAccess([
             { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
@@ -324,6 +324,15 @@
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>Vehicle Request List</p>
              
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="canAccess([
+            { department: 'Admin and HR', designations: ['Manager','Senior Programme Officer','Programme Officer'] }
+            ])">
+              <a [routerLink]="['/vehicle-allocation-list']" class="nav-link">
+                <i class="nav-icon fas fa-car"></i>
+                <p>Vehicle Allocation List</p>
               </a>
             </li>
           </ul>

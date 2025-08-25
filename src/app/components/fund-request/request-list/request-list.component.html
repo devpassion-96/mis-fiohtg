@@ -1,82 +1,134 @@
-<div class="card mt-5 mb-5">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h3 class="card-title mb-0">Funding Requests (All)</h3>
-    <div class="ml-auto d-flex align-items-center">
-        <button (click)="exportExcel()" class="btn btn-success btn-sm mr-2">
-            <i class="fas fa-file-excel"></i> Export to Excel
-        </button>
+<div class="card card-outline card-primary mt-4 mb-5">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="fas fa-money-check-alt mr-1"></i>
+      Funding Requests
+      <small class="text-muted ml-2">({{ filteredRequests.length | number }} items)</small>
+    </h3>
+
+    <div class="card-tools d-flex align-items-center">
+      <!-- Export -->
+      <button (click)="exportExcel()" class="btn btn-success btn-sm mr-2">
+        <i class="fas fa-file-excel mr-1"></i> Export
+      </button>
+
+      <!-- Status filter -->
+      <div class="input-group input-group-sm mr-2" style="width: 170px;">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-filter"></i></span>
+        </div>
         <select #filterSelect class="form-control" (change)="onFilterChange(filterSelect.value)">
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Reviewed">Reviewed</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="Reviewed">Reviewed</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
         </select>
+      </div>
+
+      <!-- Staff name filter -->
+      <div class="input-group input-group-sm" style="width: 230px;">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input
+          #staffInput
+          type="text"
+          class="form-control"
+          placeholder="Filter by staff name"
+          (input)="onStaffNameChange(staffInput.value)" />
+      </div>
     </div>
   </div>
-  <div class="card-body">
 
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Staff</th>
-          <th>Project</th>
-          <th>Amount Requested</th>
-          <th>Files</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let request of filteredRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
-          <td>{{ request._id }}</td>
-          <td>{{ request.employeeName }}</td>
-          <td>{{ request.projectName }}</td>
-          <td>D {{ request.amountRequested }}</td>
-          <td>
-                
-            <span 
-              *ngFor="let file of request.files" 
-              (click)="viewFile(file)" 
-              class="file-link badge badge-primary mr-1 mb-1"
-              role="button"
-            >
-              {{ file.split('/').pop() }}
-            </span>
+  <div class="card-body p-0">
+    <div class="table-responsive table-head-fixed" style="max-height: 65vh;">
+      <table class="table table-hover table-striped table-sm table-valign-middle mb-0">
+        <thead class="text-muted">
+          <tr>
+            <th style="min-width: 120px;">ID</th>
+            <th style="min-width: 160px;">Staff</th>
+            <th style="min-width: 160px;">Project</th>
+            <th class="text-right" style="min-width: 140px;">Amount</th>
+            <th style="min-width: 180px;">Files</th>
+            <th style="min-width: 110px;">Status</th>
+            <th class="text-right" style="min-width: 110px;">Actions</th>
+          </tr>
+        </thead>
 
-            
-          </td>
-          <td>{{ request.status }}</td>
-          <td>
-            <button class="btn btn-info btn-sm mr-2" (click)="printRequestDetails(request._id)" [disabled]="request.status !== 'Approved'">
-              <i class="fas fa-print">Print</i>
-            </button>
-          </td>
+        <tbody>
+          <tr *ngFor="let request of filteredRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+            <td class="text-monospace text-truncate id-cell" [title]="request._id">{{ request._id }}</td>
 
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="far fa-user mr-2 text-muted"></i>
+                <span class="text-wrap">{{ request.employeeName }}</span>
+              </div>
+            </td>
 
-          <!-- new addition -->
-          <td>
-            <!-- <ul>
-              <li *ngFor="let file of request.files">
-                <a [href]="file" target="_blank">{{ file }}</a>
-              </li>
-            </ul> -->
-          </td>
-          <!-- <td>
-            <a [routerLink]="['/print-request', request._id]" class="btn btn-warning btn-sm">Edit</a>
-          </td> -->
+            <td class="text-wrap">
+              <i class="far fa-folder-open mr-2 text-muted"></i>
+              {{ request.projectName }}
+            </td>
 
+            <td class="text-right">
+              <span>D {{ request.amountRequested | number:'1.0-2' }}</span>
+            </td>
 
-        </tr>
-      </tbody>
-    </table>
+            <td>
+              <ng-container *ngIf="request.files?.length; else noFiles">
+                <span
+                  *ngFor="let file of request.files"
+                  (click)="viewFile(file)"
+                  class="badge badge-light border text-primary mr-1 mb-1 cursor-pointer">
+                  <i class="fas fa-paperclip mr-1"></i>{{ file.split('/').pop() }}
+                </span>
+              </ng-container>
+              <ng-template #noFiles>
+                <span class="text-muted">—</span>
+              </ng-template>
+            </td>
+
+            <td>
+              <span class="badge"
+                [ngClass]="{
+                  'badge-warning': request.status === 'Pending',
+                  'badge-info': request.status === 'Reviewed',
+                  'badge-success': request.status === 'Approved',
+                  'badge-danger': request.status === 'Rejected'
+                }">
+                {{ request.status }}
+              </span>
+            </td>
+
+            <td class="text-right">
+              <div class="btn-group btn-group-sm">
+                <button
+                  class="btn btn-outline-info"
+                  [disabled]="request.status !== 'Approved'"
+                  (click)="printRequestDetails(request._id)">
+                  <i class="fas fa-print"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!(filteredRequests?.length)">
+            <td colspan="7" class="text-center text-muted p-4">
+              <i class="far fa-inbox mr-2"></i>No requests found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="card-footer">
-    <h5>Total Amount from Approved Requests: D {{ totalAmountCollected }}</h5>
-  </div>
 
-  <div class="card-footer">
+  <!-- Footer: total + pagination -->
+  <div class="card-footer d-flex justify-content-between align-items-center flex-wrap">
+    <h5 class="mb-2 mb-sm-0">
+      Total (Approved): <span class="badge badge-success">D {{ totalAmountCollected | number:'1.0-2' }}</span>
+    </h5>
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
 </div>

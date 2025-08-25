@@ -3,8 +3,8 @@ export interface Allocation {
     requestId: string;          // Reference to the original request
     driverId: string;           // Assigned driver
     vehicleId: string;          // Assigned vehicle
-    startDate: string;          // Start date of the trek
-    endDate: string;            // End date of the trek
+    startDate?: string;          // Start date of the trek
+    endDate?: string;            // End date of the trek
     completed?: boolean;  
     updatedAt?: string | Date;
   }
